@@ -1,163 +1,318 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Draco by @afnizarnur</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Draco is free PSD &amp; HTML template by @afnizarnur">
-    <meta name="author" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="css/kube.min.css" />
-    <link rel="stylesheet" href="css/font-awesome.min.css" />
-    <link rel="stylesheet" href="css/custom.min.css" />
-    <link rel="shortcut icon" href="img/favicon.png" />
-	<link href='https://fonts.googleapis.com/css?family=Playfair+Display+SC:700' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-	<style>
-		.intro h1:before {
-			/* Edit this with your name or anything else */
-			content: 'DRACO';
-		}
-	</style>
-</head>
-<body>
-	<!-- Navigation -->
-	<div class="main-nav">
-		<div class="container">
-			<header class="group top-nav">
-				<div class="navigation-toggle" data-tools="navigation-toggle" data-target="#navbar-1">
-				    <span class="logo">DRACO</span>
-				</div>
-			    <nav id="navbar-1" class="navbar item-nav">
-				    <ul>
-				        <li class="active"><a href="#about">About</a></li>
-				        <li><a href="#experiences">Experiences</a></li>
-				        <li><a href="#achievements">Achievements</a></li>
-				        <li><a href="#skills">Skills</a></li>
-				    </ul>
-				</nav>
-			</header>
-		</div>
-	</div>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  height: 100%;  
+}
 
-	<!-- Introduction -->
-	<div class="intro section" id="about">
-		<div class="container">
-			<p>Hi, I’m Draco the Dragon</p>
-			<div class="units-row units-split wrap">
-				<div class="unit-20">
-					<img src="img/ava.jpg" alt="Avatar">
-				</div>
-				<div class="unit-80">
-					<h1>I live in<br><span id="typed"></span></h1>
-				</div>
-				<p>
-					Draco is a constellation in the far northern sky. Its name is Latin for dragon. Draco is circumpolar (that is, never setting) for many observers in the northern hemisphere. It was one of the 48 constellations listed by the 2nd century astronomer Ptolemy.
-				</p>
-			</div>
-		</div>
-	</div>
+body {
+  min-height: 100%;  
+  background: #eee;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  color: #222;
+  font-size: 14px;
+  line-height: 26px;
+  padding-bottom: 50px;
+}
 
-	<!-- Work Experience -->
-	<div class="work section second" id="experiences">
-		<div class="container">
-			<h1>Work<br>Experiences</h1>
-			<ul class="work-list">
-				<li>2014-2015</li>
-				<li><a href="#">PT Traveloka Indonesia</a></li>
-				<li>Web Designer</li>
-			</ul>
-			<ul class="work-list">
-				<li>2014-2015</li>
-				<li><a href="#">Wego</a></li>
-				<li>UI/UX Designer</li>
-			</ul>
-			<ul class="work-list">
-				<li>2014-2015</li>
-				<li><a href="#">Garuda Indonesia</a></li>
-				<li>System Designer</li>
-			</ul>
-		</div>
-	</div>
+.container {
+  max-width: 700px;   
+  background: #fff;
+  margin: 0px auto 0px; 
+  box-shadow: 1px 1px 2px #DAD7D7;
+  border-radius: 3px;  
+  padding: 40px;
+  margin-top: 50px;
+}
 
-	<!-- Award & Achievements -->
-	<div class="award section second" id="achievements">
-		<div class="container">
-			<h1>Award &amp;<br>Achievements</h1>
-			<ul class="award-list list-flat">
-				<li>January 2014</li>
-				<li>Attained PHP5 certification</li>
-				<li>Hold world/Olympic record</li>
-			</ul>
-			<ul class="award-list list-flat">
-				<li>December 2014</li>
-				<li>Audited X number of clients in only Y amount of time</li>
-				<li>Held a perfect attendance record</li>
-				<li>Were promoted after only X months in the role</li>
-			</ul>
-			<ul class="award-list list-flat">
-				<li>March 2014</li>
-				<li>Placed employees at X companies</li>
-				<li>United multiple teams post-merger</li>
-			</ul>
-		</div>
-	</div>
+.header {
+  margin-bottom: 30px;
+  
+  .full-name {
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  
+  .first-name {
+    font-weight: 700;
+  }
+  
+  .last-name {
+    font-weight: 300;
+  }
+  
+  .contact-info {
+    margin-bottom: 20px;
+  }
+  
+  .email ,
+  .phone {
+    color: #999;
+    font-weight: 300;
+  } 
+  
+  .separator {
+    height: 10px;
+    display: inline-block;
+    border-left: 2px solid #999;
+    margin: 0px 10px;
+  }
+  
+  .position {
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    text-decoration: underline;
+  }
+}
 
-	<!-- Technical Skills -->
-	<div class="skills section second" id="skills">
-		<div class="container">
-			<h1>Technical<br>Skills</h1>
-			<ul class="skill-list list-flat">
-				<li>Web Technology</li>
-				<li>HTML / CSS / SASS / PHP / Javascript</li>
-			</ul>
-			<ul class="skill-list list-flat">
-				<li>Database</li>
-				<li>MySQL / MongoDB / Oracle / Access</li>
-			</ul>
-			<ul class="skill-list list-flat">
-				<li>Framework</li>
-				<li>Laravel / CodeIgniter / Zend / Ruby On Rails</li>
-			</ul>
-		</div>
-	</div>
 
-	<!-- Quote -->
-	<div class="quote">
-		<div class="container text-centered">
-			<h1>fight against the ugliness.</h1>
-		</div>
-	</div>
+.details {
+  line-height: 20px;
+  
+  .section {
+    margin-bottom: 40px;  
+  }
+  
+  .section:last-of-type {
+    margin-bottom: 0px;  
+  }
+  
+  .section__title {
+    letter-spacing: 2px;
+    color: #54AFE4;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  
+  .section__list-item {
+    margin-bottom: 40px;
+  }
+  
+  .section__list-item:last-of-type {
+    margin-bottom: 0;
+  }
+  
+  .left ,
+  .right {
+    vertical-align: top;
+    display: inline-block;
+  }
+  
+  .left {
+    width: 60%;    
+  }
+  
+  .right {
+    tex-align: right;
+    width: 39%;    
+  }
+  
+  .name {
+    font-weight: bold;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #000;
+    font-style: italic;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+    color: #000;
+  }
+  
+  .skills {
+    
+  }
+    
+  .skills__item {
+    margin-bottom: 10px;  
+  }
+  
+  .skills__item .right {
+    input {
+      display: none;
+    }
+    
+    label {
+      display: inline-block;  
+      width: 20px;
+      height: 20px;
+      background: #C3DEF3;
+      border-radius: 20px;
+      margin-right: 3px;
+    }
+    
+    input:checked + label {
+      background: #79A9CE;
+    }
+  }
+}
+	
+</style>
 
-	<footer>
-		<div class="container">
-			<div class="units-row">
-			    <div class="unit-50">
-			    	<p>Handcrafted by Afnizar Nur Ghifari</p>
-			    </div>
-			    <div class="unit-50">
-					<ul class="social list-flat right">
-						<li><a href="mailto:afnizarhilmi@gmail.com"><i class="fa fa-send"></i></a></li>
-						<li><a href="http://twitter.com/afnizarnur"><i class="fa fa-twitter"></i></a></li>
-						<li><a href="http://dribbble.com/afnizarnur"><i class="fa fa-dribbble"></i></a></li>
-						<li><a href="http://behance.com/afnizarnur"><i class="fa fa-behance"></i></a></li>
-					</ul>
-			    </div>
-			</div>
-		</div>
-	</footer>
+<link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
 
-	<!-- Javascript -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/typed.min.js"></script>
-    <script src="js/kube.min.js"></script>
-    <script src="js/site.js"></script>
-    <script>
-		function newTyped(){}$(function(){$("#typed").typed({
-		// Change to edit type effect
-		strings: ["far northern sky", "your galaxy", "everywhere"],
+<div class="container">
+  <div class="header">
+    <div class="full-name">
+      <span class="first-name">John</span> 
+      <span class="last-name">Doe</span>
+    </div>
+    <div class="contact-info">
+      <span class="email">Email: </span>
+      <span class="email-val">john.doe@gmail.com</span>
+      <span class="separator"></span>
+      <span class="phone">Phone: </span>
+      <span class="phone-val">111-222-3333</span>
+    </div>
+    
+    <div class="about">
+      <span class="position">Front-End Developer </span>
+      <span class="desc">
+        I am a front-end developer with more than 3 years of experience writing html, css, and js. I'm motivated, result-focused and seeking a successful team-oriented company with opportunity to grow. 
+      </span>
+    </div>
+  </div>
+   <div class="details">
+    <div class="section">
+      <div class="section__title">Experience</div>
+      <div class="section__list">
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">KlowdBox</div>
+            <div class="addr">San Fr, CA</div>
+            <div class="duration">Jan 2011 - Feb 2015</div>
+          </div>
+          <div class="right">
+            <div class="name">Fr developer</div>
+            <div class="desc">did This and that</div>
+          </div>
+        </div>
+                <div class="section__list-item">
+          <div class="left">
+            <div class="name">Akount</div>
+            <div class="addr">San Monica, CA</div>
+            <div class="duration">Jan 2011 - Feb 2015</div>
+          </div>
+          <div class="right">
+            <div class="name">Fr developer</div>
+            <div class="desc">did This and that</div>
+          </div>
+        </div>
 
-		typeSpeed:90,backDelay:700,contentType:"html",loop:!0,resetCallback:function(){newTyped()}}),$(".reset").click(function(){$("#typed").typed("reset")})});
-    </script>
-</body>
-</html>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__title">Education</div>
+      <div class="section__list">
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">Sample Institute of technology</div>
+            <div class="addr">San Fr, CA</div>
+            <div class="duration">Jan 2011 - Feb 2015</div>
+          </div>
+          <div class="right">
+            <div class="name">Fr developer</div>
+            <div class="desc">did This and that</div>
+          </div>
+        </div>
+        <div class="section__list-item">
+          <div class="left">
+            <div class="name">Akount</div>
+            <div class="addr">San Monica, CA</div>
+            <div class="duration">Jan 2011 - Feb 2015</div>
+          </div>
+          <div class="right">
+            <div class="name">Fr developer</div>
+            <div class="desc">did This and that</div>
+          </div>
+        </div>
+
+      </div>
+      
+  </div>
+     <div class="section">
+      <div class="section__title">Projects</div> 
+       <div class="section__list">
+         <div class="section__list-item">
+           <div class="name">DSP</div>
+           <div class="text">I am a front-end developer with more than 3 years of experience writing html, css, and js. I'm motivated, result-focused and seeking a successful team-oriented company with opportunity to grow.</div>
+         </div>
+         
+         <div class="section__list-item">
+                    <div class="name">DSP</div>
+           <div class="text">I am a front-end developer with more than 3 years of experience writing html, css, and js. I'm motivated, result-focused and seeking a successful team-oriented company with opportunity to grow. <a href="/login">link</a>
+           </div>
+         </div>
+       </div>
+    </div>
+     <div class="section">
+       <div class="section__title">Skills</div>
+       <div class="skills">
+         <div class="skills__item">
+           <div class="left"><div class="name">
+             Javascript
+             </div></div>
+           <div class="right">
+                          <input  id="ck1" type="checkbox" checked/>
+
+             <label for="ck1"></label>
+                          <input id="ck2" type="checkbox" checked/>
+
+              <label for="ck2"></label>
+                         <input id="ck3" type="checkbox" />
+
+              <label for="ck3"></label>
+                           <input id="ck4" type="checkbox" />
+            <label for="ck4"></label>
+                          <input id="ck5" type="checkbox" />
+              <label for="ck5"></label>
+
+           </div>
+         </div>
+         
+       </div>
+       <div class="skills__item">
+           <div class="left"><div class="name">
+             CSS</div></div>
+           <div class="right">
+                          <input  id="ck1" type="checkbox" checked/>
+
+             <label for="ck1"></label>
+                          <input id="ck2" type="checkbox" checked/>
+
+              <label for="ck2"></label>
+                         <input id="ck3" type="checkbox" />
+
+              <label for="ck3"></label>
+                           <input id="ck4" type="checkbox" />
+            <label for="ck4"></label>
+                          <input id="ck5" type="checkbox" />
+              <label for="ck5"></label>
+
+           </div>
+         </div>
+         
+       </div>
+     <div class="section">
+     <div class="section__title">
+       Interests
+       </div>
+       <div class="section__list">
+         <div class="section__list-item">
+                  Football, programming.
+          </div>
+       </div>
+     </div>
+     </div>
+  </div>
+</div>
