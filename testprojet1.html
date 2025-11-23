@@ -6,6 +6,7 @@
     <title>Attrape les Étoiles</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
 
     <style>
         /* 🎨 CSS du Jeu */
@@ -164,6 +165,10 @@
                     
                     // Mise à jour du score
                     updateScore();
+                    
+                    await Tone.start();
+                    const synth = new Tone.Synth().toDestination();
+                    synth.triggerAttackRelease("C4", "8n");
                 });
             }
 
