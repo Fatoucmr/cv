@@ -1,204 +1,192 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attrape les Étoiles</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
 
-    <style>
-        body {
-            background-color: #0b0c10;
-            color: #c5c6c7;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    <style>
+        /* 🎨 CSS du Jeu */
+        body {
+            /* Style de fond pour l'espace */
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden; /* Empêche les barres de défilement */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-        #game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
 
-        #score-board, #timer-board {
-            position: absolute;
-            font-size: 2em;
-            padding: 10px 20px;
-            border: 2px solid #66fcf1;
-            border-radius: 10px;
-            background-color: rgba(11, 12, 16, 0.7);
-            z-index: 100;
-        }
+        #score-board {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            padding: 10px 20px;
+            border: 2px solid #66fcf1;
+            border-radius: 10px;
+            background-color: rgba(11, 12, 16, 0.7);
+            z-index: 100;
+        }
 
-        #score-board {
-            top: 20px;
-            left: 20px;
-        }
+        /* Style de base de l'étoile */
+        .star {
+            position: absolute;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            background-color: #66fcf1; /* Couleur initiale */
+            /* Forme d'étoile CSS */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            /* Animation de pulsation légère */
+            animation: pulse 1s infinite alternate;
+        }
 
-        #timer-board {
-            top: 20px;
-            right: 20px;
-        }
-
-        .star {
-            position: absolute;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            background-color: #FE277E; 
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: pulse 1s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from {
-                transform: scale(1);
-                opacity: 0.9;
-            }
-            to {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-        }
-    </style>
+        /* Keyframes pour l'animation de pulsation */
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            to {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <div id="score-board">Score: <span id="score">0</span></div>
-        <div id="timer-board">Temps: <span id="timer">60</span>s</div>
-    </div>
+    <div id="game-container">
+        <div id="score-board">Score: <span id="score">0</span></div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const gameContainer = document.getElementById('game-container');
-            const scoreElement = document.getElementById('score');
-            const timerElement = document.getElementById('timer');
-            let score = 0;
-            const STAR_SIZE = 30;
-            const STAR_LIFETIME_MS = 3000;
-            const STAR_SPAWN_INTERVAL_MS = 800;
+    <script>
+        // 🧠 JavaScript et Logique du Jeu
+        document.addEventListener('DOMContentLoaded', () => {
 
-            const GAME_DURATION_SECONDS = 60;
-            let timeLeft = GAME_DURATION_SECONDS;
-            let gameLoopTimeout;
-            let timerInterval;
+            //create a synth and connect it to the main output (your speakers)
+            const synth = new Tone.Synth().toDestination();
 
-            function updateScore() {
-                score++;
-                scoreElement.textContent = score;
-            }
+            const gameContainer = document.getElementById('game-container');
+            const scoreElement = document.getElementById('score');
+            let score = 0;
+            const STAR_SIZE = 30;
+            const STAR_LIFETIME_MS = 3000; // Temps avant que l'étoile disparaisse (3s)
+            const STAR_SPAWN_INTERVAL_MS = 800; // Intervalle de création d'une étoile (0.8s)
 
-            function catchStarAnimation(star) {
-                anime({
-                    targets: star,
-                    scale: [1, 1.5],
-                    opacity: [1, 0],
-                    backgroundColor: ['#66fcf1', '#ff006e'],
-                    duration: 300,
-                    easing: 'easeOutExpo',
-                    complete: () => {
-                        if (star.parentNode) {
-                            star.remove();
-                        }
-                    }
-                });
-            }
+            /**
+             * Met à jour le score affiché.
+             */
+            function updateScore() {
+                score++;
+                scoreElement.textContent = score;
+            }
 
-            function createStar() {
-                const star = document.createElement('div');
-                star.classList.add('star');
-
-                const maxX = window.innerWidth - STAR_SIZE;
-                const maxY = window.innerHeight - STAR_SIZE;
-                const startX = Math.random() * maxX;
-                const startY = Math.random() * maxY;
-                const travelX = Math.random() * maxX;
-                const travelY = Math.random() * maxY;
-
-                star.style.left = `${startX}px`;
-                star.style.top = `${startY}px`;
-
-                gameContainer.appendChild(star);
-
-                const starAnimation = anime({
-                    targets: star,
-                    translateX: travelX - startX, 
-                    translateY: travelY - startY,
-                    rotate: '2turn',
-                    opacity: [0.5, 1],
-                    easing: 'linear',
-                    duration: STAR_LIFETIME_MS,
-                    complete: () => {
-                        if (star.parentNode) {
-                            star.remove();
-                        }
-                    }
-                });
-
-                star.addEventListener('click', async () => {
-                    star.style.pointerEvents = 'none'; 
-                    starAnimation.pause();
-                    catchStarAnimation(star);
-                    updateScore();
-                    
-                    await Tone.start();
-                    const synth = new Tone.Synth().toDestination();
-                    synth.triggerAttackRelease("C4", "8n");
-                });
-            }
-
-            function gameLoop() {
-                if (timeLeft > 0) {
-                    createStar();
-                    gameLoopTimeout = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
-                }
-            }
-
-            function startTimer() {
-                timerInterval = setInterval(() => {
-                    timeLeft--;
-                    timerElement.textContent = timeLeft;
-
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        clearTimeout(gameLoopTimeout);
-                        endGame();
+            /**
+             * Anime la disparition de l'étoile lorsqu'elle est cliquée.
+             * @param {HTMLElement} star - L'élément étoile à animer.
+             */
+            function catchStarAnimation(star) {
+                anime({
+                    targets: star,
+                    // Petite "explosion" : échelle et opacité
+                    scale: [1, 1.5],
+                    opacity: [1, 0],
+                    // Changement de couleur rapide
+                    backgroundColor: ['#66fcf1', '#ff006e'], // De cyan à rose
+                    duration: 300,
+                    easing: 'easeOutExpo',
+                    complete: () => {
+                        // Suppression de l'élément étoile du DOM après l'animation
+                        star.remove();
                     }
-                }, 1000);
+                });
             }
 
-            function endGame() {
-                document.querySelectorAll('.star').forEach(star => star.remove());
+            /**
+             * Crée et anime une nouvelle étoile.
+             */
+            function createStar() {
+                // 1. Création de l'élément DOM
+                const star = document.createElement('div');
+                star.classList.add('star');
 
-                const endMessage = document.createElement('div');
-                endMessage.id = 'end-message';
-                endMessage.textContent = `Temps écoulé ! Score final : ${score}`;
-                endMessage.style.cssText = `
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    font-size: 4em;
-                    color: #66fcf1;
-                    text-align: center;
-                    z-index: 200;
-                    text-shadow: 0 0 10px #ff006e;
-                `;
-                gameContainer.appendChild(endMessage);
-                gameContainer.style.pointerEvents = 'none';
+                // 2. Calcul des positions aléatoires
+                const maxX = window.innerWidth - STAR_SIZE;
+                const maxY = window.innerHeight - STAR_SIZE;
+                const startX = Math.random() * maxX;
+                const startY = Math.random() * maxY;
+                const travelX = Math.random() * maxX;
+                const travelY = Math.random() * maxY;
+
+                // Positionnement initial
+                star.style.left = `${startX}px`;
+                star.style.top = `${startY}px`;
+
+                gameContainer.appendChild(star);
+
+                // 3. Animation de déplacement avec Anime.js
+                const starAnimation = anime({
+                    targets: star,
+                    translateX: travelX - startX, 
+                    translateY: travelY - startY,
+                    rotate: '2turn', // Rotation
+                    opacity: [0.5, 1],
+                    easing: 'linear',
+                    duration: STAR_LIFETIME_MS,
+                    complete: () => {
+                        // Si l'animation se termine (non cliquée), l'étoile disparaît
+                        if (star.parentNode) {
+                            star.remove();
+                        }
+                    }
+                });
+
+                // 4. Gestion du clic
+                star.addEventListener('click', () => {
+                    // Empêche de cliquer deux fois
+                    star.style.pointerEvents = 'none'; 
+                    
+                    // Stoppe l'animation de déplacement
+                    starAnimation.pause();
+
+                    //play a middle 'C' for the duration of an 8th note
+                    synth.triggerAttackRelease("C4", "8n");
+                    
+                    // Lance l'animation de capture
+                    catchStarAnimation(star);
+                    
+                    // Mise à jour du score
+                    updateScore();
+                });
             }
-            
-            gameLoop();
-            startTimer();
-        });
-    </script>
+
+            /**
+             * La boucle principale du jeu.
+             */
+            function gameLoop() {
+                createStar();
+                // Répète la création d'étoiles
+                setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
+            }
+
+            // Démarrage du jeu
+            gameLoop();
+        });
+    </script>
 </body>
 </html>
