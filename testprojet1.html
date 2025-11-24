@@ -42,6 +42,20 @@
             z-index: 100;
         }
 
+        /* Timer */
+        #countdownExample {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border: 2px solid #4fafff;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.5em;
+            z-index: 100;
+        }
+
         /* Style de base de l'étoile */
         .star {
             position: absolute;
@@ -72,6 +86,11 @@
 
     <div id="game-container">
         <div id="score-board">Score: <span id="score">0</span></div>
+
+        <!-- Ton timer ajouté -->
+        <div id="countdownExample">
+            <div class="values"></div>
+        </div>
     </div>
 
     <script>
@@ -83,7 +102,12 @@
 
             const gameContainer = document.getElementById('game-container');
             const scoreElement = document.getElementById('score');
+            const countdownDisplay = document.querySelector('#countdownExample .values');
+
             let score = 0;
+            let timeLeft = 60; // ⏳ Timer 60 secondes
+            let gameActive = true; // Empêche le jeu de continuer après 0
+
             const STAR_SIZE = 30;
             const STAR_LIFETIME_MS = 3000; // Temps avant que l'étoile disparaisse (3s)
             const STAR_SPAWN_INTERVAL_MS = 800; // Intervalle de création d'une étoile (0.8s)
@@ -94,6 +118,22 @@
             function updateScore() {
                 score++;
                 scoreElement.textContent = score;
+            }
+
+            /**
+             * Timer qui se met à jour chaque seconde.
+             */
+            function updateTimer() {
+                countdownDisplay.textContent = timeLeft + "s";
+
+                if (timeLeft <= 0) {
+                    gameActive = false;
+                    countdownDisplay.textContent = "FIN";
+                    return;
+                }
+
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
             }
 
             /**
@@ -121,6 +161,9 @@
              * Crée et anime une nouvelle étoile.
              */
             function createStar() {
+
+                if (!gameActive) return;
+
                 // 1. Création de l'élément DOM
                 const star = document.createElement('div');
                 star.classList.add('star');
@@ -179,13 +222,15 @@
              * La boucle principale du jeu.
              */
             function gameLoop() {
+                if (!gameActive) return;
                 createStar();
                 // Répète la création d'étoiles
                 setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
             }
 
             // Démarrage du jeu
-            gameLoop();
+            updateTimer(); // ⏳ Lancement du timer
+            gameLoop();    // ⭐ Lancement du jeu
         });
     </script>
 </body>
