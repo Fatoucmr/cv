@@ -7,14 +7,12 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/easytimer.js@4.5.4/dist/easytimer.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <style>
         /* 🎨 CSS du Jeu */
         body {
             /* Style de fond pour l'espace */
-            background-color: #0b0c10;
+            background-color: #001233;
             color: #c5c6c7;
             font-family: Arial, sans-serif;
             margin: 0;
@@ -38,23 +36,9 @@
             transform: translateX(-50%);
             font-size: 2em;
             padding: 10px 20px;
-            border: 2px solid #66fcf1;
+            border: 2px solid #ff4fa8;
             border-radius: 10px;
             background-color: rgba(11, 12, 16, 0.7);
-            z-index: 100;
-        }
-
-        #countdownExample {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2em;
-            padding: 8px 16px;
-            border: 2px solid #ff006e;
-            border-radius: 10px;
-            background-color: rgba(11, 12, 16, 0.7);
-            color: #ff006e;
             z-index: 100;
         }
 
@@ -64,7 +48,7 @@
             cursor: pointer;
             width: 30px;
             height: 30px;
-            background-color: #66fcf1; /* Couleur initiale */
+            background-color: #ff4fa8; 
             /* Forme d'étoile CSS */
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             /* Animation de pulsation légère */
@@ -73,8 +57,14 @@
 
         /* Keyframes pour l'animation de pulsation */
         @keyframes pulse {
-            from { transform: scale(1); opacity: 0.9; }
-            to { transform: scale(1.1); opacity: 1; }
+            from {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            to {
+                transform: scale(1.1);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -82,10 +72,6 @@
 
     <div id="game-container">
         <div id="score-board">Score: <span id="score">0</span></div>
-
-        <div id="countdownExample">
-            <span class="values">00:30</span>
-        </div>
     </div>
 
     <script>
@@ -94,20 +80,6 @@
 
             //create a synth and connect it to the main output (your speakers)
             const synth = new Tone.Synth().toDestination();
-
-            // TIMER 30 SECONDES
-            var timer = new Timer();
-            timer.start({countdown: true, startValues: {seconds: 30}});
-
-            $('#countdownExample .values').html(timer.getTimeValues().toString());
-
-            timer.addEventListener('secondsUpdated', function (e) {
-                $('#countdownExample .values').html(timer.getTimeValues().toString());
-            });
-
-            timer.addEventListener('targetAchieved', function (e) {
-                $('#countdownExample .values').html('KABOOM!!');
-            });
 
             const gameContainer = document.getElementById('game-container');
             const scoreElement = document.getElementById('score');
@@ -135,7 +107,7 @@
                     scale: [1, 1.5],
                     opacity: [1, 0],
                     // Changement de couleur rapide
-                    backgroundColor: ['#66fcf1', '#ff006e'], // De cyan à rose
+                    backgroundColor: ['#ff4fa8', '#ff77c8'], // De cyan à rose
                     duration: 300,
                     easing: 'easeOutExpo',
                     complete: () => {
@@ -191,7 +163,7 @@
                     
                     // Stoppe l'animation de déplacement
                     starAnimation.pause();
-                    
+
                     //play a middle 'C' for the duration of an 8th note
                     synth.triggerAttackRelease("C4", "8n");
                     
