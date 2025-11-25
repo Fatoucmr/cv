@@ -23,10 +23,31 @@
             height: 100vh;
         }
 
-        #game-container {
+        /* NOUVEAU : Encadré principal pour le jeu */
+        #game-screen {
             position: relative;
+            width: 800px; /* Taille fixe pour l'encadré */
+            height: 600px; /* Taille fixe pour l'encadré */
+            border: 5px solid #4fafff; /* Bordure d'encadrement */
+            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
+            border-radius: 15px;
+            background-color: #000a1a; /* Fond du jeu plus sombre */
+            overflow: hidden;
+        }
+
+        /* Le conteneur du jeu doit être à l'intérieur de game-screen */
+        #game-container {
+            position: absolute; /* Remplir game-screen */
             width: 100%;
             height: 100%;
+            /* Le jeu est masqué au début */
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* Affiche le jeu quand il est démarré */
+        #game-container.active {
+            opacity: 1;
         }
 
         #score-board {
@@ -56,13 +77,59 @@
             z-index: 100;
         }
 
+        /* NOUVEAU : Conteneur des boutons et écran de démarrage */
+        #control-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 200; /* Au-dessus de tout */
+            transition: opacity 0.5s;
+        }
+
+        #control-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .game-button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        #start-button {
+            background-color: #ff4fa8;
+            color: white;
+        }
+
+        #restart-button {
+            background-color: #4fafff;
+            color: white;
+            display: none; /* Masqué initialement */
+        }
+        
+        .game-button:hover {
+            transform: scale(1.05);
+        }
+
         /* Style de base de l'étoile */
         .star {
             position: absolute;
             cursor: pointer;
             width: 30px;
             height: 30px;
-            background-color: #ff4fa8; 
+            background-color: #ff4fa8;
             /* Forme d'étoile CSS */
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             /* Animation de pulsation légère */
@@ -84,12 +151,21 @@
 </head>
 <body>
 
-    <div id="game-container">
-        <div id="score-board">Score: <span id="score">0</span></div>
+    <div id="game-screen">
+        
+        <div id="game-container">
+            <div id="score-board">Score: <span id="score">0</span></div>
 
-        <!-- Ton timer ajouté -->
-        <div id="countdownExample">
-            <div class="values"></div>
+            <div id="countdownExample">
+                <div class="values"></div>
+            </div>
+        </div>
+
+        <div id="control-panel">
+            <h1>Attrape les Étoiles ⭐</h1>
+            <p id="message"></p>
+            <button id="start-button" class="game-button">Start / Pause</button>
+            <button id="restart-button" class="game-button">Recommencer</button>
         </div>
     </div>
 
@@ -97,16 +173,26 @@
         // 🧠 JavaScript et Logique du Jeu
         document.addEventListener('DOMContentLoaded', () => {
 
-            //create a synth and connect it to the main output (your speakers)
             const synth = new Tone.Synth().toDestination();
 
+            const gameScreen = document.getElementById('game-screen'); // Le nouvel encadré
             const gameContainer = document.getElementById('game-container');
+            const controlPanel = document.getElementById('control-panel');
             const scoreElement = document.getElementById('score');
             const countdownDisplay = document.querySelector('#countdownExample .values');
+            const startButton = document.getElementById('start-button');
+            const restartButton = document.getElementById('restart-button');
+            const messageElement = document.getElementById('message');
 
             let score = 0;
-            let timeLeft = 60; // ⏳ Timer 60 secondes
-            let gameActive = true; // Empêche le jeu de continuer après 0
+            let initialTime = 60;
+            let timeLeft = initialTime; // ⏳ Timer 60 secondes
+            let gameActive = false; // Le jeu n'est pas actif (pas d'étoiles créées)
+            let gameStarted = false; // Vrai une fois que le bouton Start a été pressé une première fois
+            let gamePaused = true; // Commence en pause
+
+            let timerInterval; // Pour stocker l'ID du setTimeout du timer
+            let gameLoopInterval; // Pour stocker l'ID du setTimeout de la gameLoop
 
             const STAR_SIZE = 30;
             const STAR_LIFETIME_MS = 3000; // Temps avant que l'étoile disparaisse (3s)
@@ -121,19 +207,33 @@
             }
 
             /**
-             * Timer qui se met à jour chaque seconde.
+             * Démarre/met à jour le timer.
              */
             function updateTimer() {
+                if (!gameActive) {
+                    // Si le jeu est terminé, afficher FIN et masquer le bouton Restart
+                    if (timeLeft <= 0) {
+                        countdownDisplay.textContent = "FIN";
+                        messageElement.textContent = `Partie terminée! Score: ${score}`;
+                        startButton.style.display = 'none';
+                        restartButton.style.display = 'block';
+                    }
+                    return;
+                }
+
                 countdownDisplay.textContent = timeLeft + "s";
 
                 if (timeLeft <= 0) {
+                    // Fin du jeu
                     gameActive = false;
-                    countdownDisplay.textContent = "FIN";
+                    clearTimeout(timerInterval);
+                    clearTimeout(gameLoopInterval);
+                    controlPanel.classList.remove('hidden');
                     return;
                 }
 
                 timeLeft--;
-                setTimeout(updateTimer, 1000);
+                timerInterval = setTimeout(updateTimer, 1000);
             }
 
             /**
@@ -143,15 +243,12 @@
             function catchStarAnimation(star) {
                 anime({
                     targets: star,
-                    // Petite "explosion" : échelle et opacité
                     scale: [1, 1.5],
                     opacity: [1, 0],
-                    // Changement de couleur rapide
-                    backgroundColor: ['#ff4fa8', '#ff77c8'], // De cyan à rose
+                    backgroundColor: ['#ff4fa8', '#ff77c8'],
                     duration: 300,
                     easing: 'easeOutExpo',
                     complete: () => {
-                        // Suppression de l'élément étoile du DOM après l'animation
                         star.remove();
                     }
                 });
@@ -161,16 +258,19 @@
              * Crée et anime une nouvelle étoile.
              */
             function createStar() {
-
                 if (!gameActive) return;
+
+                // Calcul des limites du conteneur du jeu (intérieur de game-screen)
+                const containerWidth = gameScreen.clientWidth;
+                const containerHeight = gameScreen.clientHeight;
 
                 // 1. Création de l'élément DOM
                 const star = document.createElement('div');
                 star.classList.add('star');
 
-                // 2. Calcul des positions aléatoires
-                const maxX = window.innerWidth - STAR_SIZE;
-                const maxY = window.innerHeight - STAR_SIZE;
+                // 2. Calcul des positions aléatoires dans le conteneur
+                const maxX = containerWidth - STAR_SIZE;
+                const maxY = containerHeight - STAR_SIZE;
                 const startX = Math.random() * maxX;
                 const startY = Math.random() * maxY;
                 const travelX = Math.random() * maxX;
@@ -185,7 +285,7 @@
                 // 3. Animation de déplacement avec Anime.js
                 const starAnimation = anime({
                     targets: star,
-                    translateX: travelX - startX, 
+                    translateX: travelX - startX,
                     translateY: travelY - startY,
                     rotate: '2turn', // Rotation
                     opacity: [0.5, 1],
@@ -201,19 +301,13 @@
 
                 // 4. Gestion du clic
                 star.addEventListener('click', () => {
-                    // Empêche de cliquer deux fois
-                    star.style.pointerEvents = 'none'; 
-                    
-                    // Stoppe l'animation de déplacement
+                    star.style.pointerEvents = 'none';
                     starAnimation.pause();
 
-                    //play a middle 'C' for the duration of an 8th note
                     synth.triggerAttackRelease("C4", "8n");
-                    
-                    // Lance l'animation de capture
+
                     catchStarAnimation(star);
-                    
-                    // Mise à jour du score
+
                     updateScore();
                 });
             }
@@ -224,13 +318,76 @@
             function gameLoop() {
                 if (!gameActive) return;
                 createStar();
-                // Répète la création d'étoiles
-                setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
+                gameLoopInterval = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
             }
 
-            // Démarrage du jeu
-            updateTimer(); // ⏳ Lancement du timer
-            gameLoop();    // ⭐ Lancement du jeu
+            /**
+             * Démarre ou met en pause le jeu
+             */
+            function toggleGame() {
+                if (gamePaused) {
+                    // Démarrer / Reprendre le jeu
+                    gamePaused = false;
+                    gameActive = true;
+                    gameStarted = true;
+                    controlPanel.classList.add('hidden');
+                    gameContainer.classList.add('active'); // Afficher le conteneur du jeu
+                    messageElement.textContent = "";
+                    
+                    // Lancement des boucles
+                    gameLoop();
+                    updateTimer();
+                    startButton.textContent = "Pause";
+                    restartButton.style.display = 'block'; // Afficher le bouton Restart
+                } else {
+                    // Mettre en pause le jeu
+                    gamePaused = true;
+                    gameActive = false;
+                    controlPanel.classList.remove('hidden');
+                    messageElement.textContent = "Jeu en pause. Cliquez pour reprendre.";
+                    
+                    // Arrêt des boucles
+                    clearTimeout(timerInterval);
+                    clearTimeout(gameLoopInterval);
+                    startButton.textContent = "Reprendre";
+                }
+            }
+
+            /**
+             * Réinitialise le jeu à l'état initial.
+             */
+            function resetGame() {
+                // Arrêter tout
+                clearTimeout(timerInterval);
+                clearTimeout(gameLoopInterval);
+
+                // Réinitialiser les variables
+                score = 0;
+                timeLeft = initialTime;
+                gameActive = false;
+                gameStarted = false;
+                gamePaused = true;
+
+                // Réinitialiser l'affichage
+                scoreElement.textContent = score;
+                countdownDisplay.textContent = timeLeft + "s";
+                messageElement.textContent = "Attrape les Étoiles ⭐";
+                startButton.textContent = "Start";
+                startButton.style.display = 'block';
+                restartButton.style.display = 'none';
+                controlPanel.classList.remove('hidden');
+                gameContainer.classList.remove('active');
+
+                // Retirer toutes les étoiles existantes
+                document.querySelectorAll('.star').forEach(star => star.remove());
+            }
+
+            // --- Événements des boutons ---
+            startButton.addEventListener('click', toggleGame);
+            restartButton.addEventListener('click', resetGame);
+            
+            // Affichage initial
+            resetGame();
         });
     </script>
 </body>
