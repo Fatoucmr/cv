@@ -23,14 +23,13 @@
             height: 100vh;
         }
 
-        /* Encadré principal pour le jeu (CARRÉ) */
+    
         #game-screen {
             position: relative;
-            width: 800px; /* Taille fixe pour l'encadré */
-            height: 600px; /* Taille fixe pour l'encadré */
-            border: 5px solid #4fafff; /* Bordure d'encadrement */
+            width: 800px; 
+            height: 600px; 
+            border: 5px solid #4fafff; 
             box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
-            /* border-radius: 15px; <--- Supprimé pour un encadré carré */
             background-color: #000a1a;
             overflow: hidden;
         }
@@ -101,7 +100,6 @@
             font-size: 1.5em;
             cursor: pointer;
             border: none;
-            /* border-radius: 8px; <--- Supprimé pour des boutons carrés */
             transition: background-color 0.3s, transform 0.1s;
         }
 
@@ -322,46 +320,37 @@
                 gameLoop();
                 updateTimer();
 
-                // Masquer le bouton Start et afficher Restart
                 startButton.style.display = 'none';
                 restartButton.style.display = 'block';
                 messageElement.textContent = "";
             }
 
-            /**
-             * Réinitialise le jeu à l'état initial.
-             */
+            
             function resetGame() {
                 // Arrêter tout
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
 
-                // Réinitialiser les variables
                 score = 0;
                 timeLeft = initialTime;
                 gameActive = false;
 
-                // Réinitialiser l'affichage
                 scoreElement.textContent = score;
                 countdownDisplay.textContent = timeLeft + "s";
-                messageElement.textContent = "Cliquez sur Démarrer pour attraper les étoiles ! ⭐";
+                messageElement.textContent = "Cliquez sur Démarrer pour attraper les étoiles !";
                 
-                // Masquer Restart et afficher Start
                 startButton.textContent = "Démarrer";
                 startButton.style.display = 'block';
                 restartButton.style.display = 'none';
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
 
-                // Retirer toutes les étoiles existantes
                 document.querySelectorAll('.star').forEach(star => star.remove());
             }
 
-            // --- Événements des boutons ---
             startButton.addEventListener('click', startGame);
             restartButton.addEventListener('click', resetGame);
             
-            // Affichage initial
             resetGame();
         });
     </script>
