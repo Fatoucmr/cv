@@ -1,463 +1,488 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attrape les Étoiles</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
 
-    <style>
-        /* 🎨 CSS du Jeu */
-        body {
-            /* Style de fond pour l'espace */
-            background-color: #001233;
-            color: #c5c6c7;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    <style>
+        /* 🎨 CSS du Jeu */
+        body {
+            /* Style de fond pour l'espace */
+            background-color: #001233;
+            color: #c5c6c7;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    
-        #game-screen {
-            position: relative;
-            width: 800px; 
-            height: 600px; 
-            border: 5px solid #4fafff; 
-            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
-            background-color: #000a1a;
-            overflow: hidden;
-        }
+        
+        #game-screen {
+            position: relative;
+            width: 800px; 
+            height: 600px; 
+            border: 5px solid #4fafff; 
+            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
+            background-color: #000a1a;
+            overflow: hidden;
+        }
 
-        #game-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
+        #game-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* 🛑 DÉPART: Caché */
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none; /* Désactive les clics quand caché */
+        }
 
-        #game-container.active {
-            opacity: 1;
-        }
+        #game-container.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-        #score-board {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2em;
-            padding: 10px 20px;
-            border: 2px solid #ff4fa8;
-            border-radius: 10px;
-            background-color: rgba(11, 12, 16, 0.7);
-            z-index: 100;
-        }
+        #score-board {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            padding: 10px 20px;
+            border: 2px solid #ff4fa8;
+            border-radius: 10px;
+            background-color: rgba(11, 12, 16, 0.7);
+            z-index: 100;
+        }
 
-        /* Timer */
-        #countdownExample {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            border: 2px solid #4fafff;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1.5em;
-            z-index: 100;
-        }
+        /* Timer */
+        #countdownExample {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border: 2px solid #4fafff;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.5em;
+            z-index: 100;
+        }
 
-        /* Conteneur des boutons et écran de démarrage/fin */
-        #control-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 200;
-            transition: opacity 0.5s;
-        }
+        /* Conteneur des boutons et écran de démarrage/fin */
+        #control-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 200;
+            transition: opacity 0.5s;
+        }
 
-        #control-panel.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #control-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
 
-        .game-button {
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 1.5em;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s, transform 0.1s;
-        }
+        .game-button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.1s;
+            border-radius: 5px;
+        }
 
-        #start-button {
-            background-color: #ff4fa8;
-            color: white;
-        }
+        #start-button {
+            background-color: #ff4fa8;
+            color: white;
+        }
 
-        #restart-button {
-            background-color: #4fafff;
-            color: white;
-            display: none;
-        }
-        
-        .game-button:hover {
-            transform: scale(1.05);
-        }
+        #restart-button {
+            background-color: #4fafff;
+            color: white;
+            /* Rendre initiallement caché et gérer l'affichage par JS */
+            display: none; 
+        }
+        
+        .game-button:hover {
+            transform: scale(1.05);
+        }
 
-        /* Style de base de l'étoile */
-        .star {
-            position: absolute;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            background-color: #ff4fa8;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: pulse 1s infinite alternate;
-        }
+        /* Style de base de l'étoile */
+        .star {
+            position: absolute;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4fa8;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: pulse 1s infinite alternate;
+        }
 
-        /* Keyframes pour l'animation de pulsation */
-        @keyframes pulse {
-            from {
-                transform: scale(1);
-                opacity: 0.9;
-            }
-            to {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-        }
-        
-        /* 🌟 Nouveau Style pour le Tableau des Scores */
-        #score-table {
-            margin-top: 30px;
-            border-collapse: collapse;
-            width: 80%;
-            max-width: 400px;
-            text-align: left;
-        }
-        
-        #score-table th, #score-table td {
-            border: 1px solid #4fafff;
-            padding: 8px 15px;
-            font-size: 1.1em;
-        }
-        
-        #score-table th {
-            background-color: rgba(79, 175, 255, 0.2);
-            color: #ffffff;
-        }
+        /* Keyframes pour l'animation de pulsation */
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            to {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        /* 🌟 Nouveau Style pour le Tableau des Scores */
+        #score-table-container {
+            margin: 30px 0;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        #score-table {
+            margin: 10px auto;
+            border-collapse: collapse;
+            width: 100%;
+            text-align: left;
+        }
+        
+        #score-table th, #score-table td {
+            border: 1px solid #4fafff;
+            padding: 8px 15px;
+            font-size: 1.1em;
+        }
+        
+        #score-table th {
+            background-color: rgba(79, 175, 255, 0.2);
+            color: #ffffff;
+            text-align: center;
+        }
 
-    </style>
+    </style>
 </head>
 <body>
 
-    <div id="game-screen">
-        
-        <div id="game-container">
-            <div id="score-board">Score: <span id="score">0</span></div>
+    <div id="game-screen">
+        
+        <div id="game-container">
+            <div id="score-board">Score: <span id="score">0</span></div>
 
-            <div id="countdownExample">
-                <div class="values"></div>
-            </div>
-        </div>
+            <div id="countdownExample">
+                <div class="values"></div>
+            </div>
+        </div>
 
-        <div id="control-panel">
-            <h1>Attrape les Étoiles ⭐</h1>
-            <p id="message">Cliquez sur Démarrer pour attraper les étoiles !</p>
-            
-                        <div id="high-scores-container"></div>
-            
-            <button id="start-button" class="game-button">Démarrer</button>
-            <button id="restart-button" class="game-button">Recommencer</button>
-        </div>
-    </div>
+        <div id="control-panel">
+            <h1>Attrape les Étoiles ⭐</h1>
+            <p id="message">Cliquez sur Démarrer pour attraper les étoiles !</p>
+            
+            <div id="score-table-container"></div>
+            
+            <button id="start-button" class="game-button">Démarrer</button>
+            <button id="restart-button" class="game-button">Recommencer</button>
+        </div>
+    </div>
 
-    <script>
-        // 🧠 JavaScript et Logique du Jeu
-        document.addEventListener('DOMContentLoaded', () => {
+    <script>
+        // 🧠 JavaScript et Logique du Jeu
+        document.addEventListener('DOMContentLoaded', () => {
 
-            const synth = new Tone.Synth().toDestination();
+            const synth = new Tone.Synth().toDestination();
 
-            const gameScreen = document.getElementById('game-screen');
-            const gameContainer = document.getElementById('game-container');
-            const controlPanel = document.getElementById('control-panel');
-            const scoreElement = document.getElementById('score');
-            const countdownDisplay = document.querySelector('#countdownExample .values');
-            const startButton = document.getElementById('start-button');
-            const restartButton = document.getElementById('restart-button');
-            const messageElement = document.getElementById('message');
-            const highScoresContainer = document.getElementById('high-scores-container'); // Nouveau conteneur
+            const gameScreen = document.getElementById('game-screen');
+            const gameContainer = document.getElementById('game-container');
+            const controlPanel = document.getElementById('control-panel');
+            const scoreElement = document.getElementById('score');
+            const countdownDisplay = document.querySelector('#countdownExample .values');
+            const startButton = document.getElementById('start-button');
+            const restartButton = document.getElementById('restart-button');
+            const messageElement = document.getElementById('message');
+            const scoreTableContainer = document.getElementById('score-table-container');
 
-            let score = 0;
-            const initialTime = 60;
-            let timeLeft = initialTime;
-            let gameActive = false;
-            let timerInterval;
-            let gameLoopInterval;
+            let score = 0;
+            const initialTime = 60;
+            let timeLeft = initialTime;
+            let gameActive = false;
+            let timerInterval;
+            let gameLoopInterval;
 
-            const STAR_SIZE = 30;
-            const STAR_LIFETIME_MS = 3000;
-            const STAR_SPAWN_INTERVAL_MS = 800;
+            const STAR_SIZE = 30;
+            const STAR_LIFETIME_MS = 3000;
+            const STAR_SPAWN_INTERVAL_MS = 800;
 
-            // --- 🥇 Fonctions de Gestion des Scores ---
+            // --- 🥇 Fonctions de Gestion des Scores ---
 
-            /**
-             * Charge les meilleurs scores depuis le localStorage.
-             * @returns {number[]} Liste des scores triés.
-             */
-            function loadHighScores() {
-                const scoresString = localStorage.getItem('highScores');
-                return scoresString ? JSON.parse(scoresString).sort((a, b) => b - a) : [];
-            }
+            /**
+             * Charge les meilleurs scores depuis le localStorage.
+             * @returns {number[]} Liste des scores triés.
+             */
+            function loadHighScores() {
+                try {
+                    const scoresString = localStorage.getItem('highScores');
+                    return scoresString ? JSON.parse(scoresString).sort((a, b) => b - a) : [];
+                } catch (e) {
+                    console.error("Erreur de chargement du localStorage:", e);
+                    return [];
+                }
+            }
 
-            /**
-             * Ajoute le score actuel aux meilleurs scores et les sauvegarde.
-             * @param {number} newScore - Le score à ajouter.
-             */
-            function saveScore(newScore) {
-                const scores = loadHighScores();
-                scores.push(newScore);
-                scores.sort((a, b) => b - a); // Tri décroissant
-                // Garder uniquement le top 5
-                const topScores = scores.slice(0, 5);
-                localStorage.setItem('highScores', JSON.stringify(topScores));
-            }
+            /**
+             * Ajoute le score actuel aux meilleurs scores et les sauvegarde.
+             * @param {number} newScore - Le score à ajouter.
+             */
+            function saveScore(newScore) {
+                const scores = loadHighScores();
+                scores.push(newScore);
+                scores.sort((a, b) => b - a); // Tri décroissant
+                
+                const topScores = scores.slice(0, 5); // Garder le top 5
+                try {
+                    localStorage.setItem('highScores', JSON.stringify(topScores));
+                } catch (e) {
+                    console.error("Erreur de sauvegarde du localStorage:", e);
+                }
+            }
 
-            /**
-             * Crée et affiche le tableau des meilleurs scores.
-             */
-            function displayHighScores() {
-                const scores = loadHighScores();
-                highScoresContainer.innerHTML = ''; // Nettoyer l'ancien tableau
+            /**
+             * Crée et affiche le tableau des meilleurs scores.
+             */
+            function displayHighScores() {
+                const scores = loadHighScores();
+                scoreTableContainer.innerHTML = ''; // Nettoyer l'ancien tableau
 
-                if (scores.length === 0) {
-                    highScoresContainer.innerHTML = '<p>Aucun score précédent enregistré.</p>';
-                    return;
-                }
+                if (scores.length === 0) {
+                    scoreTableContainer.innerHTML = '<p>Aucun score précédent enregistré.</p>';
+                    return;
+                }
 
-                let tableHTML = '<h2>Meilleurs Scores</h2>';
-                tableHTML += '<table id="score-table"><thead><tr><th>#</th><th>Score</th></tr></thead><tbody>';
+                let tableHTML = '<h2>🏆 Meilleurs Scores</h2>';
+                tableHTML += '<table id="score-table"><thead><tr><th>#</th><th>Score</th></tr></thead><tbody>';
 
-                scores.forEach((s, index) => {
-                    const rank = index + 1;
-                    tableHTML += `<tr><td>${rank}</td><td>${s}</td></tr>`;
-                });
+                scores.forEach((s, index) => {
+                    const rank = index + 1;
+                    tableHTML += `<tr><td>${rank}</td><td>${s}</td></tr>`;
+                });
 
-                tableHTML += '</tbody></table>';
-                highScoresContainer.innerHTML = tableHTML;
-            }
-            
-            // --- 🎮 Logique du Jeu Modifiée ---
+                tableHTML += '</tbody></table>';
+                scoreTableContainer.innerHTML = tableHTML;
+            }
+            
+            // --- 🎮 Logique du Jeu Modifiée ---
 
-            /**
-             * Met à jour le score affiché.
-             */
-            function updateScore() {
-                score++;
-                scoreElement.textContent = score;
-            }
+            /**
+             * Met à jour le score affiché.
+             */
+            function updateScore() {
+                score++;
+                scoreElement.textContent = score;
+            }
 
-            /**
-             * Fonction appelée lorsque le temps est écoulé.
-             */
-            function endGame() {
-                gameActive = false;
-                clearTimeout(timerInterval);
-                clearTimeout(gameLoopInterval);
-                
-                // 1. Enregistrer le score
-                saveScore(score);
-                
-                // 2. Afficher l'écran de fin
-                controlPanel.classList.remove('hidden');
-                gameContainer.classList.remove('active');
-                
-                countdownDisplay.textContent = "FIN";
-                messageElement.innerHTML = `Partie terminée! Votre score final est : <strong>${score}</strong>`;
-                
-                startButton.style.display = 'none';
-                restartButton.style.display = 'block';
+            /**
+             * Fonction appelée lorsque le temps est écoulé.
+             */
+            function endGame() {
+                if (!gameActive) return;
 
-                // 3. Afficher le tableau des meilleurs scores
-                displayHighScores();
-                
-                // Supprimer toutes les étoiles restantes
-                document.querySelectorAll('.star').forEach(star => star.remove());
-            }
+                gameActive = false;
+                clearTimeout(timerInterval);
+                clearTimeout(gameLoopInterval);
+                
+                // 1. Enregistrer le score
+                saveScore(score);
+                
+                // 2. Afficher l'écran de fin
+                controlPanel.classList.remove('hidden');
+                gameContainer.classList.remove('active');
+                
+                countdownDisplay.textContent = "FIN";
+                messageElement.innerHTML = `Partie terminée! Votre score final est : <strong>${score}</strong>`;
+                
+                startButton.style.display = 'none';
+                restartButton.style.display = 'block';
 
-            /**
-             * Démarre/met à jour le timer.
-             */
-            function updateTimer() {
-                if (!gameActive) {
-                    // On utilise la fonction endGame à la place du code d'origine
-                    if (timeLeft <= 0) {
-                        // Si on arrive ici, c'est que le timer a fini son cycle et que le jeu est inactif
-                        countdownDisplay.textContent = "FIN";
-                    }
-                    return;
-                }
+                // 3. Afficher le tableau des meilleurs scores
+                displayHighScores();
+                
+                // Supprimer toutes les étoiles restantes
+                document.querySelectorAll('.star').forEach(star => star.remove());
+            }
 
-                countdownDisplay.textContent = timeLeft + "s";
+            /**
+             * Démarre/met à jour le timer.
+             */
+            function updateTimer() {
+                if (!gameActive) {
+                    if (timeLeft <= 0) {
+                        countdownDisplay.textContent = "FIN";
+                    }
+                    return;
+                }
 
-                if (timeLeft <= 0) {
-                    endGame(); // Appeler la nouvelle fonction de fin de jeu
-                    return;
-                }
+                countdownDisplay.textContent = timeLeft + "s";
 
-                timeLeft--;
-                timerInterval = setTimeout(updateTimer, 1000);
-            }
+                if (timeLeft <= 0) {
+                    endGame();
+                    return;
+                }
 
-            /**
-             * Anime la disparition de l'étoile lorsqu'elle est cliquée.
-             * @param {HTMLElement} star - L'élément étoile à animer.
-             */
-            function catchStarAnimation(star) {
-                anime({
-                    targets: star,
-                    scale: [1, 1.5],
-                    opacity: [1, 0],
-                    backgroundColor: ['#ff4fa8', '#ff77c8'],
-                    duration: 300,
-                    easing: 'easeOutExpo',
-                    complete: () => {
-                        star.remove();
-                    }
-                });
-            }
+                timeLeft--;
+                timerInterval = setTimeout(updateTimer, 1000);
+            }
 
-            /**
-             * Crée et anime une nouvelle étoile.
-             */
-            function createStar() {
-                if (!gameActive) return;
+            /**
+             * Anime la disparition de l'étoile lorsqu'elle est cliquée.
+             * @param {HTMLElement} star - L'élément étoile à animer.
+             */
+            function catchStarAnimation(star) {
+                anime({
+                    targets: star,
+                    scale: [1, 1.5],
+                    opacity: [1, 0],
+                    backgroundColor: ['#ff4fa8', '#ff77c8'],
+                    duration: 300,
+                    easing: 'easeOutExpo',
+                    complete: () => {
+                        star.remove();
+                    }
+                });
+            }
 
-                const containerWidth = gameScreen.clientWidth;
-                const containerHeight = gameScreen.clientHeight;
+            /**
+             * Crée et anime une nouvelle étoile.
+             */
+            function createStar() {
+                if (!gameActive) return;
 
-                const star = document.createElement('div');
-                star.classList.add('star');
+                const containerWidth = gameScreen.clientWidth;
+                const containerHeight = gameScreen.clientHeight;
 
-                const maxX = containerWidth - STAR_SIZE;
-                const maxY = containerHeight - STAR_SIZE;
-                const startX = Math.random() * maxX;
-                const startY = Math.random() * maxY;
-                const travelX = Math.random() * maxX;
-                const travelY = Math.random() * maxY;
+                const star = document.createElement('div');
+                star.classList.add('star');
 
-                star.style.left = `${startX}px`;
-                star.style.top = `${startY}px`;
+                const maxX = containerWidth - STAR_SIZE;
+                const maxY = containerHeight - STAR_SIZE;
+                const startX = Math.random() * maxX;
+                const startY = Math.random() * maxY;
+                const travelX = Math.random() * maxX;
+                const travelY = Math.random() * maxY;
 
-                gameContainer.appendChild(star);
+                star.style.left = `${startX}px`;
+                star.style.top = `${startY}px`;
 
-                const starAnimation = anime({
-                    targets: star,
-                    translateX: travelX - startX,
-                    translateY: travelY - startY,
-                    rotate: '2turn',
-                    opacity: [0.5, 1],
-                    easing: 'linear',
-                    duration: STAR_LIFETIME_MS,
-                    complete: () => {
-                        if (star.parentNode) {
-                            star.remove();
-                        }
-                    }
-                });
+                gameContainer.appendChild(star);
 
-                star.addEventListener('click', () => {
-                    if (!gameActive) return; // Sécurité supplémentaire
+                const starAnimation = anime({
+                    targets: star,
+                    translateX: travelX - startX,
+                    translateY: travelY - startY,
+                    rotate: '2turn',
+                    opacity: [0.5, 1],
+                    easing: 'linear',
+                    duration: STAR_LIFETIME_MS,
+                    complete: () => {
+                        if (star.parentNode) {
+                            star.remove();
+                        }
+                    }
+                });
 
-                    star.style.pointerEvents = 'none';
-                    starAnimation.pause();
+                star.addEventListener('click', () => {
+                    if (!gameActive) return; 
 
-                    synth.triggerAttackRelease("C4", "8n");
+                    star.style.pointerEvents = 'none';
+                    starAnimation.pause();
 
-                    catchStarAnimation(star);
+                    synth.triggerAttackRelease("C4", "8n");
 
-                    updateScore();
-                });
-            }
+                    catchStarAnimation(star);
 
-            /**
-             * La boucle principale du jeu.
-             */
-            function gameLoop() {
-                if (!gameActive) return;
-                createStar();
-                gameLoopInterval = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
-            }
+                    updateScore();
+                });
+            }
 
-            /**
-             * Démarre le jeu
-             */
-            function startGame() {
-                // S'assurer que le jeu n'est pas déjà actif
-                if (gameActive) return;
+            /**
+             * La boucle principale du jeu.
+             */
+            function gameLoop() {
+                if (!gameActive) return;
+                createStar();
+                gameLoopInterval = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
+            }
 
-                gameActive = true;
-                
-                controlPanel.classList.add('hidden');
-                gameContainer.classList.add('active');
-                highScoresContainer.innerHTML = ''; // Cacher le tableau
+            /**
+             * Démarre le jeu
+             */
+            function startGame() {
+                if (gameActive) return;
 
-                // Démarrer les boucles
-                gameLoop();
-                updateTimer();
+                gameActive = true;
+                
+                // Réinitialiser les éléments
+                score = 0;
+                timeLeft = initialTime;
+                scoreElement.textContent = score;
+                countdownDisplay.textContent = timeLeft + "s";
+                
+                // Gérer l'affichage
+                controlPanel.classList.add('hidden');
+                gameContainer.classList.add('active');
+                scoreTableContainer.innerHTML = ''; // Cache le tableau pendant le jeu
 
-                startButton.style.display = 'none';
-                restartButton.style.display = 'block';
-                messageElement.textContent = "";
-            }
+                // Démarrer les boucles
+                gameLoop();
+                updateTimer();
 
-            
-            function resetGame() {
-                // Arrêter tout
-                clearTimeout(timerInterval);
-                clearTimeout(gameLoopInterval);
+                startButton.style.display = 'none';
+                restartButton.style.display = 'none';
+                messageElement.textContent = "";
+            }
 
-                score = 0;
-                timeLeft = initialTime;
-                gameActive = false;
+            
+            function resetGame() {
+                // Arrêter tout
+                clearTimeout(timerInterval);
+                clearTimeout(gameLoopInterval);
 
-                scoreElement.textContent = score;
-                countdownDisplay.textContent = timeLeft + "s";
-                messageElement.textContent = "Cliquez sur Démarrer pour attraper les étoiles !";
-                highScoresContainer.innerHTML = ''; // Assurez-vous que le tableau n'est pas là
+                score = 0;
+                timeLeft = initialTime;
+                gameActive = false;
 
-                startButton.textContent = "Démarrer";
-                startButton.style.display = 'block';
-                restartButton.style.display = 'none';
-                controlPanel.classList.remove('hidden');
-                gameContainer.classList.remove('active');
+                scoreElement.textContent = score;
+                countdownDisplay.textContent = timeLeft + "s";
+                messageElement.textContent = "Cliquez sur Démarrer pour attraper les étoiles !";
+                
+                startButton.textContent = "Démarrer";
+                startButton.style.display = 'block';
+                restartButton.style.display = 'none';
+                controlPanel.classList.remove('hidden');
+                gameContainer.classList.remove('active');
 
-                document.querySelectorAll('.star').forEach(star => star.remove());
-                
-                // Afficher le tableau de score initial (si il y en a)
-                displayHighScores();
-            }
+                document.querySelectorAll('.star').forEach(star => star.remove());
+                
+                // Afficher les meilleurs scores sur l'écran d'accueil
+                displayHighScores();
+            }
 
-            startButton.addEventListener('click', startGame);
-            restartButton.addEventListener('click', resetGame);
-            
-            // Initialisation: afficher les meilleurs scores
-            resetGame();
-        });
-    </script>
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', resetGame);
+            
+            // Initialisation: Configurer l'écran de démarrage
+            resetGame();
+        });
+    </script>
 </body>
 </html>
