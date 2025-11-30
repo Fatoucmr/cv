@@ -256,9 +256,7 @@
                 }
             }
 
-            /**
-             * Crée et affiche le tableau des meilleurs scores.
-             */
+            
             function displayHighScores() {
                 const scores = loadHighScores();
                 scoreTableContainer.innerHTML = ''; // Nettoyer l'ancien tableau
@@ -268,8 +266,8 @@
                     return;
                 }
 
-                let tableHTML = '<h2>🏆 Meilleurs Scores</h2>';
-                tableHTML += '<table id="score-table"><thead><tr><th>Numéro de partie</th><th>Score</th></tr></thead><tbody>';
+                let tableHTML = '<h2>🏆 Tableau de Chasse aux Étoiles</h2>';
+                tableHTML += '<table id="score-table"><thead><tr><th>N°Partie</th><th>Score</th></tr></thead><tbody>';
 
                 scores.forEach((s, index) => {
                     const rank = index + 1;
@@ -281,17 +279,13 @@
             }
             
 
-            /**
-             * Met à jour le score affiché.
-             */
+         
             function updateScore() {
                 score++;
                 scoreElement.textContent = score;
             }
 
-            /**
-             * Fonction appelée lorsque le temps est écoulé.
-             */
+        
             function endGame() {
                 if (!gameActive) return;
 
@@ -299,10 +293,10 @@
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
                 
-                // 1. Enregistrer le score
+    
                 saveScore(score);
                 
-                // 2. Afficher l'écran de fin
+      
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
                 
@@ -312,10 +306,9 @@
                 startButton.style.display = 'none';
                 restartButton.style.display = 'block';
 
-                // 3. Afficher le tableau des meilleurs scores
                 displayHighScores();
                 
-                // Supprimer toutes les étoiles restantes
+               
                 document.querySelectorAll('.star').forEach(star => star.remove());
             }
 
