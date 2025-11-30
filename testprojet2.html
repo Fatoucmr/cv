@@ -223,8 +223,7 @@
             const STAR_SIZE = 30;
             const STAR_LIFETIME_MS = 3000;
             const STAR_SPAWN_INTERVAL_MS = 800;
-
-            // --- 🥇 Fonctions de Gestion des Scores ---
+            
 
             /**
              * Charge les meilleurs scores depuis le localStorage.
@@ -270,7 +269,7 @@
                 }
 
                 let tableHTML = '<h2>🏆 Meilleurs Scores</h2>';
-                tableHTML += '<table id="score-table"><thead><tr><th>#</th><th>Score</th></tr></thead><tbody>';
+                tableHTML += '<table id="score-table"><thead><tr><th>Numéro de partie</th><th>Score</th></tr></thead><tbody>';
 
                 scores.forEach((s, index) => {
                     const rank = index + 1;
@@ -281,7 +280,6 @@
                 scoreTableContainer.innerHTML = tableHTML;
             }
             
-            // --- 🎮 Logique du Jeu Modifiée ---
 
             /**
              * Met à jour le score affiché.
@@ -309,7 +307,7 @@
                 gameContainer.classList.remove('active');
                 
                 countdownDisplay.textContent = "FIN";
-                messageElement.innerHTML = `Partie terminée! Votre score final est : <strong>${score}</strong>`;
+                messageElement.innerHTML = `Partie terminée ! Votre score final est de  : <strong>${score}</strong>`;
                 
                 startButton.style.display = 'none';
                 restartButton.style.display = 'block';
