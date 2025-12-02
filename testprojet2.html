@@ -154,11 +154,11 @@
             width: 80%;
             max-width: 400px;
             text-align: center;
-            /* 👇 MASQUER PAR DÉFAUT (sauf à la fin de la partie) */
+           
             display: none; 
         }
         #score-table-container.active {
-            display: block; /* Affiche à la fin */
+            display: block; 
         }
 
         #score-table {
@@ -330,9 +330,7 @@
                 document.querySelectorAll('.star').forEach(star => star.remove());
             }
 
-            /**
-             * Démarre/met à jour le timer.
-             */
+        
             function updateTimer() {
                 if (!gameActive) {
                     if (timeLeft <= 0) {
@@ -455,7 +453,7 @@
                 // Afficher le score en direct de la partie
                 scoreBoard.style.opacity = 1;
 
-                // 🛑 Cache le tableau des meilleurs scores
+              
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = ''; 
 
@@ -468,11 +466,8 @@
                 messageElement.textContent = "";
             }
 
-            /**
-             * 🆕 Relance le jeu directement (utilisé par le bouton Recommencer).
-             */
+         
             function restartGameDirectly() {
-                // Fait exactement la même chose que startGame, car tout est déjà réinitialisé au début.
                 startGame();
             }
 
@@ -494,14 +489,14 @@
                 
                 startButton.textContent = "Démarrer";
                 startButton.style.display = 'block';
-                restartButton.style.display = 'none'; // Le bouton Recommencer n'est pas sur l'écran d'accueil
+                restartButton.style.display = 'none'; 
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
                 
-                // Cacher le score en direct de la partie
+              
                 scoreBoard.style.opacity = 0;
 
-                // 🛑 Cache le tableau des scores (il n'est affiché qu'à la fin ou jamais sur l'écran d'accueil par cette version)
+               
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = '';
 
@@ -510,10 +505,9 @@
             }
 
             startButton.addEventListener('click', startGame);
-            // 💡 Utilisez la nouvelle fonction pour le bouton "Recommencer"
+           
             restartButton.addEventListener('click', restartGameDirectly); 
             
-            // Initialisation: Configurer l'écran de démarrage. Le tableau des scores n'est pas affiché ici.
             resetGame();
         });
     </script>
