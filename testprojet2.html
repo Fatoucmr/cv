@@ -60,6 +60,8 @@
             border-radius: 10px;
             background-color: rgba(11, 12, 16, 0.7);
             z-index: 100;
+            /* 💡 Ajout pour cacher/afficher le score de la partie */
+            transition: opacity 0.3s;
         }
 
         /* Timer */
@@ -152,6 +154,8 @@
             width: 80%;
             max-width: 400px;
             text-align: center;
+            /* 💡 S'assurer qu'il est visible au départ (dans control-panel) */
+            opacity: 1; 
         }
         #score-table {
             margin: 10px auto;
@@ -206,6 +210,7 @@
             const gameScreen = document.getElementById('game-screen');
             const gameContainer = document.getElementById('game-container');
             const controlPanel = document.getElementById('control-panel');
+            const scoreBoard = document.getElementById('score-board'); // 👈 Récupérer l'élément score-board
             const scoreElement = document.getElementById('score');
             const countdownDisplay = document.querySelector('#countdownExample .values');
             const startButton = document.getElementById('start-button');
@@ -279,7 +284,7 @@
             }
             
 
-         
+          
             function updateScore() {
                 score++;
                 scoreElement.textContent = score;
@@ -293,10 +298,12 @@
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
                 
-    
+              
+                scoreBoard.style.opacity = 0;
+          
                 saveScore(score);
                 
-      
+          
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
                 
@@ -308,7 +315,7 @@
 
                 displayHighScores();
                 
-               
+                
                 document.querySelectorAll('.star').forEach(star => star.remove());
             }
 
@@ -431,7 +438,11 @@
                 // Gérer l'affichage
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
-                scoreTableContainer.innerHTML = ''; // Cache le tableau pendant le jeu
+                
+                // 💡 Afficher le score en direct de la partie
+                scoreBoard.style.opacity = 1;
+
+                scoreTableContainer.innerHTML = ''; 
 
                 // Démarrer les boucles
                 gameLoop();
@@ -461,6 +472,10 @@
                 restartButton.style.display = 'none';
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
+                
+            
+                scoreBoard.style.opacity = 0;
+
 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
