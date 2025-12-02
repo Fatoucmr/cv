@@ -154,8 +154,13 @@
             width: 80%;
             max-width: 400px;
             text-align: center;
- 
+            /* 👇 MASQUER PAR DÉFAUT (sauf à la fin de la partie) */
+            display: none; 
         }
+        #score-table-container.active {
+            display: block; /* Affiche à la fin */
+        }
+
         #score-table {
             margin: 10px auto;
             border-collapse: collapse;
@@ -209,7 +214,7 @@
             const gameScreen = document.getElementById('game-screen');
             const gameContainer = document.getElementById('game-container');
             const controlPanel = document.getElementById('control-panel');
-            const scoreBoard = document.getElementById('score-board'); // 👈 Récupérer l'élément score-board
+            const scoreBoard = document.getElementById('score-board'); 
             const scoreElement = document.getElementById('score');
             const countdownDisplay = document.querySelector('#countdownExample .values');
             const startButton = document.getElementById('start-button');
@@ -261,9 +266,14 @@
             }
 
             
+            /**
+             * Affiche le tableau des meilleurs scores.
+             */
             function displayHighScores() {
                 const scores = loadHighScores();
                 scoreTableContainer.innerHTML = ''; // Nettoyer l'ancien tableau
+                // N'affiche le tableau que s'il y a des scores
+                scoreTableContainer.classList.add('active'); 
 
                 if (scores.length === 0) {
                     scoreTableContainer.innerHTML = '<p>Aucun score précédent enregistré.</p>';
@@ -283,13 +293,13 @@
             }
             
 
-          
+            
             function updateScore() {
                 score++;
                 scoreElement.textContent = score;
             }
 
-        
+            
             function endGame() {
                 if (!gameActive) return;
 
@@ -297,21 +307,23 @@
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
                 
-                // 💡 Cacher le score en direct de la partie
+                // Cacher le score en direct de la partie
                 scoreBoard.style.opacity = 0;
-          
+            
                 saveScore(score);
                 
-          
+                // Afficher l'écran de fin
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
                 
                 countdownDisplay.textContent = "FIN";
-                messageElement.innerHTML = `Partie terminée ! Votre score final est de  : <strong>${score}</strong>`;
+                messageElement.innerHTML = `Partie terminée ! Votre score final est de : <strong>${score}</strong>`;
                 
+                // Gérer les boutons : Afficher Recommencer, Cacher Démarrer
                 startButton.style.display = 'none';
                 restartButton.style.display = 'block';
 
+                // 🌟 Afficher le tableau des meilleurs scores (NOUVEAU)
                 displayHighScores();
                 
                 
@@ -353,7 +365,9 @@
                     duration: 300,
                     easing: 'easeOutExpo',
                     complete: () => {
-                        star.remove();
+                        if (star.parentNode) {
+                            star.remove();
+                        }
                     }
                 });
             }
@@ -421,7 +435,7 @@
             }
 
             /**
-             * Démarre le jeu
+             * Démarre le jeu (utilisé par le bouton Démarrer initial).
              */
             function startGame() {
                 if (gameActive) return;
@@ -438,10 +452,12 @@
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
                 
-                // 💡 Afficher le score en direct de la partie
+                // Afficher le score en direct de la partie
                 scoreBoard.style.opacity = 1;
 
-                scoreTableContainer.innerHTML = ''; // Cache le tableau des meilleurs scores pendant le jeu
+                // 🛑 Cache le tableau des meilleurs scores
+                scoreTableContainer.classList.remove('active');
+                scoreTableContainer.innerHTML = ''; 
 
                 // Démarrer les boucles
                 gameLoop();
@@ -452,7 +468,17 @@
                 messageElement.textContent = "";
             }
 
-            
+            /**
+             * 🆕 Relance le jeu directement (utilisé par le bouton Recommencer).
+             */
+            function restartGameDirectly() {
+                // Fait exactement la même chose que startGame, car tout est déjà réinitialisé au début.
+                startGame();
+            }
+
+            /**
+             * Réinitialise le jeu à l'écran de Démarrage initial.
+             */
             function resetGame() {
                 // Arrêter tout
                 clearTimeout(timerInterval);
@@ -463,29 +489,31 @@
                 gameActive = false;
 
                 scoreElement.textContent = score;
-                countdownDisplay.textContent = timeLeft + "s";
+                countdownDisplay.textContent = initialTime + "s"; // Afficher le temps initial
                 messageElement.textContent = "Cliquez sur Démarrer pour attraper les étoiles !";
                 
                 startButton.textContent = "Démarrer";
                 startButton.style.display = 'block';
-                restartButton.style.display = 'none';
+                restartButton.style.display = 'none'; // Le bouton Recommencer n'est pas sur l'écran d'accueil
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
                 
-                // 💡 Cacher le score en direct de la partie
+                // Cacher le score en direct de la partie
                 scoreBoard.style.opacity = 0;
+
+                // 🛑 Cache le tableau des scores (il n'est affiché qu'à la fin ou jamais sur l'écran d'accueil par cette version)
+                scoreTableContainer.classList.remove('active');
+                scoreTableContainer.innerHTML = '';
 
 
                 document.querySelectorAll('.star').forEach(star => star.remove());
-                
-                // Afficher les meilleurs scores sur l'écran d'accueil
-                displayHighScores();
             }
 
             startButton.addEventListener('click', startGame);
-            restartButton.addEventListener('click', resetGame);
+            // 💡 Utilisez la nouvelle fonction pour le bouton "Recommencer"
+            restartButton.addEventListener('click', restartGameDirectly); 
             
-            // Initialisation: Configurer l'écran de démarrage
+            // Initialisation: Configurer l'écran de démarrage. Le tableau des scores n'est pas affiché ici.
             resetGame();
         });
     </script>
