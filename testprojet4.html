@@ -30,22 +30,28 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            /* MODIFIÉ: Pour un meilleur placement du contenu et l'ajout de padding */
+            justify-content: flex-start; 
             align-items: center;
             background-color: rgba(0, 0, 0, 0.9); 
             z-index: 200;
             transition: opacity 0.5s;
+            /* FIX DE MARGE : Padding pour ajouter la marge intérieure */
+            padding: 40px; 
+            box-sizing: border-box;
         }
 
-       
+        /* Masquer complètement l'écran de contrôle */
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
         }
         
-     
+        /* Titre principal en BLANC */
         #control-panel h1 {
             color: #ffffff; 
+            margin-top: 0; 
+            margin-bottom: 30px; /* Ajoute de l'espace sous le titre */
         }
         
         #game-screen {
@@ -59,10 +65,10 @@
             overflow: hidden;
         }
 
-    
+        /* Encadrés Score, Timer et Niveau (Bordures Blanches, Fonds Transparents) */
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
-            background-color: rgba(11, 12, 16, 0.7); 
+            background-color: rgba(11, 12, 16, 0.7); /* Fond noir très transparent */
             padding: 10px 20px;
             border-radius: 10px;
             z-index: 100;
@@ -74,7 +80,7 @@
             left: 50%; 
             transform: translateX(-50%); 
             font-size: 2em; 
-            
+            /* La bordure par défaut sera BLANCHE, mais le JS la changera pour le niveau 4 */
             border: 2px solid #FFFFFF; 
         }
         #countdownExample { 
@@ -89,7 +95,7 @@
         }
 
 
-
+        /* Boutons Généraux */
         .game-button {
             padding: 15px 30px;
             margin: 10px;
@@ -100,7 +106,9 @@
             border-radius: 5px;
         }
         
-     
+        /* ---------------------------------------------------- */
+        /* BOUTONS DE SÉLECTION DE NIVEAU */
+        /* ---------------------------------------------------- */
         
         #level-selection-buttons {
             display: flex;
@@ -117,21 +125,24 @@
             border: none;
             transition: background-color 0.3s, transform 0.1s;
             border-radius: 5px;
-            color: black; /* Texte en noir par défaut */
+            color: black; /* Texte en noir par défaut pour les boutons colorés */
             font-weight: bold;
         }
 
-
+        /* COULEURS DES BOUTONS SELON VOS INSTRUCTIONS */
         #select-level-1 { background-color: #4CAF50; } /* Vert */
         #select-level-2 { background-color: #FFEB3B; } /* Jaune */
         #select-level-3 { background-color: #FF9800; } /* Orange */
         #select-level-4 { background-color: #F44336; } /* Rouge (Niveau Spécial) */
-
-        #restart-button {
-            background-color: #4fafff;
-            color: white;
-        }
         
+        /* Cacher les anciens boutons */
+        #start-button, #next-level-button {
+            display: none; 
+        }
+
+        /* ---------------------------------------------------- */
+        /* STYLES DES ÉTOILES ET CONSIGNES */
+        /* ---------------------------------------------------- */
 
         .star {
             position: absolute;
@@ -142,13 +153,13 @@
             animation: pulse 1s infinite alternate;
         }
 
-
+        /* COULEURS DES ÉTOILES PAR NIVEAU */
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
-        .star.level-4 { background-color: #F44336; } 
+        .star.level-4 { background-color: #F44336; } /* Étoile du niveau spécial en Rouge */
         
-
+        /* Consigne du Niveau Spécial */
         #special-level-tip {
             position: absolute;
             top: 70px;
@@ -161,16 +172,20 @@
             width: 200px;
             text-align: center;
             border: 2px solid #F44336;
-            display: none; 
+            display: none; /* Caché par défaut */
             z-index: 101;
         }
         
+        /* ---------------------------------------------------- */
+        /* STYLES DES TABLEAUX (MIS EN BLEU) */
+        /* ---------------------------------------------------- */
 
         .table-container {
             margin: 30px 0;
             width: 80%;
             max-width: 450px;
             text-align: center;
+            /* MODIFIÉ : Seul le tableau de score reste */
             display: none; 
         }
         .table-container.active {
@@ -232,23 +247,22 @@
         </div>
 
         <div id="control-panel">
-            <h1>ATTRAPE LES ÉTOILES ⭐</h1>
+            <h1>Attrape les Étoiles ⭐</h1>
             <p id="message">Sélectionnez un niveau pour commencer.</p>
             
-            <div id="config-table-container" class="table-container"></div>
             <div id="score-table-container" class="table-container"></div>
             
             <div id="level-selection-buttons">
-                <button id="select-level-1" class="level-button" data-level="1">Niveau 1 (Facile)</button>
-                <button id="select-level-2" class="level-button" data-level="2">Niveau 2 (Normal)</button>
-                <button id="select-level-3" class="level-button" data-level="3">Niveau 3 (Difficile)</button>
-                <button id="select-level-4" class="level-button" data-level="4">Niveau SPÉCIAL</button>
+                <button id="select-level-1" class="level-button" data-level="1">Niveau 1 (Vert)</button>
+                <button id="select-level-2" class="level-button" data-level="2">Niveau 2 (Jaune)</button>
+                <button id="select-level-3" class="level-button" data-level="3">Niveau 3 (Orange)</button>
+                <button id="select-level-4" class="level-button" data-level="4">Niveau SPÉCIAL (Rouge)</button>
             </div>
             
-            <button id="start-button" class="game-button" style="display: none;">Démarrer</button>
-            <button id="next-level-button" class="game-button" style="display: none;">Niveau Suivant &raquo;</button> 
+            <button id="start-button" class="game-button" style="display: none;"></button>
+            <button id="next-level-button" class="game-button" style="display: none;"></button> 
             
-            <button id="restart-button" class="game-button" style="display: none;">Recommencer Tout</button>
+            <button id="restart-button" class="game-button" style="display: none;">Réinitialiser les scores</button>
         </div>
     </div>
 
@@ -268,7 +282,6 @@
             const countdownDisplay = document.querySelector('#countdownExample .values');
             const controlPanel = document.getElementById('control-panel');
             const messageElement = document.getElementById('message');
-            const configTableContainer = document.getElementById('config-table-container');
             const scoreTableContainer = document.getElementById('score-table-container');
             const currentLevelDisplay = document.getElementById('current-level');
             const restartButton = document.getElementById('restart-button');
@@ -276,7 +289,7 @@
             const specialLevelTip = document.getElementById('special-level-tip');
 
 
-           
+            // Configuration des Niveaux (Ajout du Niveau 4)
             const LEVELS = [
                 { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile", isSpecial: false },
                 { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal", isSpecial: false },
@@ -284,35 +297,39 @@
                 { id: 4, time: 60, goal: 15, name: "Niveau SPÉCIAL (Couleur)", isSpecial: true }
             ];
             
-            
+            // Couleurs pour le Niveau Spécial (correspondent aux classes .star)
             const SPECIAL_LEVEL_COLORS = [
-                '#ff4fa8', // Rose
-                '#4fafff', // Bleu
-                '#ffffff', // Blanc
-                '#F44336'  // Rouge (celle du niveau 4)
+                '#ff4fa8', // Rose/Magenta (couleur de l'étoile N1)
+                '#4fafff', // Bleu (couleur de l'étoile N2)
+                '#ffffff', // Blanc (couleur de l'étoile N3)
+                '#F44336'  // Rouge (couleur de l'étoile N4)
             ];
             let currentBorderColor = '#FFFFFF';
             let colorChangeInterval;
 
-     
+            // Paramètres de jeu
             let currentLevel = 1;
             let score = 0;
             let gameActive = false;
+            let timeLeft;
             let timerInterval;
             let starSpawnInterval;
             let levelScores = {};
 
             const STAR_SIZE = 30;
             
-            
+            // Paramètres de vitesse et d'apparition
             const STAR_LIFETIME_MS = 5000; 
-            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; 
+            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; // Ajout du Niveau 4
+
+            // --- Fonctions de Score et Niveaux ---
 
             function loadAllScores() {
                 try {
                     const scoresString = localStorage.getItem('levelScores');
-                 
+                    // Initialisation ou chargement des scores
                     let scores = scoresString ? JSON.parse(scoresString) : {};
+                    // Assurez-vous que tous les niveaux existent avec un score minimum de 0
                     LEVELS.forEach(level => {
                         if (scores[level.id] === undefined) {
                             scores[level.id] = 0;
@@ -320,13 +337,15 @@
                     });
                     return scores;
                 } catch (e) {
+                    // En cas d'erreur de lecture, initialise tout à 0
                     return LEVELS.reduce((acc, level) => ({ ...acc, [level.id]: 0 }), {});
                 }
             }
 
             function saveLevelScore() {
                 const allScores = loadAllScores();
-                allScores[currentLevel] = score;
+                // Enregistre le meilleur score (le score actuel s'il est supérieur au score sauvegardé)
+                allScores[currentLevel] = Math.max(allScores[currentLevel] || 0, score);
                 levelScores = allScores;
                 try {
                     localStorage.setItem('levelScores', JSON.stringify(levelScores));
@@ -335,59 +354,32 @@
                 }
             }
 
-            // --- Affichage des Tableaux ---
-
-            function displayConfigTable() {
-                scoreTableContainer.classList.remove('active');
-                scoreTableContainer.innerHTML = '';
-
-                let tableHTML = '<h2>🚀 Configuration des Niveaux</h2>';
-                tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Temps</th><th>Objectif (Score)</th></tr></thead><tbody>'; 
-
-                LEVELS.forEach((level) => {
-                    tableHTML += `<tr>
-                        <td>${level.name}</td>
-                        <td>${level.time}s</td>
-                        <td>${level.goal} étoiles</td>
-                    </tr>`;
-                });
-
-                tableHTML += '</tbody></table>';
-                configTableContainer.innerHTML = tableHTML;
-                configTableContainer.classList.add('active');
-            }
+            // --- Affichage des Tableaux (Uniquement le score final) ---
             
             function displayLevelScores(showTotal = false) {
                 const scores = loadAllScores();
-                configTableContainer.classList.remove('active');
-                configTableContainer.innerHTML = '';
+                scoreTableContainer.innerHTML = '';
 
-                let tableHTML = '<h2>🏆 Scores par Niveau</h2>';
+                let tableHTML = '<h2>🏆 Meilleurs Scores</h2>';
                 let totalScore = 0;
 
-                tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Meilleur Score</th><th>Statut</th></tr></thead><tbody>';
+                tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Meilleur Score</th><th>Objectif</th></tr></thead><tbody>';
 
                 LEVELS.forEach((level) => {
                     const levelScore = scores[level.id] !== undefined ? scores[level.id] : 0;
                     totalScore += levelScore;
                     
-                    let statusText = 'En attente';
                     let statusClass = '';
 
-                    if (levelScore > 0) {
-                        if (levelScore >= level.goal) {
-                            statusText = `✅ Validé (${level.goal} requis)`;
-                            statusClass = 'goal-met';
-                        } else {
-                            statusText = `❌ Échoué (${level.goal} requis)`;
-                            statusClass = 'goal-missed';
-                        }
-                    } 
-
+                    // On n'affiche plus le statut de validation, juste le meilleur score et l'objectif
+                    if (levelScore >= level.goal) {
+                        statusClass = 'goal-met'; // Couleur verte si l'objectif est atteint
+                    }
+                    
                     tableHTML += `<tr>
                         <td>${level.name}</td>
-                        <td class="level-score">${levelScore}</td>
-                        <td class="${statusClass}">${statusText}</td>
+                        <td class="level-score ${statusClass}">${levelScore}</td>
+                        <td>${level.goal} étoiles</td>
                     </tr>`;
                 });
 
@@ -419,59 +411,68 @@
                 
                 // Change la couleur toutes les 3 secondes
                 colorChangeInterval = setInterval(changeBorderColor, 3000);
+                specialLevelTip.style.display = 'block';
             }
 
             function stopSpecialLevelLoop() {
                 if (colorChangeInterval) {
                     clearInterval(colorChangeInterval);
                 }
-                
+                // Réinitialise la bordure du score en blanc
                 scoreBoard.style.borderColor = '#FFFFFF'; 
                 specialLevelTip.style.display = 'none';
             }
             
-            function isStarClickValid(starElement) {
-                if (currentLevel !== 4) {
-                    return true;
-                }
-                
-                // Pour le niveau spécial : l'étoile compte si la couleur de l'étoile correspond à la couleur de la bordure du score.
-                const starColor = window.getComputedStyle(starElement).backgroundColor;
-                const borderHex = rgbToHex(scoreBoard.style.borderColor);
-                
-                const starHex = rgbToHex(starColor);
-
-                return starHex.toLowerCase() === borderHex.toLowerCase();
-            }
-
+            // Fonction utilitaire pour convertir RGB en Hex pour la comparaison
             function rgbToHex(rgb) {
                 if (rgb.startsWith('#')) return rgb;
                 // Ex : rgb(244, 67, 54)
                 const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-
-                if (!parts) {
-                    if (rgb === 'transparent' || rgb === 'rgba(0, 0, 0, 0)') return '#000000'; 
-                    if (rgb === 'rgb(255, 255, 255)') return '#ffffff';
-                    return '#000000'; 
-                }
-
+                if (!parts) return '#000000'; 
                 function hex(x) {
                     const h = parseInt(x).toString(16);
                     return h.length === 1 ? '0' + h : h;
                 }
                 return '#' + hex(parts[1]) + hex(parts[2]) + hex(parts[3]);
             }
-            
-            
+
+            function isStarClickValid(starElement) {
+                if (currentLevel !== 4) {
+                    return true;
+                }
+                
+                // 1. Récupérer la couleur de l'étoile cliquée (en Hex)
+                const starColorRGB = window.getComputedStyle(starElement).backgroundColor;
+                const starColorHex = rgbToHex(starColorRGB).toLowerCase();
+
+                // 2. Récupérer la couleur de la bordure du score (en Hex)
+                const borderHex = rgbToHex(scoreBoard.style.borderColor).toLowerCase();
+                
+                // La bordure peut être vide si elle vient d'être initialisée. Utiliser une valeur par défaut.
+                if (borderHex === '#ffffff' && currentBorderColor !== '#FFFFFF') {
+                     // Si la bordure est blanche, mais que la variable de contrôle est sur une couleur spéciale, on prend la variable.
+                     // C'est une correction pour le premier tick de l'intervalle.
+                     const controlColor = currentBorderColor.toLowerCase();
+                     return starColorHex === controlColor;
+                }
+
+                // 3. Comparer
+                return starColorHex === borderHex;
+            }
+
+
+            // --- Logique de Jeu Générale ---
+
             function updateScore(validClick) {
                 if (validClick) {
                     score++;
                     scoreElement.textContent = score;
                     synth.triggerAttackRelease("C4", "8n");
                 } else if (currentLevel === 4) {
+                    // Pénalité pour le niveau spécial si mauvaise couleur cliquée
                     score = Math.max(0, score - 1);
                     scoreElement.textContent = score;
-                    synth.triggerAttackRelease("C3", "16n"); 
+                    synth.triggerAttackRelease("C3", "16n"); // Son différent pour l'erreur
                 }
             }
 
@@ -480,6 +481,7 @@
 
                 gameActive = false;
                 clearTimeout(timerInterval);
+                clearTimeout(starSpawnInterval);
                 stopSpecialLevelLoop(); // Arrêter la boucle du niveau spécial
                 
                 saveLevelScore();
@@ -490,14 +492,14 @@
                 gameContainer.classList.remove('active');
                 controlPanel.classList.remove('hidden'); 
                 
+                // Afficher le tableau des scores uniquement à la fin
                 displayLevelScores(true);
 
                 const currentLevelConfig = LEVELS.find(l => l.id === currentLevel);
-                
                 const goalMet = score >= currentLevelConfig.goal;
                 
                 levelSelectionButtons.style.display = 'flex'; // Afficher les boutons de sélection
-                restartButton.style.display = 'none';
+                restartButton.style.display = 'block'; // Afficher le bouton de réinitialisation des scores
 
                 if (goalMet) {
                     messageElement.innerHTML = `BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score} (Objectif : ${currentLevelConfig.goal}). Choisissez un autre niveau !`;
@@ -619,13 +621,16 @@
                 scoreElement.textContent = score;
                 currentLevelDisplay.textContent = currentLevel;
 
+                // Cacher les messages et tables pour démarrer le jeu
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
                 scoreBoard.style.opacity = 1;
+                scoreTableContainer.classList.remove('active');
+                scoreTableContainer.innerHTML = '';
+
 
                 if (levelConfig.isSpecial) {
                     startSpecialLevelLoop();
-                    specialLevelTip.style.display = 'block';
                 }
 
                 gameLoop();
@@ -634,19 +639,19 @@
 
             function resetGame() {
                 clearTimeout(timerInterval);
-                stopSpecialLevelLoop(); // S'assurer que le loop de couleur est arrêté
+                clearTimeout(starSpawnInterval);
+                stopSpecialLevelLoop(); // Arrêter la boucle de couleur si elle était active
 
                 gameActive = false;
                 currentLevel = 1; 
                 score = 0;
-                levelScores = loadAllScores();
 
                 scoreElement.textContent = 0;
                 currentLevelDisplay.textContent = 1;
                 messageElement.textContent = "Sélectionnez un niveau pour commencer.";
                 
-                levelSelectionButtons.style.display = 'flex';
-                restartButton.style.display = 'none'; 
+                levelSelectionButtons.style.display = 'flex'; // Afficher le menu de sélection
+                restartButton.style.display = 'none'; // Cacher le bouton de réinitialisation des scores (il s'affichera après un niveau joué)
                 
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
@@ -654,21 +659,28 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
-                displayConfigTable();
-                displayLevelScores();
+                // Vider et masquer les tableaux au démarrage
+                scoreTableContainer.classList.remove('active');
+                scoreTableContainer.innerHTML = '';
+            }
+            
+            function resetAllScoresAndGame() {
+                localStorage.removeItem('levelScores');
+                resetGame();
+                messageElement.textContent = "Scores réinitialisés. Sélectionnez un niveau pour commencer.";
             }
 
+            // --- Événements ---
             
             levelSelectionButtons.querySelectorAll('.level-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const levelId = parseInt(e.target.dataset.level);
                     startLevel(levelId);
-                    levelSelectionButtons.style.display = 'none';
-                    restartButton.style.display = 'block';
+                    levelSelectionButtons.style.display = 'none'; // Cacher les boutons pendant le jeu
                 });
             });
             
-            restartButton.addEventListener('click', resetGame); 
+            restartButton.addEventListener('click', resetAllScoresAndGame); 
             
             // Initialisation
             resetGame();
