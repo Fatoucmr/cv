@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles</title>
+    <title>Attrape les Étoiles - Multilevel</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
@@ -37,13 +37,15 @@
             transition: opacity 0.5s;
         }
 
+        /* Masquer complètement l'écran de contrôle */
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
         }
         
+        /* Titre principal en BLANC */
         #control-panel h1 {
-            color: #ffffff;
+            color: #ffffff; 
         }
         
         #game-screen {
@@ -57,10 +59,10 @@
             overflow: hidden;
         }
 
-    
+        /* Encadrés Score, Timer et Niveau (Bordures Blanches, Fonds Transparents) */
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
-            background-color: rgba(11, 12, 16, 0.7); 
+            background-color: rgba(11, 12, 16, 0.7); /* Fond noir très transparent */
             padding: 10px 20px;
             border-radius: 10px;
             z-index: 100;
@@ -84,7 +86,9 @@
             font-size: 1.5em; 
             border: 2px solid #FFFFFF; 
         }
-    
+
+
+        /* Boutons */
         .game-button {
             padding: 15px 30px;
             margin: 10px;
@@ -95,14 +99,15 @@
             border-radius: 5px;
         }
 
+        /* Fond Blanc, Texte Bleu pour Démarrer/Niveau Suivant */
         #start-button, #next-level-button {
-            background-color: #FFFFFF;
-            color: #4fafff;
-            font-weight: bold;
+            background-color: #FFFFFF; /* Fond Blanc */
+            color: #4fafff;     /* Texte Bleu (couleur du cadre) */
+            font-weight: bold;  
         }
 
         #restart-button {
-            background-color: ##4fafff;
+            background-color: #4fafff;
             color: white;
             display: none; 
         }
@@ -117,12 +122,12 @@
             animation: pulse 1s infinite alternate;
         }
 
-
+        /* COULEURS DES ÉTOILES PAR NIVEAU */
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
         
-      
+        /* 📊 Styles des Tableaux */
         .table-container {
             margin: 30px 0;
             width: 80%;
@@ -134,6 +139,7 @@
             display: block; 
         }
         
+        /* Marge plus grande sous le message et sous le tableau de score pour éloigner les boutons du cadre bleu */
         #message {
             margin-bottom: 30px; 
         }
@@ -148,18 +154,21 @@
             width: 100%;
         }
         
+        /* 💡 CORRECTION : BORDURES DU TABLEAU EN BLEU */
         .game-table th, .game-table td {
-            border: 1px solid #4fafff;
+            border: 1px solid #4fafff; /* Changement de rose à bleu */
             padding: 10px 15px;
             font-size: 1.1em;
             color: #ffffff; 
         }
         
+        /* 💡 CORRECTION : FOND DE L'ENTÊTE DU TABLEAU EN BLEU TRANSLUCIDE */
         .game-table th {
-            background-color: rgba(79, 175, 255, 0.2);
+            background-color: rgba(79, 175, 255, 0.2); /* Changement de rose translucide à bleu translucide */
             color: #ffffff;
             text-align: center;
         }
+        
         .level-score {
             font-weight: bold;
             color: #4fafff;
@@ -181,7 +190,7 @@
         
         <div id="game-container">
             <div id="score-board">Score: <span id="score">0</span></div>
-            <div id="level-display">Niveaux: <span id="current-level">1</span></div> 
+            <div id="level-display">Niveau: <span id="current-level">1</span></div> 
 
             <div id="countdownExample">
                 <div class="values"></div>
@@ -189,7 +198,7 @@
         </div>
 
         <div id="control-panel">
-            <h1>ATTRAPE LES ÉTOILES ⭐</h1>
+            <h1>Attrape les Étoiles ⭐</h1>
             <p id="message">Cliquez sur Démarrer pour attraper les étoiles !</p>
             
             <div id="config-table-container" class="table-container"></div>
@@ -222,9 +231,9 @@
 
             // Configuration des Niveaux (score minimum requis)
             const LEVELS = [
-                { id: 1, time: 60, goal: 20, name: "Niveau 1 : Facile" },
-                { id: 2, time: 40, goal: 40, name: "Niveau 2 : Normal" },
-                { id: 3, time: 20, goal: 60, name: "Niveau 3 : Difficile" }
+                { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile" },
+                { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal" },
+                { id: 3, time: 20, goal: 60, name: "Niveau 3: Difficile" }
             ];
 
             // Paramètres de jeu
@@ -305,10 +314,10 @@
 
                     if (levelScore > 0) {
                         if (levelScore >= level.goal) {
-                            statusText = `Validé ✅ (${level.goal} requis)`;
+                            statusText = `✅ Validé (${level.goal} requis)`;
                             statusClass = 'goal-met';
                         } else {
-                            statusText = `Échoué ❌ (${level.goal} requis)`;
+                            statusText = `❌ Échoué (${level.goal} requis)`;
                             statusClass = 'goal-missed';
                         }
                     } else if (level.id < currentLevel) {
@@ -380,7 +389,7 @@
                     restartButton.style.display = 'block';
                     
                 } else {
-                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour débloquer le niveau suivant.`;
+                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour progresser.`;
                     nextLevelButton.style.display = 'none';
                     startButton.style.display = 'block';
                     startButton.textContent = `Recommencer Niveau ${currentLevel}`;
