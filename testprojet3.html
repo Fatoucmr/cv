@@ -11,7 +11,7 @@
     <style>
         /* 🎨 CSS du Jeu */
         body {
-            /* 💡 CHANGEMENT: Fond de la page en NOIR */
+            /* 💡 FOND NOIR */
             background-color: #000000; 
             color: #ffffff; 
             font-family: Arial, sans-serif;
@@ -39,6 +39,12 @@
             transition: opacity 0.5s;
         }
 
+        /* 💥 CORRECTION AJOUTÉE ICI : Masquer complètement l'écran de contrôle */
+        #control-panel.hidden {
+            opacity: 0;
+            pointer-events: none; /* TRÈS IMPORTANT : Permet de cliquer sur les étoiles en dessous */
+        }
+        
         #control-panel h1 {
             color: #ff4fa8;
         }
@@ -124,7 +130,6 @@
         }
         
         .game-table th, .game-table td {
-            /* 💡 CHANGEMENT: Texte en blanc pour fond noir */
             border: 1px solid #ff4fa8;
             padding: 10px 15px;
             font-size: 1.1em;
@@ -141,11 +146,11 @@
             color: #4fafff;
         }
         .goal-met {
-            color: #90ee90; /* Vert clair pour fond noir */
+            color: #90ee90;
             font-weight: bold;
         }
         .goal-missed {
-            color: #ff6347; /* Rouge orangé pour fond noir */
+            color: #ff6347;
             font-weight: bold;
         }
 
@@ -248,11 +253,11 @@
                 scoreTableContainer.innerHTML = '';
 
                 let tableHTML = '<h2>🚀 Configuration des Niveaux</h2>';
-                // 💡 CHANGEMENT: EN-TÊTE : Seulement Niveau et Temps
+                // 💡 EN-TÊTE : Seulement Niveau et Temps
                 tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Temps</th></tr></thead><tbody>'; 
 
                 LEVELS.forEach((level) => {
-                    // 💡 CHANGEMENT: LIGNES : Seulement Niveau et Temps
+                    // 💡 LIGNES : Seulement Niveau et Temps
                     tableHTML += `<tr>
                         <td>${level.name}</td>
                         <td>${level.time}s</td>
@@ -339,7 +344,7 @@
                 // Cacher les infos de la partie et afficher l'écran de contrôle
                 scoreBoard.style.opacity = 0;
                 gameContainer.classList.remove('active');
-                controlPanel.classList.remove('hidden');
+                controlPanel.classList.remove('hidden'); // Afficher la page de contrôle
                 
                 // Afficher le tableau de scores
                 displayLevelScores(true);
@@ -483,7 +488,7 @@
                 currentLevelDisplay.textContent = currentLevel;
 
                 // Affichage de la partie en cours
-                controlPanel.classList.add('hidden');
+                controlPanel.classList.add('hidden'); // Cacher la page de contrôle
                 gameContainer.classList.add('active');
                 scoreBoard.style.opacity = 1;
 
@@ -493,8 +498,6 @@
             }
 
             function startGame() {
-                // Si on démarre depuis le bouton 'Démarrer Niveau X' après un échec, on utilise le currentLevel
-                // Si on démarre depuis le bouton 'Démarrer' initial, currentLevel est 1.
                 if (currentLevel === 1) {
                     // Initialisation pour une nouvelle partie complète
                     localStorage.removeItem('levelScores');
@@ -510,7 +513,7 @@
                 clearTimeout(starSpawnInterval);
 
                 gameActive = false;
-                currentLevel = 1; // Retour au niveau 1 pour la réinitialisation complète
+                currentLevel = 1; 
                 score = 0;
                 levelScores = loadAllScores();
 
