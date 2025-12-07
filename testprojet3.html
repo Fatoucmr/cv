@@ -305,10 +305,10 @@
 
                     if (levelScore > 0) {
                         if (levelScore >= level.goal) {
-                            statusText = `✅ Validé (${level.goal} requis)`;
+                            statusText = `Validé ✅ (${level.goal} requis)`;
                             statusClass = 'goal-met';
                         } else {
-                            statusText = `❌ Échoué (${level.goal} requis)`;
+                            statusText = `Échoué ❌ (${level.goal} requis)`;
                             statusClass = 'goal-missed';
                         }
                     } else if (level.id < currentLevel) {
@@ -380,7 +380,7 @@
                     restartButton.style.display = 'block';
                     
                 } else {
-                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour progresser.`;
+                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour débloquer le niveau suivant.`;
                     nextLevelButton.style.display = 'none';
                     startButton.style.display = 'block';
                     startButton.textContent = `Recommencer Niveau ${currentLevel}`;
