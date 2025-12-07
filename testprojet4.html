@@ -29,29 +29,27 @@
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: column;
-            /* MODIFIÉ: Pour un meilleur placement du contenu et l'ajout de padding */
+            flex-direction: column; 
             justify-content: flex-start; 
             align-items: center;
             background-color: rgba(0, 0, 0, 0.9); 
             z-index: 200;
             transition: opacity 0.5s;
-            /* FIX DE MARGE : Padding pour ajouter la marge intérieure */
             padding: 40px; 
             box-sizing: border-box;
         }
 
-        /* Masquer complètement l'écran de contrôle */
+      
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
         }
         
-        /* Titre principal en BLANC */
+        
         #control-panel h1 {
             color: #ffffff; 
             margin-top: 0; 
-            margin-bottom: 30px; /* Ajoute de l'espace sous le titre */
+            margin-bottom: 30px; 
         }
         
         #game-screen {
@@ -65,10 +63,10 @@
             overflow: hidden;
         }
 
-        /* Encadrés Score, Timer et Niveau (Bordures Blanches, Fonds Transparents) */
+       
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
-            background-color: rgba(11, 12, 16, 0.7); /* Fond noir très transparent */
+            background-color: rgba(11, 12, 16, 0.7); 
             padding: 10px 20px;
             border-radius: 10px;
             z-index: 100;
@@ -80,7 +78,6 @@
             left: 50%; 
             transform: translateX(-50%); 
             font-size: 2em; 
-            /* La bordure par défaut sera BLANCHE, mais le JS la changera pour le niveau 4 */
             border: 2px solid #FFFFFF; 
         }
         #countdownExample { 
@@ -106,9 +103,7 @@
             border-radius: 5px;
         }
         
-        /* ---------------------------------------------------- */
-        /* BOUTONS DE SÉLECTION DE NIVEAU */
-        /* ---------------------------------------------------- */
+
         
         #level-selection-buttons {
             display: flex;
@@ -125,24 +120,21 @@
             border: none;
             transition: background-color 0.3s, transform 0.1s;
             border-radius: 5px;
-            color: black; /* Texte en noir par défaut pour les boutons colorés */
+            color: black; 
             font-weight: bold;
         }
 
-        /* COULEURS DES BOUTONS SELON VOS INSTRUCTIONS */
-        #select-level-1 { background-color: #4CAF50; } /* Vert */
-        #select-level-2 { background-color: #FFEB3B; } /* Jaune */
-        #select-level-3 { background-color: #FF9800; } /* Orange */
-        #select-level-4 { background-color: #F44336; } /* Rouge (Niveau Spécial) */
+
+        #select-level-1 { background-color: #A4BD01; } 
+        #select-level-2 { background-color: #FFE361; } 
+        #select-level-3 { background-color: #FC4E00; } 
+        #select-level-4 { background-color: #F44336; }
         
-        /* Cacher les anciens boutons */
         #start-button, #next-level-button {
             display: none; 
         }
 
-        /* ---------------------------------------------------- */
-        /* STYLES DES ÉTOILES ET CONSIGNES */
-        /* ---------------------------------------------------- */
+       
 
         .star {
             position: absolute;
@@ -153,11 +145,11 @@
             animation: pulse 1s infinite alternate;
         }
 
-        /* COULEURS DES ÉTOILES PAR NIVEAU */
+    
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
-        .star.level-4 { background-color: #F44336; } /* Étoile du niveau spécial en Rouge */
+        .star.level-4 { background-color: #F44336; } 
         
         /* Consigne du Niveau Spécial */
         #special-level-tip {
@@ -176,16 +168,13 @@
             z-index: 101;
         }
         
-        /* ---------------------------------------------------- */
-        /* STYLES DES TABLEAUX (MIS EN BLEU) */
-        /* ---------------------------------------------------- */
+       
 
         .table-container {
             margin: 30px 0;
             width: 80%;
             max-width: 450px;
             text-align: center;
-            /* MODIFIÉ : Seul le tableau de score reste */
             display: none; 
         }
         .table-container.active {
@@ -253,10 +242,10 @@
             <div id="score-table-container" class="table-container"></div>
             
             <div id="level-selection-buttons">
-                <button id="select-level-1" class="level-button" data-level="1">Niveau 1 (Vert)</button>
-                <button id="select-level-2" class="level-button" data-level="2">Niveau 2 (Jaune)</button>
-                <button id="select-level-3" class="level-button" data-level="3">Niveau 3 (Orange)</button>
-                <button id="select-level-4" class="level-button" data-level="4">Niveau SPÉCIAL (Rouge)</button>
+                <button id="select-level-1" class="level-button" data-level="1">Niveau 1</button>
+                <button id="select-level-2" class="level-button" data-level="2">Niveau 2</button>
+                <button id="select-level-3" class="level-button" data-level="3">Niveau 3</button>
+                <button id="select-level-4" class="level-button" data-level="4">Niveau SPÉCIAL</button>
             </div>
             
             <button id="start-button" class="game-button" style="display: none;"></button>
@@ -267,7 +256,7 @@
     </div>
 
     <div id="special-level-tip">
-        ATTENTION : Cliquez sur l'étoile **UNIQUEMENT** si sa couleur est **IDENTIQUE** à la couleur de la bordure du score ci-dessus. La couleur change !
+        ATTENTION : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
     </div>
 
     <script>
@@ -289,20 +278,24 @@
             const specialLevelTip = document.getElementById('special-level-tip');
 
 
-            // Configuration des Niveaux (Ajout du Niveau 4)
+     
             const LEVELS = [
                 { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile", isSpecial: false },
                 { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal", isSpecial: false },
                 { id: 3, time: 20, goal: 60, name: "Niveau 3: Difficile", isSpecial: false },
-                { id: 4, time: 60, goal: 15, name: "Niveau SPÉCIAL (Couleur)", isSpecial: true }
+                { id: 4, time: 60, goal: 15, name: "Niveau SPÉCIAL", isSpecial: true }
             ];
             
             // Couleurs pour le Niveau Spécial (correspondent aux classes .star)
             const SPECIAL_LEVEL_COLORS = [
-                '#ff4fa8', // Rose/Magenta (couleur de l'étoile N1)
-                '#4fafff', // Bleu (couleur de l'étoile N2)
-                '#ffffff', // Blanc (couleur de l'étoile N3)
-                '#F44336'  // Rouge (couleur de l'étoile N4)
+                '#ff4fa8', 
+                '#4fafff', 
+                '#ffffff', 
+                '#F44336',  
+                '#5D0D6E',
+                '#F8DE65',
+                '#0FAC71',
+                '#FC4E00'
             ];
             let currentBorderColor = '#FFFFFF';
             let colorChangeInterval;
