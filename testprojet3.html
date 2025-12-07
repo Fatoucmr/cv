@@ -37,13 +37,13 @@
             transition: opacity 0.5s;
         }
 
-        /* Masquer complètement l'écran de contrôle */
+       
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
         }
         
-        /* Titre principal en BLANC */
+    
         #control-panel h1 {
             color: #ffffff; 
         }
@@ -59,10 +59,10 @@
             overflow: hidden;
         }
 
-        /* Encadrés Score, Timer et Niveau (Bordures Blanches, Fonds Transparents) */
+       
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
-            background-color: rgba(11, 12, 16, 0.7); /* Fond noir très transparent */
+            background-color: rgba(11, 12, 16, 0.7); 
             padding: 10px 20px;
             border-radius: 10px;
             z-index: 100;
@@ -88,7 +88,7 @@
         }
 
 
-        /* Boutons */
+       
         .game-button {
             padding: 15px 30px;
             margin: 10px;
@@ -99,10 +99,10 @@
             border-radius: 5px;
         }
 
-        /* Fond Blanc, Texte Bleu pour Démarrer/Niveau Suivant */
+        
         #start-button, #next-level-button {
-            background-color: #FFFFFF; /* Fond Blanc */
-            color: #4fafff;     /* Texte Bleu (couleur du cadre) */
+            background-color: #FFFFFF; 
+            color: #4fafff;     
             font-weight: bold;  
         }
 
@@ -112,7 +112,7 @@
             display: none; 
         }
         
-        /* 🌟 Styles des Étoiles */
+        
         .star {
             position: absolute;
             cursor: pointer;
@@ -122,12 +122,12 @@
             animation: pulse 1s infinite alternate;
         }
 
-        /* COULEURS DES ÉTOILES PAR NIVEAU */
+       
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
         
-        /* 📊 Styles des Tableaux */
+   
         .table-container {
             margin: 30px 0;
             width: 80%;
@@ -139,7 +139,7 @@
             display: block; 
         }
         
-        /* Marge plus grande sous le message et sous le tableau de score pour éloigner les boutons du cadre bleu */
+       
         #message {
             margin-bottom: 30px; 
         }
@@ -154,17 +154,17 @@
             width: 100%;
         }
         
-        /* 💡 CORRECTION : BORDURES DU TABLEAU EN BLEU */
+       
         .game-table th, .game-table td {
-            border: 1px solid #4fafff; /* Changement de rose à bleu */
+            border: 1px solid #4fafff; 
             padding: 10px 15px;
             font-size: 1.1em;
             color: #ffffff; 
         }
         
-        /* 💡 CORRECTION : FOND DE L'ENTÊTE DU TABLEAU EN BLEU TRANSLUCIDE */
+      
         .game-table th {
-            background-color: rgba(79, 175, 255, 0.2); /* Changement de rose translucide à bleu translucide */
+            background-color: rgba(79, 175, 255, 0.2); 
             color: #ffffff;
             text-align: center;
         }
@@ -198,7 +198,7 @@
         </div>
 
         <div id="control-panel">
-            <h1>Attrape les Étoiles ⭐</h1>
+            <h1>Chasse aux Étoiles : Les 3 Épreuves ⭐</h1>
             <p id="message">Cliquez sur Démarrer pour attraper les étoiles !</p>
             
             <div id="config-table-container" class="table-container"></div>
