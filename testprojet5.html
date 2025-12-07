@@ -34,25 +34,35 @@
             z-index: 10; 
         }
 
-        /* 2. Panneau de contrôle (Page de Démarrage) qui couvre TOUT */
+        /* 2. Panneau de contrôle (Page de Démarrage) avec le cadre */
         #control-panel {
-            position: fixed; /* Positionnement au-dessus de tout l'écran */
-            top: 0;
-            left: 0;
-            width: 100%; 
-            height: 100vh; /* Couvre toute la hauteur de la fenêtre */
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            
+            width: 90%; 
+            max-width: 750px; 
+            max-height: 90vh; 
             
             display: flex;
             flex-direction: column; 
-            justify-content: center; /* Centrer le contenu verticalement */
+            justify-content: center;
             align-items: center;
             
-            background-color: rgba(0, 0, 0, 0.95); /* Bien opaque pour cacher le jeu */
+            /* Rendre le fond légèrement transparent pour voir le jeu */
+            background-color: rgba(0, 0, 0, 0.9); 
             
             padding: 40px; 
             box-sizing: border-box;
             overflow-y: auto; 
-            z-index: 500; /* Au-dessus de tout */
+            z-index: 500; 
+            
+            /* --- Rétablissement des styles de CADRE ESTHÉTIQUE --- */
+            border: 5px solid #4fafff; /* Bordure épaisse */
+            border-radius: 15px; /* Coins arrondis */
+            box-shadow: 0 0 80px rgba(79, 175, 255, 0.7); /* Ombre lumineuse */
+            /* ----------------------------------------------------- */
             
             transition: opacity 0.5s;
         }
@@ -686,7 +696,7 @@
                 // Le panneau de contrôle est visible par défaut à la réinitialisation
                 controlPanel.classList.remove('hidden'); 
                 gameContainer.classList.remove('active');
-                scoreBoard.style.opacity = 0; /* Cacher le score/chrono sur le panneau d'accueil */
+                scoreBoard.style.opacity = 1; /* Laisser le score/chrono visible en fond */
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
