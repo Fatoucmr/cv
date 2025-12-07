@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
 
     <style>
-        /* 🎨 CSS du Jeu (non modifié) */
+        /* 🎨 CSS du Jeu */
         body {
             background-color: #000000; 
             color: #ffffff; 
@@ -261,15 +261,14 @@
             // Initialisation des outils audio
             const synth = new Tone.Synth().toDestination();
             
-            // --- NOUVEAU : Le lecteur pour la musique de fond ---
+            // --- Lecteur pour la musique de fond (avec un volume réduit) ---
             const backgroundMusic = new Tone.Player({
-                // Utiliser le lien direct vers le fichier MP3
                 url: "https://cdn.freesound.org/previews/835/835835_16035974-lq.mp3", 
                 loop: true,
                 autostart: false,
-                volume: -12 // Réduit le volume pour ne pas couvrir les effets sonores
+                volume: -12 // Volume réduit pour le fond
             }).toDestination();
-            // ----------------------------------------------------
+            // ------------------------------------------------------------------
 
             const gameScreen = document.getElementById('game-screen');
             const gameContainer = document.getElementById('game-container');
@@ -455,12 +454,14 @@
                 if (validClick) {
                     score++;
                     scoreElement.textContent = score;
-                    synth.triggerAttackRelease("C4", "8n");
+                    // Son pour le clic valide (pour tous les niveaux)
+                    synth.triggerAttackRelease("C4", "8n"); 
                 } else if (currentLevel === 4) {
                     // Pénalité pour le niveau spécial si mauvaise couleur cliquée
                     score = Math.max(0, score - 1);
                     scoreElement.textContent = score;
-                    synth.triggerAttackRelease("C3", "16n"); // Son différent pour l'erreur
+                    // Son différent pour l'erreur
+                    synth.triggerAttackRelease("C3", "16n"); 
                 }
             }
 
@@ -470,11 +471,11 @@
                 gameActive = false;
                 clearTimeout(timerInterval);
                 clearTimeout(starSpawnInterval);
-                stopSpecialLevelLoop(); // Arrêter la boucle du niveau spécial
+                stopSpecialLevelLoop(); 
                 
-                // --- NOUVEAU : Arrêter la musique de fond ---
+                // --- Arrêter la musique de fond ---
                 backgroundMusic.stop();
-                // ------------------------------------------
+                // ----------------------------------
                 
                 saveLevelScore();
                 
@@ -553,6 +554,7 @@
 
                 gameContainer.appendChild(star);
                 
+                // Vitesse des étoiles augmente avec le niveau
                 const animationDuration = STAR_LIFETIME_MS * (1 + (LEVELS.length - currentLevel) * 0.2) * 1.5;
 
                 const starAnimation = anime({
@@ -600,30 +602,33 @@
                 createStar();
                 starSpawnInterval = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS[currentLevel - 1]);
             }
-
+            
+            // --- FONCTION startLevel CORRIGÉE POUR L'AUDIO ---
             function startLevel(levelId) {
                 if (gameActive) return;
 
-                // Tone.start() doit être appelé suite à une interaction utilisateur
-                Tone.start().then(() => {
-                    console.log("Audio context started.");
-                    // --- NOUVEAU : Démarrer la musique de fond ici ---
-                    if (!backgroundMusic.loaded) {
-                        // Charger la musique si ce n'est pas déjà fait
-                        backgroundMusic.load().then(() => {
-                             backgroundMusic.start();
-                        });
-                    } else {
-                        backgroundMusic.start();
-                    }
-                    // ----------------------------------------------------
-                });
-                
                 const levelConfig = LEVELS.find(l => l.id === levelId);
                 if (!levelConfig) {
                     return;
                 }
-
+                
+                // 🔊 DÉMARRAGE CRITIQUE : Démarrer le contexte audio sur l'action de l'utilisateur
+                Tone.start().then(() => {
+                    console.log("Audio context started.");
+                    
+                    // Démarrer la musique de fond
+                    if (!backgroundMusic.loaded) {
+                        // Si le son n'est pas encore chargé (première fois), on le charge et le démarre
+                        backgroundMusic.load().then(() => {
+                             backgroundMusic.start();
+                        }).catch(e => console.error("Erreur de chargement de la musique:", e));
+                    } else {
+                        // Si déjà chargé, on le démarre simplement
+                        backgroundMusic.start();
+                    }
+                });
+                // --------------------------------------------------------------------
+                
                 currentLevel = levelId;
                 gameActive = true;
                 
@@ -651,11 +656,11 @@
             function resetGame() {
                 clearTimeout(timerInterval);
                 clearTimeout(starSpawnInterval);
-                stopSpecialLevelLoop(); // Arrêter la boucle de couleur si elle était active
+                stopSpecialLevelLoop(); 
                 
-                // --- NOUVEAU : Arrêter la musique de fond ---
+                // --- Arrêter la musique de fond ---
                 backgroundMusic.stop();
-                // ------------------------------------------
+                // ----------------------------------
 
                 gameActive = false;
                 currentLevel = 1; 
