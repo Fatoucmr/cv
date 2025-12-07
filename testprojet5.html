@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles : Les 3 Niveaux + Niveau Spécial ⭐</title>
+    <title>Attrape les Étoiles ⭐</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
@@ -22,7 +22,6 @@
             height: 100vh;
         }
         
-        /* 1. Cadre du jeu, centré - Masqué au démarrage */
         #game-screen {
             position: relative; 
             width: 800px; 
@@ -33,12 +32,12 @@
             overflow: hidden;
             z-index: 10; 
             
-            /* CACHER AU DÉMARRAGE */
+
             opacity: 0; 
             transition: opacity 0.5s; 
         }
 
-        /* 2. Panneau de contrôle (Page de Démarrage) avec le cadre */
+
         #control-panel {
             position: fixed; 
             top: 50%; 
@@ -54,7 +53,7 @@
             justify-content: center;
             align-items: center;
             
-            /* Rendre le fond complètement noir (cache le jeu) */
+
             background-color: rgba(0, 0, 0, 1); 
             
             padding: 40px; 
@@ -62,7 +61,6 @@
             overflow-y: auto; 
             z-index: 500; 
             
-            /* Styles de CADRE ESTHÉTIQUE pour le panneau */
             border: 5px solid #4fafff; 
             border-radius: 15px; 
             box-shadow: 0 0 80px rgba(79, 175, 255, 0.7); 
@@ -91,7 +89,7 @@
             z-index: 100;
             position: absolute;
             top: 20px;
-            /* Le score sera géré par le JS et l'opacité du game-screen */
+
         }
 
         #score-board { 
@@ -277,21 +275,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- INITIALISATION DES SONS ---
-            const clickSynth = new Tone.Synth().toDestination(); // Son pour clic réussi (tous niveaux)
-            
-            // --- Son de démarrage de partie ---
-            const startSynth = new Tone.PolySynth(Tone.Synth).toDestination();
-            // ------------------------------------------
 
-            const errorPlayer = new Tone.Player( // Son pour erreur (niveau spécial)
+            const clickSynth = new Tone.Synth().toDestination(); 
+            
+            const startSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+
+
+            const errorPlayer = new Tone.Player( 
                 "https://tonejs.github.io/audio/berklee/gong_1.mp3"
             ).toDestination();
 
             Tone.loaded().then(() => {
                 console.log("Audio de Gong chargé.");
             });
-            // ---------------------------------------------
             
 
             const gameScreen = document.getElementById('game-screen');
@@ -479,15 +475,15 @@
                 if (validClick) {
                     score++;
                     scoreElement.textContent = score;
-                    // Son pour succès
+                   
                     const now = Tone.now();
                     clickSynth.triggerAttack("C4", now);
                     clickSynth.triggerRelease(now + 0.125); 
                 } else if (currentLevel === 4) {
-                    // Pénalité pour le niveau spécial si mauvaise couleur cliquée
+                    
                     score = Math.max(0, score - 1);
                     scoreElement.textContent = score;
-                    // Son pour erreur (gong)
+                   
                     if (errorPlayer.buffer.loaded) {
                         errorPlayer.start();
                     }
@@ -500,33 +496,33 @@
                 gameActive = false;
                 clearTimeout(timerInterval);
                 clearTimeout(starSpawnInterval);
-                stopSpecialLevelLoop(); // Arrêter la boucle du niveau spécial
+                stopSpecialLevelLoop(); 
                 
                 saveLevelScore();
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
 
-                // Cacher l'écran de jeu (et son score/chrono)
+              
                 gameScreen.style.opacity = 0; 
                 
                 gameContainer.classList.remove('active');
                 controlPanel.classList.remove('hidden'); 
                 
-                // Afficher le tableau des scores uniquement à la fin
+              
                 displayLevelScores(true);
 
                 const currentLevelConfig = LEVELS.find(l => l.id === currentLevel);
                 const goalMet = score >= currentLevelConfig.goal;
                 
-                // Afficher TOUJOURS les boutons de sélection
+              
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (currentLevel === 4) {
-                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de **${score}**. Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de **${score}**. Vous êtes désormais un(e) spécialiste des étoiles !`;
                 } else if (goalMet) {
-                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez un autre niveau !`;
                 } else {
-                    messageElement.innerHTML = `❌ Dommage ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
+                    messageElement.innerHTML = `❌ Dommage ! Votre score est de ${score}. Essayez à nouveau ou choisissez un autre niveau.`;
                 }
             }
 
@@ -564,7 +560,6 @@
                 star.classList.add('star', `level-${currentLevel}`);
 
                 if (currentLevel === 4) {
-                    // Choisir une couleur aléatoire pour le niveau spécial et l'appliquer via style
                     const randomColorIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
                     star.style.backgroundColor = SPECIAL_LEVEL_COLORS[randomColorIndex];
                     star.classList.remove(`level-${currentLevel}`); 
@@ -645,7 +640,7 @@
             function startLevel(levelId) {
                 if (gameActive) return;
 
-                // Démarrer le contexte audio lors du premier clic
+               
                 Tone.start().then(() => {
                     console.log("Audio context started.");
                 });
@@ -663,13 +658,10 @@
                 scoreElement.textContent = score;
                 currentLevelDisplay.textContent = currentLevel;
 
-                // --- DÉCLENCHEMENT DU SON DE DÉMARRAGE ICI ---
                 triggerStartSound();
-                // ---------------------------------------------
 
-                // Cacher le panneau de contrôle et afficher le jeu
                 controlPanel.classList.add('hidden');
-                gameScreen.style.opacity = 1; // Rendre l'écran de jeu visible
+                gameScreen.style.opacity = 1; 
                 scoreBoard.style.opacity = 1; 
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = '';
@@ -686,7 +678,7 @@
             function resetGame() {
                 clearTimeout(timerInterval);
                 clearTimeout(starSpawnInterval);
-                stopSpecialLevelLoop(); // Arrêter la boucle de couleur si elle était active
+                stopSpecialLevelLoop(); 
 
                 gameActive = false;
                 currentLevel = 1; 
@@ -696,20 +688,20 @@
                 currentLevelDisplay.textContent = 1;
                 messageElement.textContent = "Sélectionnez un niveau pour commencer.";
                 
-                // Afficher le menu de sélection
+               
                 levelSelectionButtons.style.display = 'flex'; 
                 
-                // Cacher l'écran de jeu
+               
                 gameScreen.style.opacity = 0; 
                 
-                // Le panneau de contrôle est visible par défaut à la réinitialisation
+             
                 controlPanel.classList.remove('hidden'); 
                 gameContainer.classList.remove('active');
                 scoreBoard.style.opacity = 0; 
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
-                // Afficher les scores s'il y en a
+             
                 const currentScores = loadAllScores();
                 const hasScores = Object.values(currentScores).some(s => s > 0);
                 if (hasScores) {
@@ -726,11 +718,11 @@
                 button.addEventListener('click', (e) => {
                     const levelId = parseInt(e.target.dataset.level);
                     startLevel(levelId);
-                    levelSelectionButtons.style.display = 'none'; // Cacher les boutons pendant le jeu
+                    levelSelectionButtons.style.display = 'none'; 
                 });
             });
             
-            // Initialisation
+
             resetGame();
         });
     </script>
