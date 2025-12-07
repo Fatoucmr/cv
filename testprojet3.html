@@ -37,14 +37,13 @@
             transition: opacity 0.5s;
         }
 
-        /* Masquer complètement l'écran de contrôle */
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
         }
         
         #control-panel h1 {
-            color: #ff4fa8;
+            color: #ffffff;
         }
         
         #game-screen {
@@ -58,10 +57,10 @@
             overflow: hidden;
         }
 
-        /* 💡 CORRECTION : Encadrés avec BORDURE BLANCHE et FOND TRANSPARENT/TRANSLUCIDE */
+    
         #score-board, #countdownExample, #level-display {
-            color: #ffffff; /* Texte en blanc pour le fond noir du jeu */
-            background-color: rgba(11, 12, 16, 0.7); /* Fond noir très transparent */
+            color: #ffffff; 
+            background-color: rgba(11, 12, 16, 0.7); 
             padding: 10px 20px;
             border-radius: 10px;
             z-index: 100;
@@ -73,21 +72,19 @@
             left: 50%; 
             transform: translateX(-50%); 
             font-size: 2em; 
-            border: 2px solid #FFFFFF; /* BORDURE BLANCHE */
+            border: 2px solid #FFFFFF; 
         }
         #countdownExample { 
             right: 20px; 
             font-size: 1.5em; 
-            border: 2px solid #FFFFFF; /* BORDURE BLANCHE */
+            border: 2px solid #FFFFFF; 
         }
         #level-display { 
             left: 20px; 
             font-size: 1.5em; 
-            border: 2px solid #FFFFFF; /* BORDURE BLANCHE */
+            border: 2px solid #FFFFFF; 
         }
-        /* Fin de la correction */
-
-        /* Boutons */
+    
         .game-button {
             padding: 15px 30px;
             margin: 10px;
@@ -99,12 +96,13 @@
         }
 
         #start-button, #next-level-button {
-            background-color: #ff4fa8;
-            color: white;
+            background-color: #FFFFFF;
+            color: #4fafff;
+            font-weight: bold;
         }
 
         #restart-button {
-            background-color: #4fafff;
+            background-color: ##4fafff;
             color: white;
             display: none; 
         }
@@ -119,12 +117,12 @@
             animation: pulse 1s infinite alternate;
         }
 
-        /* COULEURS DES ÉTOILES PAR NIVEAU */
+
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
         
-        /* 📊 Styles des Tableaux */
+      
         .table-container {
             margin: 30px 0;
             width: 80%;
@@ -136,7 +134,6 @@
             display: block; 
         }
         
-        /* Marge plus grande sous le message et sous le tableau de score pour éloigner les boutons du cadre bleu */
         #message {
             margin-bottom: 30px; 
         }
@@ -152,14 +149,14 @@
         }
         
         .game-table th, .game-table td {
-            border: 1px solid #ff4fa8;
+            border: 1px solid #4fafff;
             padding: 10px 15px;
             font-size: 1.1em;
             color: #ffffff; 
         }
         
         .game-table th {
-            background-color: rgba(255, 79, 168, 0.2);
+            background-color: rgba(79, 175, 255, 0.2);
             color: #ffffff;
             text-align: center;
         }
