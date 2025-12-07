@@ -22,7 +22,7 @@
             height: 100vh;
         }
         
-        /* 1. Cadre du jeu, centré */
+        /* 1. Cadre du jeu, centré - Masqué au démarrage */
         #game-screen {
             position: relative; 
             width: 800px; 
@@ -32,6 +32,10 @@
             background-color: #000a1a;
             overflow: hidden;
             z-index: 10; 
+            
+            /* CACHER AU DÉMARRAGE */
+            opacity: 0; 
+            transition: opacity 0.5s; 
         }
 
         /* 2. Panneau de contrôle (Page de Démarrage) avec le cadre */
@@ -50,7 +54,7 @@
             justify-content: center;
             align-items: center;
             
-            /* CORRECTION: Rend le fond complètement noir et opaque (cache le jeu) */
+            /* Rendre le fond complètement noir (cache le jeu) */
             background-color: rgba(0, 0, 0, 1); 
             
             padding: 40px; 
@@ -58,11 +62,10 @@
             overflow-y: auto; 
             z-index: 500; 
             
-            /* --- Styles de CADRE ESTHÉTIQUE --- */
+            /* Styles de CADRE ESTHÉTIQUE pour le panneau */
             border: 5px solid #4fafff; 
             border-radius: 15px; 
             box-shadow: 0 0 80px rgba(79, 175, 255, 0.7); 
-            /* ---------------------------------- */
             
             transition: opacity 0.5s;
         }
@@ -88,6 +91,7 @@
             z-index: 100;
             position: absolute;
             top: 20px;
+            /* Le score sera géré par le JS et l'opacité du game-screen */
         }
 
         #score-board { 
@@ -502,7 +506,9 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
 
-                scoreBoard.style.opacity = 0;
+                // Cacher l'écran de jeu (et son score/chrono)
+                gameScreen.style.opacity = 0; 
+                
                 gameContainer.classList.remove('active');
                 controlPanel.classList.remove('hidden'); 
                 
@@ -661,10 +667,10 @@
                 triggerStartSound();
                 // ---------------------------------------------
 
-                // Cacher le panneau de contrôle pour démarrer le jeu
+                // Cacher le panneau de contrôle et afficher le jeu
                 controlPanel.classList.add('hidden');
-                gameContainer.classList.add('active');
-                scoreBoard.style.opacity = 1; // Rendre le score/chrono visible dans l'écran de jeu
+                gameScreen.style.opacity = 1; // Rendre l'écran de jeu visible
+                scoreBoard.style.opacity = 1; 
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = '';
 
@@ -693,10 +699,13 @@
                 // Afficher le menu de sélection
                 levelSelectionButtons.style.display = 'flex'; 
                 
+                // Cacher l'écran de jeu
+                gameScreen.style.opacity = 0; 
+                
                 // Le panneau de contrôle est visible par défaut à la réinitialisation
                 controlPanel.classList.remove('hidden'); 
                 gameContainer.classList.remove('active');
-                scoreBoard.style.opacity = 0; /* Cacher le score/chrono derrière le panneau d'accueil */
+                scoreBoard.style.opacity = 0; 
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
