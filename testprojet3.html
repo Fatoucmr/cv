@@ -58,10 +58,10 @@
             overflow: hidden;
         }
 
-        /* Encadrés Score, Timer et Niveau en BLANC */
+        /* 💡 CORRECTION : Encadrés avec BORDURE BLANCHE et FOND TRANSPARENT/TRANSLUCIDE */
         #score-board, #countdownExample, #level-display {
-            color: #000000; 
-            background-color: #FFFFFF;
+            color: #ffffff; /* Texte en blanc pour le fond noir du jeu */
+            background-color: rgba(11, 12, 16, 0.7); /* Fond noir très transparent */
             padding: 10px 20px;
             border-radius: 10px;
             z-index: 100;
@@ -69,9 +69,23 @@
             top: 20px;
         }
 
-        #score-board { left: 50%; transform: translateX(-50%); font-size: 2em; border: 2px solid #ff4fa8; }
-        #countdownExample { right: 20px; font-size: 1.5em; border: 2px solid #4fafff; }
-        #level-display { left: 20px; font-size: 1.5em; border: 2px solid #000000; }
+        #score-board { 
+            left: 50%; 
+            transform: translateX(-50%); 
+            font-size: 2em; 
+            border: 2px solid #FFFFFF; /* BORDURE BLANCHE */
+        }
+        #countdownExample { 
+            right: 20px; 
+            font-size: 1.5em; 
+            border: 2px solid #FFFFFF; /* BORDURE BLANCHE */
+        }
+        #level-display { 
+            left: 20px; 
+            font-size: 1.5em; 
+            border: 2px solid #FFFFFF; /* BORDURE BLANCHE */
+        }
+        /* Fin de la correction */
 
         /* Boutons */
         .game-button {
@@ -122,7 +136,7 @@
             display: block; 
         }
         
-        /* 💡 CORRECTION : Marge plus grande sous le message et sous le tableau de score */
+        /* Marge plus grande sous le message et sous le tableau de score pour éloigner les boutons du cadre bleu */
         #message {
             margin-bottom: 30px; 
         }
@@ -130,7 +144,6 @@
             margin-bottom: 50px; 
             display: block;
         }
-        /* Fin de la correction */
 
         .game-table {
             margin: 10px auto;
