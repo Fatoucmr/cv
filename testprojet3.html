@@ -11,9 +11,9 @@
     <style>
         /* 🎨 CSS du Jeu */
         body {
-            /* FOND BLANC POUR L'ÉCRAN DE DÉMARRAGE */
-            background-color: #ffffff; 
-            color: #000000; 
+            /* 💡 CHANGEMENT: Fond de la page en NOIR */
+            background-color: #000000; 
+            color: #ffffff; 
             font-family: Arial, sans-serif;
             margin: 0;
             overflow: hidden;
@@ -24,7 +24,7 @@
         }
         
         #control-panel {
-            /* Fond blanc semi-transparent pour l'écran de contrôle */
+            /* Fond noir semi-transparent pour l'écran de contrôle */
             position: absolute;
             top: 0;
             left: 0;
@@ -34,7 +34,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.95); 
+            background-color: rgba(0, 0, 0, 0.9); 
             z-index: 200;
             transition: opacity 0.5s;
         }
@@ -105,7 +105,7 @@
         .star.level-2 { background-color: #4fafff; /* Bleu */ }
         .star.level-3 { background-color: #ffffff; /* Blanc */ }
         
-        /* 📊 Styles des Tableaux (pour l'écran de contrôle blanc) */
+        /* 📊 Styles des Tableaux (pour l'écran de contrôle noir) */
         .table-container {
             margin: 30px 0;
             width: 80%;
@@ -124,15 +124,16 @@
         }
         
         .game-table th, .game-table td {
+            /* 💡 CHANGEMENT: Texte en blanc pour fond noir */
             border: 1px solid #ff4fa8;
             padding: 10px 15px;
             font-size: 1.1em;
-            color: #000000;
+            color: #ffffff; 
         }
         
         .game-table th {
             background-color: rgba(255, 79, 168, 0.2);
-            color: #000000;
+            color: #ffffff;
             text-align: center;
         }
         .level-score {
@@ -140,11 +141,11 @@
             color: #4fafff;
         }
         .goal-met {
-            color: green;
+            color: #90ee90; /* Vert clair pour fond noir */
             font-weight: bold;
         }
         .goal-missed {
-            color: red;
+            color: #ff6347; /* Rouge orangé pour fond noir */
             font-weight: bold;
         }
 
@@ -195,7 +196,7 @@
             const scoreTableContainer = document.getElementById('score-table-container');
             const currentLevelDisplay = document.getElementById('current-level');
 
-            // Configuration des Niveaux (Ajout du score minimum requis)
+            // Configuration des Niveaux (score minimum requis)
             const LEVELS = [
                 { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile" },
                 { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal" },
@@ -240,20 +241,21 @@
             // --- Affichage des Tableaux ---
 
             /**
-             * Affiche le tableau de configuration (Niveau/Temps/Objectif) au démarrage.
+             * Affiche le tableau de configuration (Niveau/Temps) au démarrage.
              */
             function displayConfigTable() {
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = '';
 
                 let tableHTML = '<h2>🚀 Configuration des Niveaux</h2>';
-                tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Temps</th><th>Objectif Min.</th></tr></thead><tbody>';
+                // 💡 CHANGEMENT: EN-TÊTE : Seulement Niveau et Temps
+                tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Temps</th></tr></thead><tbody>'; 
 
                 LEVELS.forEach((level) => {
+                    // 💡 CHANGEMENT: LIGNES : Seulement Niveau et Temps
                     tableHTML += `<tr>
                         <td>${level.name}</td>
                         <td>${level.time}s</td>
-                        <td>${level.goal} étoiles</td>
                     </tr>`;
                 });
 
