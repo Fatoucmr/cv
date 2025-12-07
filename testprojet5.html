@@ -22,33 +22,37 @@
             height: 100vh;
         }
         
-        #control-panel {
-            /* Anciens styles (positionnement pour masquer) */
-            position: fixed; /* Utiliser fixed pour le centrer dans la fenêtre */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Centrage parfait */
-            
-            width: 90%; 
-            max-width: 700px; /* Limiter la taille pour un effet de cadre */
-            max-height: 90vh; /* Limiter la hauteur */
+        /* 1. Cadre du jeu, centré */
+        #game-screen {
+            position: relative; /* Essentiel pour le positionnement des étoiles */
+            width: 800px; 
+            height: 600px; 
+            border: 5px solid #4fafff; 
+            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
+            background-color: #000a1a;
+            overflow: hidden;
+            z-index: 10; 
+        }
 
+        /* 2. Panneau de contrôle (Page de Démarrage) qui couvre TOUT */
+        #control-panel {
+            position: fixed; /* Positionnement au-dessus de tout l'écran */
+            top: 0;
+            left: 0;
+            width: 100%; 
+            height: 100vh; /* Couvre toute la hauteur de la fenêtre */
+            
             display: flex;
             flex-direction: column; 
-            justify-content: flex-start; 
+            justify-content: center; /* Centrer le contenu verticalement */
             align-items: center;
             
-            background-color: rgba(0, 0, 0, 0.95); /* Arrière-plan plus opaque */
+            background-color: rgba(0, 0, 0, 0.95); /* Bien opaque pour cacher le jeu */
+            
             padding: 40px; 
             box-sizing: border-box;
             overflow-y: auto; 
-            z-index: 200;
-            
-            /* --- NOUVEAUX STYLES DE CADRE ESTHÉTIQUE --- */
-            border: 5px solid #4fafff; /* Bordure épaisse */
-            border-radius: 15px; /* Coins arrondis */
-            box-shadow: 0 0 80px rgba(79, 175, 255, 0.7); /* Ombre lumineuse */
-            /* ------------------------------------------- */
+            z-index: 500; /* Au-dessus de tout */
             
             transition: opacity 0.5s;
         }
@@ -65,16 +69,6 @@
             margin-bottom: 30px; 
         }
         
-        #game-screen {
-            position: relative;
-            width: 800px; 
-            height: 600px; 
-            border: 5px solid #4fafff; 
-            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
-            background-color: #000a1a;
-            overflow: hidden;
-        }
-
         
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
@@ -184,7 +178,6 @@
             width: 80%;
             max-width: 450px;
             text-align: center;
-            display: none; 
         }
         .table-container.active {
             display: block; 
@@ -233,6 +226,24 @@
 </head>
 <body>
 
+    <div id="control-panel">
+        <h1>Attrape les Étoiles ⭐</h1>
+        <p id="message">Sélectionnez un niveau pour commencer.</p>
+        
+        <div id="score-table-container" class="table-container"></div>
+        
+        <div id="level-selection-buttons">
+            <button id="select-level-1" class="level-button" data-level="1">Niveau 1</button>
+            <button id="select-level-2" class="level-button" data-level="2">Niveau 2</button>
+            <button id="select-level-3" class="level-button" data-level="3">Niveau 3</button>
+            <button id="select-level-4" class="level-button" data-level="4">Niveau SPÉCIAL</button>
+        </div>
+        
+        <button id="start-button" class="game-button" style="display: none;"></button>
+        <button id="next-level-button" class="game-button" style="display: none;"></button> 
+        
+    </div>
+    
     <div id="game-screen">
         
         <div id="game-container">
@@ -242,24 +253,6 @@
             <div id="countdownExample">
                 <div class="values"></div>
             </div>
-        </div>
-
-        <div id="control-panel">
-            <h1>Attrape les Étoiles ⭐</h1>
-            <p id="message">Sélectionnez un niveau pour commencer.</p>
-            
-            <div id="score-table-container" class="table-container"></div>
-            
-            <div id="level-selection-buttons">
-                <button id="select-level-1" class="level-button" data-level="1">Niveau 1</button>
-                <button id="select-level-2" class="level-button" data-level="2">Niveau 2</button>
-                <button id="select-level-3" class="level-button" data-level="3">Niveau 3</button>
-                <button id="select-level-4" class="level-button" data-level="4">Niveau SPÉCIAL</button>
-            </div>
-            
-            <button id="start-button" class="game-button" style="display: none;"></button>
-            <button id="next-level-button" class="game-button" style="display: none;"></button> 
-            
         </div>
     </div>
 
@@ -658,7 +651,7 @@
                 triggerStartSound();
                 // ---------------------------------------------
 
-                // Cacher les messages et tables pour démarrer le jeu
+                // Cacher le panneau de contrôle pour démarrer le jeu
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
                 scoreBoard.style.opacity = 1;
@@ -690,9 +683,10 @@
                 // Afficher le menu de sélection
                 levelSelectionButtons.style.display = 'flex'; 
                 
-                controlPanel.classList.remove('hidden');
+                // Le panneau de contrôle est visible par défaut à la réinitialisation
+                controlPanel.classList.remove('hidden'); 
                 gameContainer.classList.remove('active');
-                scoreBoard.style.opacity = 0;
+                scoreBoard.style.opacity = 0; /* Cacher le score/chrono sur le panneau d'accueil */
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
