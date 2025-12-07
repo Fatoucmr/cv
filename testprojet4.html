@@ -39,7 +39,7 @@
             box-sizing: border-box;
         }
 
-      
+        
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
@@ -63,7 +63,7 @@
             overflow: hidden;
         }
 
-       
+        
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
             background-color: rgba(11, 12, 16, 0.7); 
@@ -134,7 +134,7 @@
             display: none; 
         }
 
-       
+        
 
         .star {
             position: absolute;
@@ -145,10 +145,11 @@
             animation: pulse 1s infinite alternate;
         }
 
-    
+    /* Styles pour les niveaux 1, 2 et 3 classiques */
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
+        /* La classe .star.level-4 n'est plus utilisée pour la couleur, mais nous la gardons */
         .star.level-4 { background-color: #F44336; } 
         
         /* Consigne du Niveau Spécial */
@@ -168,7 +169,7 @@
             z-index: 101;
         }
         
-       
+        
 
         .table-container {
             margin: 30px 0;
@@ -277,8 +278,7 @@
             const levelSelectionButtons = document.getElementById('level-selection-buttons');
             const specialLevelTip = document.getElementById('special-level-tip');
 
-
-     
+            
             const LEVELS = [
                 { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile", isSpecial: false },
                 { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal", isSpecial: false },
@@ -418,12 +418,12 @@
             
             // Fonction utilitaire pour convertir RGB en Hex pour la comparaison
             function rgbToHex(rgb) {
-                if (rgb.startsWith('#')) return rgb;
+                if (rgb.startsWith('#')) return rgb.toUpperCase();
                 // Ex : rgb(244, 67, 54)
                 const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
                 if (!parts) return '#000000'; 
                 function hex(x) {
-                    const h = parseInt(x).toString(16);
+                    const h = parseInt(x).toString(16).toUpperCase();
                     return h.length === 1 ? '0' + h : h;
                 }
                 return '#' + hex(parts[1]) + hex(parts[2]) + hex(parts[3]);
@@ -436,19 +436,12 @@
                 
                 // 1. Récupérer la couleur de l'étoile cliquée (en Hex)
                 const starColorRGB = window.getComputedStyle(starElement).backgroundColor;
-                const starColorHex = rgbToHex(starColorRGB).toLowerCase();
+                const starColorHex = rgbToHex(starColorRGB);
 
                 // 2. Récupérer la couleur de la bordure du score (en Hex)
-                const borderHex = rgbToHex(scoreBoard.style.borderColor).toLowerCase();
+                const borderRGB = window.getComputedStyle(scoreBoard).borderColor;
+                const borderHex = rgbToHex(borderRGB);
                 
-                // La bordure peut être vide si elle vient d'être initialisée. Utiliser une valeur par défaut.
-                if (borderHex === '#ffffff' && currentBorderColor !== '#FFFFFF') {
-                     // Si la bordure est blanche, mais que la variable de contrôle est sur une couleur spéciale, on prend la variable.
-                     // C'est une correction pour le premier tick de l'intervalle.
-                     const controlColor = currentBorderColor.toLowerCase();
-                     return starColorHex === controlColor;
-                }
-
                 // 3. Comparer
                 return starColorHex === borderHex;
             }
@@ -533,6 +526,16 @@
 
                 const star = document.createElement('div');
                 star.classList.add('star', `level-${currentLevel}`);
+
+                // *** DÉBUT DE LA MODIFICATION CLÉ ***
+                if (currentLevel === 4) {
+                    // Choisir une couleur aléatoire pour le niveau spécial et l'appliquer via style
+                    const randomColorIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
+                    star.style.backgroundColor = SPECIAL_LEVEL_COLORS[randomColorIndex];
+                    star.classList.remove(`level-${currentLevel}`); // Optionnel: enlever la classe pour éviter la couleur par défaut
+                }
+                // *** FIN DE LA MODIFICATION CLÉ ***
+
 
                 const maxX = containerWidth - STAR_SIZE;
                 const maxY = containerHeight - STAR_SIZE;
@@ -644,7 +647,7 @@
                 messageElement.textContent = "Sélectionnez un niveau pour commencer.";
                 
                 levelSelectionButtons.style.display = 'flex'; // Afficher le menu de sélection
-                restartButton.style.display = 'none'; // Cacher le bouton de réinitialisation des scores (il s'affichera après un niveau joué)
+                restartButton.style.display = 'block'; // Afficher le bouton de réinitialisation des scores (car au moins un jeu a été fait)
                 
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
@@ -652,15 +655,16 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
-                // Vider et masquer les tableaux au démarrage
-                scoreTableContainer.classList.remove('active');
-                scoreTableContainer.innerHTML = '';
+                // Afficher les scores initiaux
+                displayLevelScores(true);
             }
             
             function resetAllScoresAndGame() {
                 localStorage.removeItem('levelScores');
                 resetGame();
                 messageElement.textContent = "Scores réinitialisés. Sélectionnez un niveau pour commencer.";
+                // Cacher le bouton "Réinitialiser les scores" après la réinitialisation complète
+                restartButton.style.display = 'none'; 
             }
 
             // --- Événements ---
