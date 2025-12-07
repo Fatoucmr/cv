@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles - Multilevel</title>
+    <title>Attrape les Étoiles</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
@@ -181,7 +181,7 @@
         
         <div id="game-container">
             <div id="score-board">Score: <span id="score">0</span></div>
-            <div id="level-display">Niveau: <span id="current-level">1</span></div> 
+            <div id="level-display">Niveaux: <span id="current-level">1</span></div> 
 
             <div id="countdownExample">
                 <div class="values"></div>
@@ -189,7 +189,7 @@
         </div>
 
         <div id="control-panel">
-            <h1>Attrape les Étoiles ⭐</h1>
+            <h1>ATTRAPE LES ÉTOILES ⭐</h1>
             <p id="message">Cliquez sur Démarrer pour attraper les étoiles !</p>
             
             <div id="config-table-container" class="table-container"></div>
@@ -222,9 +222,9 @@
 
             // Configuration des Niveaux (score minimum requis)
             const LEVELS = [
-                { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile" },
-                { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal" },
-                { id: 3, time: 20, goal: 60, name: "Niveau 3: Difficile" }
+                { id: 1, time: 60, goal: 20, name: "Niveau 1 : Facile" },
+                { id: 2, time: 40, goal: 40, name: "Niveau 2 : Normal" },
+                { id: 3, time: 20, goal: 60, name: "Niveau 3 : Difficile" }
             ];
 
             // Paramètres de jeu
