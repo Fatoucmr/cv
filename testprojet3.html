@@ -11,7 +11,6 @@
     <style>
         /* 🎨 CSS du Jeu */
         body {
-            /* 💡 FOND NOIR */
             background-color: #000000; 
             color: #ffffff; 
             font-family: Arial, sans-serif;
@@ -24,7 +23,6 @@
         }
         
         #control-panel {
-            /* Fond noir semi-transparent pour l'écran de contrôle */
             position: absolute;
             top: 0;
             left: 0;
@@ -39,10 +37,10 @@
             transition: opacity 0.5s;
         }
 
-        /* 💥 CORRECTION AJOUTÉE ICI : Masquer complètement l'écran de contrôle */
+        /* 💥 CORRECTION : Masquer complètement l'écran de contrôle */
         #control-panel.hidden {
             opacity: 0;
-            pointer-events: none; /* TRÈS IMPORTANT : Permet de cliquer sur les étoiles en dessous */
+            pointer-events: none;
         }
         
         #control-panel h1 {
@@ -55,11 +53,10 @@
             height: 600px; 
             border: 5px solid #4fafff; 
             box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
-            background-color: #000a1a; /* L'écran de jeu reste noir */
+            background-color: #000a1a;
             overflow: hidden;
         }
 
-        /* Styles de la partie en jeu (doivent être visibles sur fond noir) */
         #score-board, #countdownExample, #level-display {
             color: white; 
             background-color: rgba(11, 12, 16, 0.7);
@@ -111,7 +108,7 @@
         .star.level-2 { background-color: #4fafff; /* Bleu */ }
         .star.level-3 { background-color: #ffffff; /* Blanc */ }
         
-        /* 📊 Styles des Tableaux (pour l'écran de contrôle noir) */
+        /* 📊 Styles des Tableaux */
         .table-container {
             margin: 30px 0;
             width: 80%;
@@ -218,8 +215,13 @@
             let levelScores = {};
 
             const STAR_SIZE = 30;
-            const STAR_LIFETIME_MS = 3000;
-            const STAR_SPAWN_INTERVAL_MS = [1000, 700, 500];
+            
+            // 💡 CHANGEMENT 1: Augmenter la durée de vie pour les rendre plus lentes (en ms)
+            const STAR_LIFETIME_MS = 5000; 
+            
+            // 💡 CHANGEMENT 2: Augmenter l'intervalle d'apparition (en ms) pour réduire la densité
+            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700]; 
+
 
             // --- Fonctions de Score et Niveaux ---
 
@@ -245,19 +247,14 @@
 
             // --- Affichage des Tableaux ---
 
-            /**
-             * Affiche le tableau de configuration (Niveau/Temps) au démarrage.
-             */
             function displayConfigTable() {
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = '';
 
                 let tableHTML = '<h2>🚀 Configuration des Niveaux</h2>';
-                // 💡 EN-TÊTE : Seulement Niveau et Temps
                 tableHTML += '<table class="game-table"><thead><tr><th>Niveau</th><th>Temps</th></tr></thead><tbody>'; 
 
                 LEVELS.forEach((level) => {
-                    // 💡 LIGNES : Seulement Niveau et Temps
                     tableHTML += `<tr>
                         <td>${level.name}</td>
                         <td>${level.time}s</td>
@@ -269,10 +266,6 @@
                 configTableContainer.classList.add('active');
             }
             
-            /**
-             * Affiche le tableau des scores de chaque niveau.
-             * @param {boolean} showTotal - Afficher ou non le total cumulé.
-             */
             function displayLevelScores(showTotal = false) {
                 const scores = loadAllScores();
                 configTableContainer.classList.remove('active');
@@ -341,43 +334,37 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
 
-                // Cacher les infos de la partie et afficher l'écran de contrôle
                 scoreBoard.style.opacity = 0;
                 gameContainer.classList.remove('active');
-                controlPanel.classList.remove('hidden'); // Afficher la page de contrôle
+                controlPanel.classList.remove('hidden'); 
                 
-                // Afficher le tableau de scores
                 displayLevelScores(true);
 
                 const currentLevelConfig = LEVELS.find(l => l.id === currentLevel);
                 const nextLevel = LEVELS.find(l => l.id === currentLevel + 1);
                 
-                // Vérification de l'objectif
                 const goalMet = score >= currentLevelConfig.goal;
 
                 if (goalMet && nextLevel) {
-                    // Objectif atteint et niveau suivant existe
                     messageElement.innerHTML = `Bravo ! Niveau ${currentLevel} validé avec ${score} étoiles (Objectif : ${currentLevelConfig.goal}). Prêt(e) pour le niveau ${nextLevel.id} ?`;
                     nextLevelButton.textContent = `Démarrer ${nextLevel.name}`;
                     nextLevelButton.style.display = 'block';
                     startButton.style.display = 'none';
                     restartButton.style.display = 'none';
-                    currentLevel++; // Préparer le niveau suivant
+                    currentLevel++;
 
                 } else if (goalMet && !nextLevel) {
-                    // Objectif atteint et fin du jeu
                     messageElement.innerHTML = `FÉLICITATIONS ! Niveau ${currentLevel} validé ! Vous avez terminé le jeu ! Votre score **TOTAL** est de <strong>${Object.values(levelScores).reduce((a, b) => a + b, 0)}</strong>.`;
                     nextLevelButton.style.display = 'none';
                     startButton.style.display = 'none';
                     restartButton.style.display = 'block';
                     
                 } else {
-                    // Objectif non atteint
                     messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour progresser.`;
                     nextLevelButton.style.display = 'none';
                     startButton.style.display = 'block';
                     startButton.textContent = `Recommencer Niveau ${currentLevel}`;
-                    restartButton.style.display = 'block'; // Permettre de recommencer tout le jeu
+                    restartButton.style.display = 'block';
                 }
             }
 
@@ -425,6 +412,9 @@
                 star.style.top = `${startY}px`;
 
                 gameContainer.appendChild(star);
+                
+                // 💡 CHANGEMENT 3: Augmentation de la durée de l'animation pour ralentir l'étoile
+                const animationDuration = STAR_LIFETIME_MS * (1 + (LEVELS.length - currentLevel) * 0.2) * 1.5; // Multiplicateur pour ralentir
 
                 const starAnimation = anime({
                     targets: star,
@@ -433,7 +423,7 @@
                     rotate: '2turn',
                     opacity: [0.5, 1],
                     easing: 'linear',
-                    duration: STAR_LIFETIME_MS * (1 + (LEVELS.length - currentLevel) * 0.2),
+                    duration: animationDuration,
                     complete: () => {
                         if (star.parentNode) {
                             star.remove();
@@ -473,6 +463,11 @@
             function startLevel(levelId) {
                 if (gameActive) return;
 
+                // 💡 CORRECTION SON: Démarrer le contexte audio lors du premier clic utilisateur
+                Tone.start().then(() => {
+                    console.log("Audio context started.");
+                });
+                
                 const levelConfig = LEVELS.find(l => l.id === levelId);
                 if (!levelConfig) {
                     return;
@@ -481,25 +476,21 @@
                 currentLevel = levelId;
                 gameActive = true;
                 
-                // Réinitialisation par niveau
                 score = 0;
                 timeLeft = levelConfig.time;
                 scoreElement.textContent = score;
                 currentLevelDisplay.textContent = currentLevel;
 
-                // Affichage de la partie en cours
-                controlPanel.classList.add('hidden'); // Cacher la page de contrôle
+                controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
                 scoreBoard.style.opacity = 1;
 
-                // Démarrage des boucles
                 gameLoop();
                 updateTimer();
             }
 
             function startGame() {
                 if (currentLevel === 1) {
-                    // Initialisation pour une nouvelle partie complète
                     localStorage.removeItem('levelScores');
                     levelScores = { 1: 0, 2: 0, 3: 0 };
                 }
@@ -507,7 +498,6 @@
             }
 
             function resetGame() {
-                // Arrêter tout
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
                 clearTimeout(starSpawnInterval);
@@ -517,7 +507,6 @@
                 score = 0;
                 levelScores = loadAllScores();
 
-                // Préparation de l'écran de démarrage
                 const initialLevelConfig = LEVELS[0];
                 scoreElement.textContent = 0;
                 currentLevelDisplay.textContent = 1;
@@ -533,10 +522,8 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
-                // Afficher le tableau des configurations
                 displayConfigTable();
                 
-                // Afficher les scores précédents (si existants), sinon afficher seulement la config
                 if (Object.values(levelScores).some(s => s > 0)) {
                      displayLevelScores(true);
                      configTableContainer.classList.remove('active');
