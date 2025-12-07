@@ -479,7 +479,7 @@
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (goalMet) {
-                    messageElement.innerHTML = `✅ BRAVO ! Niveau **${currentLevelConfig.name}** validé avec un score de ${score} (Objectif : ${currentLevelConfig.goal}). **Choisissez un autre niveau !**`;
+                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez un autre niveau !`;
                 } else {
                     messageElement.innerHTML = `❌ Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
                 }
