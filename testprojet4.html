@@ -1,1 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attrape les Étoiles - Multilevel</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
 
+    <style>
+        /* 🎨 CSS du Jeu */
+        body {
+            background-color: #000000; 
+            color: #ffffff; 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        #control-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9); 
+            z-index: 200;
+            transition: opacity 0.5s;
+        }
+
+        #control-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #control-panel h1 {
+            color: #ffffff; 
+        }
+        
+        #game-screen {
+            position: relative;
+            width: 800px; 
+            height: 600px; 
+            /* Encadré bleu du jeu */
+            border: 5px solid #4fafff; 
+            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
+            background-color: #000a1a;
+            overflow: hidden;
+        }
+
+        #score-board, #countdownExample, #level-display {
+            color: #ffffff; 
+            background-color: rgba(11, 12, 16, 0.7); 
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 100;
+            position: absolute;
+            top: 20px;
+        }
+
+        #score-board { 
+            left: 50%; 
+            transform: translateX(-50%); 
+            font-size: 2em; 
+            border: 2px solid #FFFFFF; 
+        }
+        #countdownExample { 
+            right: 20px; 
+            font-size: 1.5em; 
+            border: 2px solid #FFFFFF; 
+        }
+        #level-display { 
+            left: 20px; 
+            font-size: 1.5em; 
+            border: 2px solid #FFFFFF; 
+        }
+
+
+        .game-button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.1s;
+            border-radius: 5px;
+        }
+        
+        #level-selection-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap; 
+            justify-content: center;
+        }
+
+        .level-button {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.1s;
+            border-radius: 5px;
+            color: black; /* Texte en noir par défaut */
+            font-weight: bold;
+        }
+
+        #select-level-1 { background-color: #4CAF50; } /* Vert */
+        #select-level-2 { background-color: #FFEB3B; } /* Jaune */
+        #select-level-3 { background-color: #FF9800; } /* Orange */
+        #select-level-4 { background-color: #F44336; } /* Rouge (Niveau Spécial) */
+
+        #restart-button {
+            background-color: #4fafff;
+            color: white;
+        }
+
+        .star {
+            position: absolute;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: pulse 1s infinite alternate;
+        }
+
+        .star.level-1 { background-color: #ff4fa8; }
+        .star.level-2 { background-color: #4fafff; }
+        .star.level-3 { background-color: #ffffff; }
+        .star.level-4 { background-color: #F44336; } /* Étoile du niveau spécial en Rouge */
+        
+        #special-level-tip {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000000;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            width:
