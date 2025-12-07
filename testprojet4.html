@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles - Multilevel</title>
+    <title>Attrape les Étoiles</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
@@ -37,7 +37,6 @@
             transition: opacity 0.5s;
             padding: 40px; 
             box-sizing: border-box;
-            /* Permet le défilement si le contenu est trop grand */
             overflow-y: auto; 
         }
 
@@ -58,7 +57,6 @@
             position: relative;
             width: 800px; 
             height: 600px; 
-            /* Encadré bleu du jeu */
             border: 5px solid #4fafff; 
             box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
             background-color: #000a1a;
@@ -94,7 +92,6 @@
         }
 
 
-        /* Boutons Généraux */
         .game-button {
             padding: 15px 30px;
             margin: 10px;
@@ -147,14 +144,11 @@
             animation: pulse 1s infinite alternate;
         }
 
-    /* Styles pour les niveaux 1, 2 et 3 classiques */
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
-        /* La classe .star.level-4 n'est plus utilisée pour la couleur, mais nous la gardons */
         .star.level-4 { background-color: #F44336; } 
         
-        /* Consigne du Niveau Spécial */
         #special-level-tip {
             position: absolute;
             top: 70px;
@@ -167,7 +161,7 @@
             width: 200px;
             text-align: center;
             border: 2px solid #F44336;
-            display: none; /* Caché par défaut */
+            display: none; 
             z-index: 101;
         }
         
@@ -239,7 +233,7 @@
         </div>
 
         <div id="control-panel">
-            <h1>Attrape les Étoiles ⭐</h1>
+            <h1>Attrape les Étoiles : Les 3 Niveaux + Niveau Spécial ⭐</h1>
             <p id="message">Sélectionnez un niveau pour commencer.</p>
             
             <div id="score-table-container" class="table-container"></div>
@@ -259,7 +253,7 @@
     </div>
 
     <div id="special-level-tip">
-        ATTENTION : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
+        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
     </div>
 
     <script>
@@ -313,7 +307,6 @@
 
             const STAR_SIZE = 30;
             
-            // Paramètres de vitesse et d'apparition
             const STAR_LIFETIME_MS = 5000; 
             const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; // Ajout du Niveau 4
 
@@ -348,8 +341,6 @@
                     console.error("Erreur de sauvegarde du localStorage:", e);
                 }
             }
-
-            // --- Affichage des Tableaux (Uniquement le score final) ---
             
             function displayLevelScores(showTotal = false) {
                 const scores = loadAllScores();
@@ -534,7 +525,7 @@
                     // Choisir une couleur aléatoire pour le niveau spécial et l'appliquer via style
                     const randomColorIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
                     star.style.backgroundColor = SPECIAL_LEVEL_COLORS[randomColorIndex];
-                    star.classList.remove(`level-${currentLevel}`); // Optionnel: enlever la classe pour éviter la couleur par défaut
+                    star.classList.remove(`level-${currentLevel}`); 
                 }
 
 
@@ -678,8 +669,6 @@
                     restartButton.style.display = 'none'; 
                 }
             }
-
-            // --- Événements ---
             
             levelSelectionButtons.querySelectorAll('.level-button').forEach(button => {
                 button.addEventListener('click', (e) => {
