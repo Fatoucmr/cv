@@ -252,13 +252,25 @@
     </div>
 
     <div id="special-level-tip">
-        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
+        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est **IDENTIQUE** à la couleur de la bordure du score ci-dessus. La couleur change !
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- INITIALISATION DES SONS (AJOUTS ICI) ---
+            const synth = new Tone.Synth().toDestination(); // Son pour clic réussi (tous niveaux)
+            
+            const errorPlayer = new Tone.Player( // Son pour erreur (niveau spécial)
+                "https://tonejs.github.io/audio/berklee/gong_1.mp3"
+            ).toDestination();
 
-            const synth = new Tone.Synth().toDestination();
+            Tone.loaded().then(() => {
+                // S'assurer que le gong est chargé avant de pouvoir être joué
+                console.log("Audio de Gong chargé.");
+            });
+            // ---------------------------------------------
+            
 
             const gameScreen = document.getElementById('game-screen');
             const gameContainer = document.getElementById('game-container');
@@ -282,10 +294,10 @@
             
             // Couleurs pour le Niveau Spécial (correspondent aux classes .star)
             const SPECIAL_LEVEL_COLORS = [
-                '#ff4fa8', 
-                '#4fafff', 
-                '#ffffff', 
-                '#F44336',  
+                '#FF4FA8', // Correspond à .star.level-1 (mis en majuscule pour la cohérence des comparaisons Hex)
+                '#4FAFFF', // Correspond à .star.level-2
+                '#FFFFFF', // Correspond à .star.level-3
+                '#F44336', // Correspond à .star.level-4 (F44336)
                 '#5D0D6E',
                 '#F8DE65',
                 '#0FAC71',
@@ -356,7 +368,7 @@
                     let statusClass = '';
 
                     // On n'affiche plus le statut de validation, juste le meilleur score et l'objectif
-                    if (levelScore >= level.goal) {
+                    if (levelScore >= level.goal && level.goal > 0) { // Ajout de la condition pour ne pas valider Niv. Spécial avec goal=0
                         statusClass = 'goal-met'; // Couleur verte si l'objectif est atteint
                     }
                     
@@ -426,6 +438,7 @@
                 }
                 
                 // 1. Récupérer la couleur de l'étoile cliquée (en Hex)
+                // Dans le niveau 4, la couleur est définie par style.backgroundColor
                 const starColorRGB = window.getComputedStyle(starElement).backgroundColor;
                 const starColorHex = rgbToHex(starColorRGB);
 
@@ -444,12 +457,21 @@
                 if (validClick) {
                     score++;
                     scoreElement.textContent = score;
-                    synth.triggerAttackRelease("C4", "8n");
+                    // --- SON POUR SUCCÈS (AJOUT) ---
+                    const now = Tone.now();
+                    synth.triggerAttack("C4", now);
+                    synth.triggerRelease(now + 0.125); // 8n = 0.125
+                    // --------------------------------
                 } else if (currentLevel === 4) {
                     // Pénalité pour le niveau spécial si mauvaise couleur cliquée
                     score = Math.max(0, score - 1);
                     scoreElement.textContent = score;
-                    synth.triggerAttackRelease("C3", "16n"); // Son différent pour l'erreur
+                    // --- SON POUR ERREUR (AJOUT) ---
+                    if (errorPlayer.buffer.loaded) {
+                        // Rejouer le son du gong
+                        errorPlayer.start();
+                    }
+                    // --------------------------------
                 }
             }
 
@@ -478,10 +500,12 @@
                 // Afficher TOUJOURS les boutons de sélection
                 levelSelectionButtons.style.display = 'flex'; 
                 
-                if (goalMet) {
-                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez un autre niveau !`;
+                if (currentLevel === 4) {
+                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de **${score}**. Choisissez un autre niveau !`;
+                } else if (goalMet) {
+                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez un autre niveau !`;
                 } else {
-                    messageElement.innerHTML = `❌ Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
+                    messageElement.innerHTML = `❌ Dommage ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
                 }
             }
 
@@ -589,9 +613,12 @@
             function startLevel(levelId) {
                 if (gameActive) return;
 
+                // --- Démarrer le contexte audio lors du premier clic ---
+                // C'est nécessaire dans de nombreux navigateurs modernes.
                 Tone.start().then(() => {
                     console.log("Audio context started.");
                 });
+                // -----------------------------------------------------
                 
                 const levelConfig = LEVELS.find(l => l.id === levelId);
                 if (!levelConfig) {
