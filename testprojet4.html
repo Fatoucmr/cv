@@ -37,6 +37,8 @@
             transition: opacity 0.5s;
             padding: 40px; 
             box-sizing: border-box;
+            /* Permet le défilement si le contenu est trop grand */
+            overflow-y: auto; 
         }
 
         
@@ -484,13 +486,14 @@
                 const currentLevelConfig = LEVELS.find(l => l.id === currentLevel);
                 const goalMet = score >= currentLevelConfig.goal;
                 
-                levelSelectionButtons.style.display = 'flex'; // Afficher les boutons de sélection
-                restartButton.style.display = 'block'; // Afficher le bouton de réinitialisation des scores
-
+                // *** AJOUT/MODIFICATION CLÉ POUR RÉAFFICHER LES BOUTONS ***
+                levelSelectionButtons.style.display = 'flex'; // Afficher TOUJOURS les boutons de sélection
+                restartButton.style.display = 'block'; // Afficher TOUJOURS le bouton de réinitialisation des scores
+                
                 if (goalMet) {
-                    messageElement.innerHTML = `BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score} (Objectif : ${currentLevelConfig.goal}). Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `✅ BRAVO ! Niveau **${currentLevelConfig.name}** validé avec un score de ${score} (Objectif : ${currentLevelConfig.goal}). **Choisissez un autre niveau !**`;
                 } else {
-                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Essayez à nouveau ou choisissez un autre niveau.`;
+                    messageElement.innerHTML = `❌ Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
                 }
             }
 
@@ -527,14 +530,12 @@
                 const star = document.createElement('div');
                 star.classList.add('star', `level-${currentLevel}`);
 
-                // *** DÉBUT DE LA MODIFICATION CLÉ ***
                 if (currentLevel === 4) {
                     // Choisir une couleur aléatoire pour le niveau spécial et l'appliquer via style
                     const randomColorIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
                     star.style.backgroundColor = SPECIAL_LEVEL_COLORS[randomColorIndex];
                     star.classList.remove(`level-${currentLevel}`); // Optionnel: enlever la classe pour éviter la couleur par défaut
                 }
-                // *** FIN DE LA MODIFICATION CLÉ ***
 
 
                 const maxX = containerWidth - STAR_SIZE;
@@ -646,8 +647,12 @@
                 currentLevelDisplay.textContent = 1;
                 messageElement.textContent = "Sélectionnez un niveau pour commencer.";
                 
-                levelSelectionButtons.style.display = 'flex'; // Afficher le menu de sélection
-                restartButton.style.display = 'block'; // Afficher le bouton de réinitialisation des scores (car au moins un jeu a été fait)
+                // Afficher le menu de sélection
+                levelSelectionButtons.style.display = 'flex'; 
+                // Cacher le bouton de réinitialisation des scores au premier lancement
+                const currentScores = loadAllScores();
+                const hasScores = Object.values(currentScores).some(s => s > 0);
+                restartButton.style.display = hasScores ? 'block' : 'none';
                 
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
@@ -655,16 +660,23 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
-                // Afficher les scores initiaux
-                displayLevelScores(true);
+                // Afficher les scores initiaux s'il y en a
+                if (hasScores) {
+                    displayLevelScores(true);
+                } else {
+                    scoreTableContainer.classList.remove('active');
+                    scoreTableContainer.innerHTML = '';
+                }
             }
             
             function resetAllScoresAndGame() {
-                localStorage.removeItem('levelScores');
-                resetGame();
-                messageElement.textContent = "Scores réinitialisés. Sélectionnez un niveau pour commencer.";
-                // Cacher le bouton "Réinitialiser les scores" après la réinitialisation complète
-                restartButton.style.display = 'none'; 
+                if (confirm("Êtes-vous sûr de vouloir réinitialiser tous vos meilleurs scores ? Cette action est irréversible.")) {
+                    localStorage.removeItem('levelScores');
+                    resetGame();
+                    messageElement.textContent = "Scores réinitialisés. Sélectionnez un niveau pour commencer.";
+                    // Cacher le bouton "Réinitialiser les scores" après la réinitialisation complète
+                    restartButton.style.display = 'none'; 
+                }
             }
 
             // --- Événements ---
