@@ -27,8 +27,8 @@
             position: relative; 
             width: 800px; 
             height: 600px; 
-            border: 5px solid #4fafff; /* Valeur par défaut */
-            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5); /* Valeur par défaut */
+            border: 5px solid #4fafff; 
+            box-shadow: 0 0 50px rgba(79, 175, 255, 0.5);
             background-color: #000a1a;
             overflow: hidden;
             z-index: 10; 
@@ -271,7 +271,7 @@
     </div>
 
     <div id="special-level-tip">
-        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est **IDENTIQUE** à la couleur de la bordure du score ci-dessus. La couleur change !
+        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
     </div>
 
     <script>
@@ -326,7 +326,7 @@
             let currentBorderColor = '#FFFFFF';
             let colorChangeInterval;
 
-            // Paramètres de jeu
+           
             let currentLevel = 1;
             let score = 0;
             let gameActive = false;
@@ -511,11 +511,11 @@
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (currentLevel === 4) {
-                    messageElement.innerHTML = `✨ Niveau SPÉCIAL terminé ! Votre score est de **${score}**. Choisissez votre prochaine aventure !`;
+                    messageElement.innerHTML = `✨ Niveau SPÉCIAL terminé ! Votre score est de ${score}. Choisissez votre prochaine aventure !`;
                 } else if (goalMet) {
-                    messageElement.innerHTML = `🌟 Bravo ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez votre prochaine aventure !`;
+                    messageElement.innerHTML = `🌟 Bravo ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez votre prochaine aventure !`;
                 } else {
-                    messageElement.innerHTML = `⚡ Presque ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). Rejouez ou sélectionnez un autre niveau !`;
+                    messageElement.innerHTML = `⚡ Presque ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Rejouez ou sélectionnez un autre niveau !`;
                 }
             }
 
@@ -682,7 +682,7 @@
 
                 scoreElement.textContent = 0;
                 currentLevelDisplay.textContent = 1;
-                messageElement.textContent = "Attrape les étoiles : sélectionne un niveau pour commencer !";
+                messageElement.textContent = "Attrape les étoiles : sélectionne un niveau pour (re)commencer !";
                 
                 levelSelectionButtons.style.display = 'flex'; 
                 
