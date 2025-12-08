@@ -37,17 +37,16 @@
             transition: opacity 0.5s;
             padding: 40px; 
             box-sizing: border-box;
-            /* AJUSTEMENT CLÉ : Permet le défilement si le contenu dépasse la hauteur de 600px */
             overflow-y: auto; 
         }
 
-        /* Masquer complètement l'écran de contrôle */
+        
         #control-panel.hidden {
             opacity: 0;
             pointer-events: none;
         }
         
-        /* Titre principal en BLANC */
+       
         #control-panel h1 {
             color: #ffffff; 
             margin-top: 0; 
@@ -65,7 +64,7 @@
             overflow: hidden;
         }
 
-        /* Encadrés Score, Timer et Niveau */
+      
         #score-board, #countdownExample, #level-display {
             color: #ffffff; 
             background-color: rgba(11, 12, 16, 0.7); 
@@ -94,10 +93,10 @@
         }
 
 
-        /* Boutons Généraux */
+    
         .game-button {
             padding: 15px 30px;
-            /* Réduction des marges pour laisser plus de place */
+            
             margin: 8px; 
             font-size: 1.5em;
             cursor: pointer;
@@ -118,7 +117,7 @@
             display: none; 
         }
         
-        /* Styles des étoiles */
+
         .star {
             position: absolute;
             cursor: pointer;
@@ -128,7 +127,7 @@
             animation: pulse 1s infinite alternate;
         }
 
-        /* Couleurs des étoiles */
+    
         .star.level-1 { background-color: #ff4fa8; }
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
@@ -148,10 +147,10 @@
         
         
         #message {
-            margin-bottom: 20px; /* Réduction de la marge */
+            margin-bottom: 20px; 
         }
         #score-table-container.active {
-            margin-bottom: 30px; /* Réduction de la marge */
+            margin-bottom: 30px; 
             display: block;
         }
 
@@ -164,8 +163,8 @@
         
         .game-table th, .game-table td {
             border: 1px solid #4fafff; 
-            padding: 8px 12px; /* Réduction du padding */
-            font-size: 1em; /* Légère réduction de la taille de la police */
+            padding: 8px 12px; 
+            font-size: 1em; 
             color: #ffffff; 
         }
         
@@ -397,7 +396,7 @@
                     restartButton.style.display = 'block';
                     
                 } else {
-                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour progresser.`;
+                    messageElement.innerHTML = `Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Vous devez refaire le Niveau ${currentLevel} pour atteindre le niveau suivant.`;
                     nextLevelButton.style.display = 'none';
                     startButton.style.display = 'block';
                     startButton.textContent = `Recommencer Niveau ${currentLevel}`;
@@ -568,13 +567,13 @@
                 }
             }
 
-            // --- Événements ---
+
             
             startButton.addEventListener('click', startGame);
             nextLevelButton.addEventListener('click', () => startLevel(currentLevel)); 
             restartButton.addEventListener('click', resetGame); 
             
-            // Initialisation
+         
             resetGame();
         });
     </script>
