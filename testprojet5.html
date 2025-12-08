@@ -240,7 +240,7 @@
 
     <div id="control-panel">
         <h1>Attrape les Étoiles ⭐</h1>
-        <p id="message">Sélectionnez un niveau pour commencer.</p>
+        <p id="message">Sélectionnez un niveau pour (re)commencer.</p>
         
         <div id="score-table-container" class="table-container"></div>
         
@@ -269,7 +269,7 @@
     </div>
 
     <div id="special-level-tip">
-        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est **IDENTIQUE** à la couleur de la bordure du score ci-dessus. La couleur change !
+        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
     </div>
 
     <script>
@@ -336,7 +336,7 @@
             const STAR_SIZE = 30;
             
             const STAR_LIFETIME_MS = 5000; 
-            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; // Ajout du Niveau 4
+            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; 
 
             // --- Fonctions de Score et Niveaux ---
 
@@ -387,7 +387,7 @@
 
                     // On n'affiche plus le statut de validation, juste le meilleur score et l'objectif
                     if (levelScore >= level.goal && level.goal > 0) { // Ajout de la condition pour ne pas valider Niv. Spécial avec goal=0
-                        statusClass = 'goal-met'; // Couleur verte si l'objectif est atteint
+                        statusClass = 'goal-met'; 
                     }
                     
                     tableHTML += `<tr>
@@ -420,10 +420,10 @@
             function startSpecialLevelLoop() {
                 if (currentLevel !== 4 || !gameActive) return;
                 
-                // Initialise la couleur de la bordure
+            
                 changeBorderColor();
                 
-                // Change la couleur toutes les 3 secondes
+               
                 colorChangeInterval = setInterval(changeBorderColor, 3000);
                 specialLevelTip.style.display = 'block';
             }
@@ -432,7 +432,7 @@
                 if (colorChangeInterval) {
                     clearInterval(colorChangeInterval);
                 }
-                // Réinitialise la bordure du score en blanc
+              
                 scoreBoard.style.borderColor = '#FFFFFF'; 
                 specialLevelTip.style.display = 'none';
             }
@@ -518,7 +518,7 @@
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (currentLevel === 4) {
-                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de **${score}**. Vous êtes désormais un(e) spécialiste des étoiles !`;
+                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de ${score}. Vous êtes désormais un(e) spécialiste des étoiles !`;
                 } else if (goalMet) {
                     messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez un autre niveau !`;
                 } else {
@@ -686,7 +686,7 @@
 
                 scoreElement.textContent = 0;
                 currentLevelDisplay.textContent = 1;
-                messageElement.textContent = "Sélectionnez un niveau pour commencer.";
+                messageElement.textContent = "Sélectionnez un niveau pour (re)commencer.";
                 
                
                 levelSelectionButtons.style.display = 'flex'; 
