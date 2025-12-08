@@ -234,7 +234,7 @@
 
         <div id="control-panel">
             <h1>Attrape les Étoiles ⭐</h1>
-            <p id="message">Sélectionnez un niveau pour commencer.</p>
+            <p id="message">Sélectionnez un niveau pour (re)commencer.</p>
             
             <div id="score-table-container" class="table-container"></div>
             
@@ -258,15 +258,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- INITIALISATION DES SONS (AJOUTS ICI) ---
-            const synth = new Tone.Synth().toDestination(); // Son pour clic réussi (tous niveaux)
+           
+            const synth = new Tone.Synth().toDestination(); 
             
-            const errorPlayer = new Tone.Player( // Son pour erreur (niveau spécial)
+            const errorPlayer = new Tone.Player( 
                 "https://tonejs.github.io/audio/berklee/gong_1.mp3"
             ).toDestination();
 
             Tone.loaded().then(() => {
-                // S'assurer que le gong est chargé avant de pouvoir être joué
                 console.log("Audio de Gong chargé.");
             });
             // ---------------------------------------------
@@ -292,12 +291,12 @@
                 { id: 4, time: 60, goal: 0, name: "Niveau SPÉCIAL", isSpecial: true }
             ];
             
-            // Couleurs pour le Niveau Spécial (correspondent aux classes .star)
+           
             const SPECIAL_LEVEL_COLORS = [
-                '#FF4FA8', // Correspond à .star.level-1 (mis en majuscule pour la cohérence des comparaisons Hex)
+                '#FF4FA8', // Correspond à .star.level-1 
                 '#4FAFFF', // Correspond à .star.level-2
                 '#FFFFFF', // Correspond à .star.level-3
-                '#F44336', // Correspond à .star.level-4 (F44336)
+                '#F44336', // Correspond à .star.level-4 
                 '#5D0D6E',
                 '#F8DE65',
                 '#0FAC71',
@@ -369,7 +368,7 @@
 
                     // On n'affiche plus le statut de validation, juste le meilleur score et l'objectif
                     if (levelScore >= level.goal && level.goal > 0) { // Ajout de la condition pour ne pas valider Niv. Spécial avec goal=0
-                        statusClass = 'goal-met'; // Couleur verte si l'objectif est atteint
+                        statusClass = 'goal-met'; 
                     }
                     
                     tableHTML += `<tr>
@@ -414,7 +413,7 @@
                 if (colorChangeInterval) {
                     clearInterval(colorChangeInterval);
                 }
-                // Réinitialise la bordure du score en blanc
+               
                 scoreBoard.style.borderColor = '#FFFFFF'; 
                 specialLevelTip.style.display = 'none';
             }
@@ -457,21 +456,21 @@
                 if (validClick) {
                     score++;
                     scoreElement.textContent = score;
-                    // --- SON POUR SUCCÈS (AJOUT) ---
+                  
                     const now = Tone.now();
                     synth.triggerAttack("C4", now);
                     synth.triggerRelease(now + 0.125); // 8n = 0.125
-                    // --------------------------------
+                   
                 } else if (currentLevel === 4) {
-                    // Pénalité pour le niveau spécial si mauvaise couleur cliquée
+                    
                     score = Math.max(0, score - 1);
                     scoreElement.textContent = score;
-                    // --- SON POUR ERREUR (AJOUT) ---
+                  
                     if (errorPlayer.buffer.loaded) {
-                        // Rejouer le son du gong
+                       
                         errorPlayer.start();
                     }
-                    // --------------------------------
+    
                 }
             }
 
@@ -491,21 +490,21 @@
                 gameContainer.classList.remove('active');
                 controlPanel.classList.remove('hidden'); 
                 
-                // Afficher le tableau des scores uniquement à la fin
+      
                 displayLevelScores(true);
 
                 const currentLevelConfig = LEVELS.find(l => l.id === currentLevel);
                 const goalMet = score >= currentLevelConfig.goal;
                 
-                // Afficher TOUJOURS les boutons de sélection
+               
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (currentLevel === 4) {
-                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de **${score}**. Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de ${score}. Choisissez un autre niveau !`;
                 } else if (goalMet) {
-                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez un autre niveau !`;
                 } else {
-                    messageElement.innerHTML = `❌ Dommage ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
+                    messageElement.innerHTML = `❌ Dommage ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Essayez à nouveau ou choisissez un autre niveau.`;
                 }
             }
 
@@ -543,7 +542,6 @@
                 star.classList.add('star', `level-${currentLevel}`);
 
                 if (currentLevel === 4) {
-                    // Choisir une couleur aléatoire pour le niveau spécial et l'appliquer via style
                     const randomColorIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
                     star.style.backgroundColor = SPECIAL_LEVEL_COLORS[randomColorIndex];
                     star.classList.remove(`level-${currentLevel}`); 
@@ -613,12 +611,11 @@
             function startLevel(levelId) {
                 if (gameActive) return;
 
-                // --- Démarrer le contexte audio lors du premier clic ---
-                // C'est nécessaire dans de nombreux navigateurs modernes.
+                
                 Tone.start().then(() => {
                     console.log("Audio context started.");
                 });
-                // -----------------------------------------------------
+               
                 
                 const levelConfig = LEVELS.find(l => l.id === levelId);
                 if (!levelConfig) {
@@ -633,7 +630,7 @@
                 scoreElement.textContent = score;
                 currentLevelDisplay.textContent = currentLevel;
 
-                // Cacher les messages et tables pour démarrer le jeu
+               
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
                 scoreBoard.style.opacity = 1;
@@ -652,7 +649,7 @@
             function resetGame() {
                 clearTimeout(timerInterval);
                 clearTimeout(starSpawnInterval);
-                stopSpecialLevelLoop(); // Arrêter la boucle de couleur si elle était active
+                stopSpecialLevelLoop(); 
 
                 gameActive = false;
                 currentLevel = 1; 
@@ -660,7 +657,7 @@
 
                 scoreElement.textContent = 0;
                 currentLevelDisplay.textContent = 1;
-                messageElement.textContent = "Sélectionnez un niveau pour commencer.";
+                messageElement.textContent = "Sélectionnez un niveau pour (re)commencer.";
                 
                 // Afficher le menu de sélection
                 levelSelectionButtons.style.display = 'flex'; 
@@ -688,11 +685,11 @@
                 button.addEventListener('click', (e) => {
                     const levelId = parseInt(e.target.dataset.level);
                     startLevel(levelId);
-                    levelSelectionButtons.style.display = 'none'; // Cacher les boutons pendant le jeu
+                    levelSelectionButtons.style.display = 'none'; 
                 });
             });
             
-            // Initialisation
+           
             resetGame();
         });
     </script>
