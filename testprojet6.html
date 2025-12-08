@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attrape les Étoiles : Les 3 Niveaux + Niveau Spécial ⭐</title>
+    <title>Chasse aux Étoiles 🌟</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
@@ -22,7 +22,7 @@
             height: 100vh;
         }
         
-        /* 1. Cadre du jeu, centré - Masqué au démarrage */
+       
         #game-screen {
             position: relative; 
             width: 800px; 
@@ -33,12 +33,12 @@
             overflow: hidden;
             z-index: 10; 
             
-            /* CACHER AU DÉMARRAGE */
+            
             opacity: 0; 
             transition: opacity 0.5s, border-color 0.5s, box-shadow 0.5s; 
         }
 
-        /* 2. Panneau de contrôle (Page de Démarrage/Fin) avec le cadre VIOLET */
+      
         #control-panel {
             position: fixed; 
             top: 50%; 
@@ -54,7 +54,7 @@
             justify-content: center;
             align-items: center;
             
-            /* Rendre le fond complètement noir (cache le jeu) */
+         
             background-color: rgba(0, 0, 0, 1); 
             
             padding: 40px; 
@@ -62,10 +62,10 @@
             overflow-y: auto; 
             z-index: 500; 
             
-            /* Styles de CADRE VIOLET pour le panneau */
-            border: 5px solid #9932CC; /* Violet éclatant */
+            
+            border: 5px solid #9932CC; 
             border-radius: 15px; 
-            box-shadow: 0 0 80px rgba(153, 50, 204, 0.7); /* Ombre violette */
+            box-shadow: 0 0 80px rgba(153, 50, 204, 0.7); 
             
             transition: opacity 0.5s;
         }
@@ -138,16 +138,16 @@
             border: none;
             transition: background-color 0.3s, transform 0.1s;
             border-radius: 5px;
-            color: white; /* Texte en blanc pour les couleurs foncées */
+            color: white; 
             font-weight: bold;
         }
 
 
-        /* Couleurs de niveau plus foncées */
-        #select-level-1 { background-color: #556B2F; } /* Vert Olive Foncé */
-        #select-level-2 { background-color: #B8860B; } /* Jaune Doré Foncé */
-        #select-level-3 { background-color: #CC5500; } /* Orange Foncé */
-        #select-level-4 { background-color: #8B0000; } /* Rouge Foncé */
+       
+        #select-level-1 { background-color: #556B2F; } 
+        #select-level-2 { background-color: #B8860B; } 
+        #select-level-3 { background-color: #CC5500; } 
+        #select-level-4 { background-color: #8B0000; } 
         
         #start-button, #next-level-button {
             display: none; 
@@ -242,7 +242,7 @@
 
     <div id="control-panel">
         <h1>Attrape les Étoiles ⭐</h1>
-        <p id="message">Sélectionnez un niveau pour commencer.</p>
+        <p id="message">Choisis ton niveau et attrape les étoiles !</p>
         
         <div id="score-table-container" class="table-container"></div>
         
@@ -277,10 +277,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- INITIALISATION DES SONS ---
+           
             const clickSynth = new Tone.Synth().toDestination(); 
             const startSynth = new Tone.PolySynth(Tone.Synth).toDestination();
-            const endOscillator = new Tone.Oscillator().toDestination(); // Son de fin de partie
+            const endOscillator = new Tone.Oscillator().toDestination(); 
             const errorPlayer = new Tone.Player( 
                 "https://tonejs.github.io/audio/berklee/gong_1.mp3"
             ).toDestination();
@@ -288,7 +288,7 @@
             Tone.loaded().then(() => {
                 console.log("Audio context started.");
             });
-            // ---------------------------------------------
+           
             
 
             const gameScreen = document.getElementById('game-screen');
@@ -304,7 +304,7 @@
             const specialLevelTip = document.getElementById('special-level-tip');
 
             
-            // --- NOUVELLES COULEURS DE NIVEAU (PLUS FONCÉES) ---
+
             const LEVELS = [
                 { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile", isSpecial: false, color: "#556B2F", shadow: "rgba(85, 107, 47, 0.7)" },
                 { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal", isSpecial: false, color: "#B8860B", shadow: "rgba(184, 134, 11, 0.7)" },
@@ -312,7 +312,7 @@
                 { id: 4, time: 60, goal: 0, name: "Niveau SPÉCIAL", isSpecial: true, color: "#8B0000", shadow: "rgba(139, 0, 0, 0.7)" }
             ];
             
-            // Couleurs pour le Niveau Spécial (étoiles)
+
             const SPECIAL_LEVEL_COLORS = [
                 '#FF4FA8',
                 '#4FAFFF',
@@ -340,17 +340,15 @@
             const STAR_LIFETIME_MS = 5000; 
             const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; 
 
-            // --- Fonctions de Style ---
+     
             function updateGameScreenStyle(levelConfig) {
                 if (levelConfig) {
                     gameScreen.style.borderColor = levelConfig.color;
-                    // L'ombre utilise la couleur sombre en version transparente
                     gameScreen.style.boxShadow = `0 0 50px ${levelConfig.shadow}`;
                 }
             }
 
 
-            // --- Fonctions de Score et Niveaux (Omises pour la concision du commentaire) ---
 
             function loadAllScores() {
                 try {
@@ -461,12 +459,12 @@
             }
 
 
-            // --- Logique de Jeu Générale ---
+
 
             function triggerEndSound() {
                 const now = Tone.now();
                 
-                // Son de fin de partie : rampe descendante de C4 à C2 sur 2s, s'arrête après 3s
+              
                 endOscillator.frequency.value = "C4";
                 endOscillator.frequency.rampTo("C2", 2);
                 endOscillator.start(now).stop(now + 3);
@@ -496,7 +494,7 @@
                 clearTimeout(starSpawnInterval);
                 stopSpecialLevelLoop(); 
                 
-                triggerEndSound(); // Jouer le son de fin de partie
+                triggerEndSound(); 
 
                 saveLevelScore();
                 
@@ -513,11 +511,11 @@
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (currentLevel === 4) {
-                    messageElement.innerHTML = `🏁 FIN du Niveau SPÉCIAL ! Votre score est de **${score}**. Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `✨ Niveau SPÉCIAL terminé ! Votre score est de **${score}**. Choisissez votre prochaine aventure !`;
                 } else if (goalMet) {
-                    messageElement.innerHTML = `✅ BRAVO ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez un autre niveau !`;
+                    messageElement.innerHTML = `🌟 Bravo ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez votre prochaine aventure !`;
                 } else {
-                    messageElement.innerHTML = `❌ Dommage ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). **Essayez à nouveau ou choisissez un autre niveau.**`;
+                    messageElement.innerHTML = `⚡ Presque ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). Rejouez ou sélectionnez un autre niveau !`;
                 }
             }
 
@@ -654,10 +652,10 @@
 
                 triggerStartSound();
                 
-                // Mettre à jour la couleur du cadre de jeu
+               
                 updateGameScreenStyle(levelConfig);
 
-                // Cacher le panneau de contrôle et afficher le jeu
+                
                 controlPanel.classList.add('hidden');
                 gameScreen.style.opacity = 1; 
                 scoreBoard.style.opacity = 1; 
@@ -684,7 +682,7 @@
 
                 scoreElement.textContent = 0;
                 currentLevelDisplay.textContent = 1;
-                messageElement.textContent = "Sélectionnez un niveau pour commencer.";
+                messageElement.textContent = "Attrape les étoiles : sélectionne un niveau pour commencer !";
                 
                 levelSelectionButtons.style.display = 'flex'; 
                 
@@ -716,7 +714,7 @@
                 });
             });
             
-            // Initialisation
+            
             resetGame();
         });
     </script>
