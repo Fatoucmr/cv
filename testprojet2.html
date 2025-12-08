@@ -11,7 +11,6 @@
     <style>
         /* 🎨 CSS du Jeu */
         body {
-            /* Style de fond pour l'espace */
             background-color: #001233;
             color: #c5c6c7;
             font-family: Arial, sans-serif;
@@ -38,10 +37,9 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            /* 🛑 DÉPART: Caché */
             opacity: 0;
             transition: opacity 0.5s;
-            pointer-events: none; /* Désactive les clics quand caché */
+            pointer-events: none; 
         }
 
         #game-container.active {
@@ -60,7 +58,6 @@
             border-radius: 10px;
             background-color: rgba(11, 12, 16, 0.7);
             z-index: 100;
-            /* 💡 Ajout pour cacher/afficher le score de la partie */
             transition: opacity 0.3s;
         }
 
@@ -78,7 +75,7 @@
             z-index: 100;
         }
 
-        /* Conteneur des boutons et écran de démarrage/fin */
+
         #control-panel {
             position: absolute;
             top: 0;
@@ -117,7 +114,6 @@
         #restart-button {
             background-color: #4fafff;
             color: white;
-            /* Rendre initiallement caché et gérer l'affichage par JS */
             display: none; 
         }
         
@@ -148,7 +144,7 @@
             }
         }
         
-        /* 🌟 Nouveau Style pour le Tableau des Scores */
+
         #score-table-container {
             margin: 30px 0;
             width: 80%;
@@ -312,7 +308,7 @@
             
                 saveScore(score);
                 
-                // Afficher l'écran de fin
+          
                 controlPanel.classList.remove('hidden');
                 gameContainer.classList.remove('active');
                 
@@ -323,7 +319,7 @@
                 startButton.style.display = 'none';
                 restartButton.style.display = 'block';
 
-                // 🌟 Afficher le tableau des meilleurs scores (NOUVEAU)
+          
                 displayHighScores();
                 
                 
@@ -484,7 +480,7 @@
                 gameActive = false;
 
                 scoreElement.textContent = score;
-                countdownDisplay.textContent = initialTime + "s"; // Afficher le temps initial
+                countdownDisplay.textContent = initialTime + "s"; 
                 messageElement.textContent = "Cliquez sur Démarrer pour attraper les étoiles !";
                 
                 startButton.textContent = "Démarrer";
