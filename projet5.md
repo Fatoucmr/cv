@@ -1,1 +1,3 @@
+VERSION 5
+
 Pour cette version, j'ai utilisé Gemini et je lui ai demandé d'ajouter un encadré sur la page de démarrage afin que ce soit plus esthétique et que l'on ne voie pas la page du jeu en arrière-plan. Je lui ai également demander d'ajouter le son Instruments de Tone.js, qui s'active lorsque l'on démarre une partie.
