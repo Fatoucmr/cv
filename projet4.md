@@ -1,4 +1,7 @@
+VERSION 4
+
 Pour cette version, je lui ai demandé de faire en sorte que, dès le départ, on puisse choisir directement quel niveau on veut faire parmi les trois niveaux. Je lui ai aussi demandé d’ajouter un niveau spécial : dans ce niveau, pour que l’étoile soit comptée, le joueur doit cliquer dessus uniquement lorsque sa couleur correspond à la couleur de la bordure du score (cette couleur change toutes les 3 secondes). Le timer de ce niveau est de 60 secondes.
+
 J’ai également demandé que les boutons des niveaux aient chacun une couleur précise :
 - niveau 1 en vert,
 - niveau 2 en jaune,
