@@ -1,3 +1,5 @@
+PROJET VERSION 0 - GÉNÉRÉ PAR L'IA GEMINI
+
 Description de mon projet - Attrape les étoiles
 
 Je vais créer un petit jeu en HTML, CSS et JavaScript, en utilisant Anime.js.
