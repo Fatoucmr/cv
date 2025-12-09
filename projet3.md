@@ -1,3 +1,5 @@
+VERSION 3
+
 Pour cette version, j’ai demandé à l’IA (Gemini) d’ajouter à mon code trois niveaux :
 - Niveau 1 : 60 secondes
 - Niveau 2 : 40 secondes
