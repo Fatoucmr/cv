@@ -28,7 +28,6 @@ flowchart TB
     A@{ label: "Je vois 'Démarrer' et le Tableau des Niveaux/Durées" } --> B@{ label: "Je clique sur 'Démarrer'" }
     B --> C1["Démarrage Niveau 1 Timer 60s"]
     C1 --> D1{"Temps écoulé ?"}
-    D1 -- Non --> D1
     D1 -- Oui --> E1{"Score Niveau 1 supérieur ou égal à 20 ?"}
     E1 -- Non --> F1["Échec Niveau 1"]
     F1 --> G1{"Que veux-je faire ?"}
