@@ -20,3 +20,7 @@ En parallèle, j’ai supprimé la condition de progression obligatoire entre le
 Après la génération du code, j’ai apporté plusieurs modifications personnelles, j’ai ajusté les couleurs du niveau spécial en m’appuyant sur le site **palettesdecouleurs**, puis retravaillé le style général et les titres pour qu’ils correspondent à l’esthétique souhaitée.
 
 Enfin, j’ai modifié la gestion du son, j’ai remplacé le son déclenché lors du clic sur une étoile par **Tone.Synth**, et ajouté un son différent (**Samples**) lorsqu’une erreur est commise dans le niveau spécial. Ces deux sons proviennent de la bibliothèque **Tone.js**.
+
+## Diagramme de flux testprojet4
+
+```mermaid
