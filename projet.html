@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projet – Version 0</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
     <style>
         h1 {
             font-size: 2.5em;
@@ -17,6 +21,9 @@
             font-family: Arial, sans-serif;
             line-height: 1.6;
             padding: 20px;
+        }
+        .mermaid {
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -43,10 +50,9 @@
         l’encadré du score, en m’aidant du site palettedecouleur afin de choisir des couleurs correspondant davantage
         à mes goûts.
     </p>
-
-    <h2>Diagramme de flux testprojet (version 0)</h2>
-
-    ```mermaid
+    
+    <h2>Diagramme de flux (version 0)</h2>
+    <div class="mermaid">
 flowchart TB
     A["Démarrage du Jeu"] --> B@{ label: "L'écran de jeu s'active" }
     B --> C@{ label: "Plusieurs étoiles aléatoires apparaissent à l'écran" }
@@ -64,8 +70,7 @@ flowchart TB
     F@{ shape: rect}
     G@{ shape: diamond}
     H@{ shape: rect}
-```
-    
+    </div>
+
 </body>
 </html>
-
