@@ -1,4 +1,4 @@
-# VERSION 6
+# VERSION 6 - testprojet6
 
 Par rapport à la version 5, cette version apporte des ajustements visuels et ergonomiques, en particulier pour le niveau spécial, ainsi qu’un nouvel élément sonore.
 
