@@ -61,7 +61,7 @@
             transition: opacity 0.3s;
         }
 
-        /* Timer */
+       
         #countdownExample {
             position: absolute;
             top: 20px;
@@ -121,7 +121,7 @@
             transform: scale(1.05);
         }
 
-        /* Style de base de l'étoile */
+        
         .star {
             position: absolute;
             cursor: pointer;
@@ -202,7 +202,7 @@
     </div>
 
     <script>
-        // 🧠 JavaScript et Logique du Jeu
+        
         document.addEventListener('DOMContentLoaded', () => {
 
             const synth = new Tone.Synth().toDestination();
@@ -230,10 +230,7 @@
             const STAR_SPAWN_INTERVAL_MS = 800;
             
 
-            /**
-             * Charge les meilleurs scores depuis le localStorage.
-             * @returns {number[]} Liste des scores triés.
-             */
+            
             function loadHighScores() {
                 try {
                     const scoresString = localStorage.getItem('highScores');
@@ -244,16 +241,13 @@
                 }
             }
 
-            /**
-             * Ajoute le score actuel aux meilleurs scores et les sauvegarde.
-             * @param {number} newScore - Le score à ajouter.
-             */
+           
             function saveScore(newScore) {
                 const scores = loadHighScores();
                 scores.push(newScore);
-                scores.sort((a, b) => b - a); // Tri décroissant
+                scores.sort((a, b) => b - a); 
                 
-                const topScores = scores.slice(0, 5); // Garder le top 5
+                const topScores = scores.slice(0, 5); 
                 try {
                     localStorage.setItem('highScores', JSON.stringify(topScores));
                 } catch (e) {
@@ -262,13 +256,11 @@
             }
 
             
-            /**
-             * Affiche le tableau des meilleurs scores.
-             */
+           
             function displayHighScores() {
                 const scores = loadHighScores();
-                scoreTableContainer.innerHTML = ''; // Nettoyer l'ancien tableau
-                // N'affiche le tableau que s'il y a des scores
+                scoreTableContainer.innerHTML = ''; 
+               
                 scoreTableContainer.classList.add('active'); 
 
                 if (scores.length === 0) {
@@ -303,7 +295,7 @@
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
                 
-                // Cacher le score en direct de la partie
+                
                 scoreBoard.style.opacity = 0;
             
                 saveScore(score);
@@ -315,7 +307,7 @@
                 countdownDisplay.textContent = "FIN";
                 messageElement.innerHTML = `Partie terminée ! Votre score final est de : <strong>${score}</strong>`;
                 
-                // Gérer les boutons : Afficher Recommencer, Cacher Démarrer
+                
                 startButton.style.display = 'none';
                 restartButton.style.display = 'block';
 
@@ -346,10 +338,7 @@
                 timerInterval = setTimeout(updateTimer, 1000);
             }
 
-            /**
-             * Anime la disparition de l'étoile lorsqu'elle est cliquée.
-             * @param {HTMLElement} star - L'élément étoile à animer.
-             */
+           
             function catchStarAnimation(star) {
                 anime({
                     targets: star,
@@ -366,9 +355,7 @@
                 });
             }
 
-            /**
-             * Crée et anime une nouvelle étoile.
-             */
+            
             function createStar() {
                 if (!gameActive) return;
 
@@ -419,41 +406,37 @@
                 });
             }
 
-            /**
-             * La boucle principale du jeu.
-             */
+            
             function gameLoop() {
                 if (!gameActive) return;
                 createStar();
                 gameLoopInterval = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
             }
 
-            /**
-             * Démarre le jeu (utilisé par le bouton Démarrer initial).
-             */
+            
             function startGame() {
                 if (gameActive) return;
 
                 gameActive = true;
                 
-                // Réinitialiser les éléments
+                
                 score = 0;
                 timeLeft = initialTime;
                 scoreElement.textContent = score;
                 countdownDisplay.textContent = timeLeft + "s";
                 
-                // Gérer l'affichage
+               
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
                 
-                // Afficher le score en direct de la partie
+                
                 scoreBoard.style.opacity = 1;
 
               
                 scoreTableContainer.classList.remove('active');
                 scoreTableContainer.innerHTML = ''; 
 
-                // Démarrer les boucles
+               
                 gameLoop();
                 updateTimer();
 
@@ -467,11 +450,9 @@
                 startGame();
             }
 
-            /**
-             * Réinitialise le jeu à l'écran de Démarrage initial.
-             */
+           
             function resetGame() {
-                // Arrêter tout
+               
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
 
