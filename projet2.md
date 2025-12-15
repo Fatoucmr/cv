@@ -1,4 +1,4 @@
-# VERSION 2
+# VERSION 2 - testprojet2
 
 Par rapport à la version 1, cette version introduit de nouvelles fonctionnalités liées au score et à la fin de la partie.
 
