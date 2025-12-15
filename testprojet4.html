@@ -252,7 +252,7 @@
     </div>
 
     <div id="special-level-tip">
-        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est **IDENTIQUE** à la couleur de la bordure du score ci-dessus. La couleur change !
+        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
     </div>
 
     <script>
@@ -268,7 +268,7 @@
             Tone.loaded().then(() => {
                 console.log("Audio de Gong chargé.");
             });
-            // ---------------------------------------------
+            
             
 
             const gameScreen = document.getElementById('game-screen');
@@ -317,16 +317,16 @@
             const STAR_SIZE = 30;
             
             const STAR_LIFETIME_MS = 5000; 
-            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; // Ajout du Niveau 4
+            const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; 
 
-            // --- Fonctions de Score et Niveaux ---
+           
 
             function loadAllScores() {
                 try {
                     const scoresString = localStorage.getItem('levelScores');
-                    // Initialisation ou chargement des scores
+                    
                     let scores = scoresString ? JSON.parse(scoresString) : {};
-                    // Assurez-vous que tous les niveaux existent avec un score minimum de 0
+                    
                     LEVELS.forEach(level => {
                         if (scores[level.id] === undefined) {
                             scores[level.id] = 0;
@@ -334,14 +334,14 @@
                     });
                     return scores;
                 } catch (e) {
-                    // En cas d'erreur de lecture, initialise tout à 0
+                    
                     return LEVELS.reduce((acc, level) => ({ ...acc, [level.id]: 0 }), {});
                 }
             }
 
             function saveLevelScore() {
                 const allScores = loadAllScores();
-                // Enregistre le meilleur score (le score actuel s'il est supérieur au score sauvegardé)
+               
                 allScores[currentLevel] = Math.max(allScores[currentLevel] || 0, score);
                 levelScores = allScores;
                 try {
@@ -366,8 +366,8 @@
                     
                     let statusClass = '';
 
-                    // On n'affiche plus le statut de validation, juste le meilleur score et l'objectif
-                    if (levelScore >= level.goal && level.goal > 0) { // Ajout de la condition pour ne pas valider Niv. Spécial avec goal=0
+                    
+                    if (levelScore >= level.goal && level.goal > 0) { 
                         statusClass = 'goal-met'; 
                     }
                     
@@ -390,7 +390,7 @@
             }
 
 
-            // --- Logique du Niveau Spécial (Niveau 4) ---
+           
             
             function changeBorderColor() {
                 const randomIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
@@ -401,10 +401,10 @@
             function startSpecialLevelLoop() {
                 if (currentLevel !== 4 || !gameActive) return;
                 
-                // Initialise la couleur de la bordure
+                
                 changeBorderColor();
                 
-                // Change la couleur toutes les 3 secondes
+                
                 colorChangeInterval = setInterval(changeBorderColor, 3000);
                 specialLevelTip.style.display = 'block';
             }
@@ -418,10 +418,10 @@
                 specialLevelTip.style.display = 'none';
             }
             
-            // Fonction utilitaire pour convertir RGB en Hex pour la comparaison
+           
             function rgbToHex(rgb) {
                 if (rgb.startsWith('#')) return rgb.toUpperCase();
-                // Ex : rgb(244, 67, 54)
+                
                 const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
                 if (!parts) return '#000000'; 
                 function hex(x) {
@@ -436,21 +436,20 @@
                     return true;
                 }
                 
-                // 1. Récupérer la couleur de l'étoile cliquée (en Hex)
-                // Dans le niveau 4, la couleur est définie par style.backgroundColor
+                
                 const starColorRGB = window.getComputedStyle(starElement).backgroundColor;
                 const starColorHex = rgbToHex(starColorRGB);
 
-                // 2. Récupérer la couleur de la bordure du score (en Hex)
+                
                 const borderRGB = window.getComputedStyle(scoreBoard).borderColor;
                 const borderHex = rgbToHex(borderRGB);
                 
-                // 3. Comparer
+                
                 return starColorHex === borderHex;
             }
 
 
-            // --- Logique de Jeu Générale ---
+           
 
             function updateScore(validClick) {
                 if (validClick) {
@@ -480,7 +479,7 @@
                 gameActive = false;
                 clearTimeout(timerInterval);
                 clearTimeout(starSpawnInterval);
-                stopSpecialLevelLoop(); // Arrêter la boucle du niveau spécial
+                stopSpecialLevelLoop(); 
                 
                 saveLevelScore();
                 
@@ -659,7 +658,7 @@
                 currentLevelDisplay.textContent = 1;
                 messageElement.textContent = "Sélectionnez un niveau pour (re)commencer.";
                 
-                // Afficher le menu de sélection
+               
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 controlPanel.classList.remove('hidden');
@@ -668,7 +667,7 @@
                 
                 document.querySelectorAll('.star').forEach(star => star.remove());
                 
-                // Afficher les scores s'il y en a
+                
                 const currentScores = loadAllScores();
                 const hasScores = Object.values(currentScores).some(s => s > 0);
                 if (hasScores) {
