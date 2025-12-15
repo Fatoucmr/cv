@@ -58,7 +58,7 @@
             z-index: 100;
         }
 
-        /* Timer */
+      
         #countdownExample {
             position: absolute;
             top: 20px;
@@ -117,7 +117,7 @@
             transform: scale(1.05);
         }
 
-        /* Style de base de l'étoile */
+      
         .star {
             position: absolute;
             cursor: pointer;
@@ -128,7 +128,7 @@
             animation: pulse 1s infinite alternate;
         }
 
-        /* Keyframes pour l'animation de pulsation */
+      
         @keyframes pulse {
             from {
                 transform: scale(1);
@@ -162,7 +162,7 @@
     </div>
 
     <script>
-        // 🧠 JavaScript et Logique du Jeu
+        
         document.addEventListener('DOMContentLoaded', () => {
 
             const synth = new Tone.Synth().toDestination();
@@ -187,17 +187,13 @@
             const STAR_LIFETIME_MS = 3000;
             const STAR_SPAWN_INTERVAL_MS = 800;
 
-            /**
-             * Met à jour le score affiché.
-             */
+            
             function updateScore() {
                 score++;
                 scoreElement.textContent = score;
             }
 
-            /**
-             * Démarre/met à jour le timer.
-             */
+            
             function updateTimer() {
                 if (!gameActive) {
                     // Si le jeu est terminé
@@ -225,10 +221,7 @@
                 timerInterval = setTimeout(updateTimer, 1000);
             }
 
-            /**
-             * Anime la disparition de l'étoile lorsqu'elle est cliquée.
-             * @param {HTMLElement} star - L'élément étoile à animer.
-             */
+            
             function catchStarAnimation(star) {
                 anime({
                     targets: star,
@@ -243,9 +236,7 @@
                 });
             }
 
-            /**
-             * Crée et anime une nouvelle étoile.
-             */
+            
             function createStar() {
                 if (!gameActive) return;
 
@@ -294,20 +285,16 @@
                 });
             }
 
-            /**
-             * La boucle principale du jeu.
-             */
+            
             function gameLoop() {
                 if (!gameActive) return;
                 createStar();
                 gameLoopInterval = setTimeout(gameLoop, STAR_SPAWN_INTERVAL_MS);
             }
 
-            /**
-             * Démarre le jeu
-             */
+            
             function startGame() {
-                // S'assurer que le jeu n'est pas déjà actif
+               
                 if (gameActive) return;
 
                 gameActive = true;
@@ -315,7 +302,7 @@
                 controlPanel.classList.add('hidden');
                 gameContainer.classList.add('active');
 
-                // Démarrer les boucles
+               
                 gameLoop();
                 updateTimer();
 
@@ -326,7 +313,7 @@
 
             
             function resetGame() {
-                // Arrêter tout
+               
                 clearTimeout(timerInterval);
                 clearTimeout(gameLoopInterval);
 
