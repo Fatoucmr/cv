@@ -310,7 +310,7 @@
                 { id: 4, time: 60, goal: 0, name: "Niveau SPÉCIAL", isSpecial: true }
             ];
             
-            // Couleurs pour le Niveau Spécial (correspondent aux classes .star)
+           
             const SPECIAL_LEVEL_COLORS = [
                 '#FF4FA8',
                 '#4FAFFF',
@@ -338,7 +338,7 @@
             const STAR_LIFETIME_MS = 5000; 
             const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; 
 
-            // --- Fonctions de Score et Niveaux ---
+           
 
             function loadAllScores() {
                 try {
@@ -385,8 +385,8 @@
                     
                     let statusClass = '';
 
-                    // On n'affiche plus le statut de validation, juste le meilleur score et l'objectif
-                    if (levelScore >= level.goal && level.goal > 0) { // Ajout de la condition pour ne pas valider Niv. Spécial avec goal=0
+                    
+                    if (levelScore >= level.goal && level.goal > 0) { 
                         statusClass = 'goal-met'; 
                     }
                     
@@ -409,7 +409,7 @@
             }
 
 
-            // --- Logique du Niveau Spécial (Niveau 4) ---
+           
             
             function changeBorderColor() {
                 const randomIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
@@ -437,10 +437,10 @@
                 specialLevelTip.style.display = 'none';
             }
             
-            // Fonction utilitaire pour convertir RGB en Hex pour la comparaison
+            
             function rgbToHex(rgb) {
                 if (rgb.startsWith('#')) return rgb.toUpperCase();
-                // Ex : rgb(244, 67, 54)
+                
                 const parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
                 if (!parts) return '#000000'; 
                 function hex(x) {
@@ -455,21 +455,20 @@
                     return true;
                 }
                 
-                // 1. Récupérer la couleur de l'étoile cliquée (en Hex)
-                // Dans le niveau 4, la couleur est définie par style.backgroundColor
+               
                 const starColorRGB = window.getComputedStyle(starElement).backgroundColor;
                 const starColorHex = rgbToHex(starColorRGB);
 
-                // 2. Récupérer la couleur de la bordure du score (en Hex)
+               
                 const borderRGB = window.getComputedStyle(scoreBoard).borderColor;
                 const borderHex = rgbToHex(borderRGB);
                 
-                // 3. Comparer
+               
                 return starColorHex === borderHex;
             }
 
 
-            // --- Logique de Jeu Générale ---
+          
 
             function updateScore(validClick) {
                 if (validClick) {
