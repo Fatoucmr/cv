@@ -20,3 +20,7 @@ La progression entre les niveaux est conditionnée par la réussite du niveau pr
 - Pour le niveau 3, il faut attraper au minimum **60 étoiles**.
 
 Afin de renforcer la lisibilité et l’immersion, j’ai également demandé que **les étoiles aient une couleur différente selon le niveau**. Enfin, après l’intégration de ces éléments, j’ai retravaillé certains aspects du projet (couleurs, textes et espacements) afin d’obtenir un rendu visuel plus cohérent et conforme à mes attentes.
+
+## Diagramme de flux testprojet3
+
+```mermaid
