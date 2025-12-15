@@ -149,7 +149,7 @@
         .star.level-2 { background-color: #4fafff; }
         .star.level-3 { background-color: #ffffff; }
        
-        /* NOUVEAU: Message d'instruction initial pour le niveau spécial */
+        /* Écran d'instruction initial pour le niveau spécial */
         #special-level-intro {
             position: absolute;
             top: 0;
@@ -182,7 +182,6 @@
             border: 3px solid #F44336;
             padding: 20px;
             border-radius: 10px;
-            /* Mise en évidence de la consigne */
             font-weight: bold; 
         }
 
@@ -201,41 +200,36 @@
             background-color: #d32f2f;
         }
        
-        /* NOUVEAU: Message d'alerte de couleur */
+        /* MODIFIÉ: Message d'alerte de couleur minimaliste */
         #color-alert-message {
             position: absolute;
-            top: 95px; /* Décalé légèrement pour être plus visible */
+            top: 75px; /* Positionné juste au-dessus du score */
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000000;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 1.1em; /* Légèrement plus grand */
+            /* Retrait du fond et de la bordure pour un look minimaliste */
+            padding: 5px 10px;
+            font-size: 1.3em; 
             font-weight: bold;
             text-align: center;
-            border: 2px solid #F44336;
             display: none; 
             z-index: 101;
         }
         
-        /* Stylisation du mot-clé "UNIQUEMENT" dans l'alerte pour insister */
         #color-alert-message span.keyword {
-            color: #F44336; 
             font-weight: bolder;
         }
 
-        /* NOUVEAU: Message de pénalité */
+        /* MODIFIÉ: Message de pénalité plus petit */
         #penalty-message {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(244, 67, 54, 0.8); 
+            background-color: rgba(244, 67, 54, 0.9); /* Plus opaque */
             color: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            font-size: 3em;
+            padding: 10px 15px; /* Réduit */
+            border-radius: 5px; 
+            font-size: 1.5em; /* Réduit */
             font-weight: bold;
             z-index: 300;
             display: none; 
@@ -294,7 +288,6 @@
             font-weight: bold;
         }
        
-        /* L'ancienne tipbox est masquée */
         #special-level-tip { display: none !important; }
 
     </style>
@@ -304,6 +297,8 @@
     <div id="game-screen">
        
         <div id="game-container">
+            <div id="color-alert-message"></div>
+            
             <div id="score-board">Score: <span id="score">0</span></div>
             <div id="level-display">Niveau: <span id="current-level">1</span></div> 
 
@@ -311,7 +306,6 @@
                 <div class="values"></div>
             </div>
             
-            <div id="color-alert-message"></div>
             
             <div id="penalty-message">-1 ❌</div>
 
@@ -416,6 +410,7 @@
 
             let currentBorderColor = '#FFFFFF';
             let colorChangeInterval;
+            let colorAlertTimeout; // Pour gérer la disparition du message
 
             // Paramètres de jeu
             let currentLevel = 1;
@@ -504,10 +499,17 @@
                 currentBorderColor = SPECIAL_LEVEL_COLORS[randomIndex];
                 scoreBoard.style.borderColor = currentBorderColor;
                 
-                // NOUVEAU: Mise à jour du message d'alerte de couleur plus explicite
+                // Mise à jour du message d'alerte de couleur plus explicite et minimaliste
                 const colorName = COLOR_NAMES[currentBorderColor.toUpperCase()] || currentBorderColor;
                 colorAlertMessage.innerHTML = `Cliquez <span class="keyword">UNIQUEMENT</span> sur l'étoile **${colorName}**`;
                 colorAlertMessage.style.color = currentBorderColor;
+                
+                // Afficher le message pour 5 secondes
+                colorAlertMessage.style.display = 'block';
+                clearTimeout(colorAlertTimeout);
+                colorAlertTimeout = setTimeout(() => {
+                    colorAlertMessage.style.display = 'none';
+                }, 5000); 
             }
 
             function startSpecialLevelLoop() {
@@ -515,9 +517,6 @@
                
                 changeBorderColor();
                 
-                // Affiche le message d'alerte
-                colorAlertMessage.style.display = 'block';
-
                 // Change la couleur toutes les 3 secondes
                 colorChangeInterval = setInterval(changeBorderColor, 3000);
             }
@@ -526,6 +525,7 @@
                 if (colorChangeInterval) {
                     clearInterval(colorChangeInterval);
                 }
+                clearTimeout(colorAlertTimeout); // S'assurer que le timeout est nettoyé
                 
                 scoreBoard.style.borderColor = '#FFFFFF'; 
                 colorAlertMessage.style.display = 'none'; 
@@ -539,7 +539,7 @@
                     targets: penaltyMessage,
                     opacity: [0, 1, 1, 0],
                     scale: [0.8, 1.2, 1.2, 0.8],
-                    duration: 1000, 
+                    duration: 800, /* Animation plus rapide */
                     easing: 'easeInOutQuad',
                     complete: () => {
                         penaltyMessage.style.display = 'none';
@@ -670,8 +670,22 @@
                 star.classList.add('star', `level-${currentLevel}`);
 
                 if (currentLevel === 4) {
-                    const randomColorIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
-                    star.style.backgroundColor = SPECIAL_LEVEL_COLORS[randomColorIndex];
+                    // MODIFIÉ: 50% de chance d'avoir la bonne couleur (étoile cible)
+                    let starColor;
+                    if (Math.random() < 0.5) { 
+                        starColor = currentBorderColor; 
+                    } else {
+                        // Choisir une couleur différente au hasard
+                        const nonTargetColors = SPECIAL_LEVEL_COLORS.filter(color => color !== currentBorderColor);
+                        if (nonTargetColors.length > 0) {
+                            const randomIndex = Math.floor(Math.random() * nonTargetColors.length);
+                            starColor = nonTargetColors[randomIndex];
+                        } else {
+                            // Si pour une raison bizarre toutes les couleurs sont identiques, utiliser la couleur cible
+                            starColor = currentBorderColor;
+                        }
+                    }
+                    star.style.backgroundColor = starColor;
                     star.classList.remove(`level-${currentLevel}`); 
                 }
 
