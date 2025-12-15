@@ -12,16 +12,16 @@ Enfin, j’ai demandé à **Gemini** d’ajouter de nouvelles fonctionnalités :
 
 ```mermaid
 flowchart TB
-    A@{ label: "J'arrive sur la page et je vois le bouton Démarrer'" } --> B@{ label: "Je clique sur 'Démarrer'" }
-    B --> C@{ label: "L'écran de jeu s'active, le Timer 60s et les Étoiles commencent à apparaître" }
-    C --> D{"Je vois une Étoile ?"}
+    A@{ label: "J'arrive sur la page et je vois le bouton Démarrer" } --> B@{ label: "Je clique sur Démarrer" }
+    B --> C@{ label: "L'écran de jeu s'active, le timer est de 60s et les étoiles commencent à apparaître" }
+    C --> D{"Je vois des étoiles ?"}
     D -- Oui --> E@{ label: "J'arrive à cliquer dessus à temps ?" }
-    E -- Oui --> F["Mon Score augmente"]
+    E -- Oui --> F["Mon score augmente"]
     E -- Non --> G@{ label: "L'étoile disparaît" }
     F --> H{"Le Timer est à 0s ?"}
     G --> H
-    H -- Oui --> I["Fin du Jeu : Le temps est écoulé"]
-    I --> J["Le score final apparait"]
+    H -- Oui --> I["Fin du Jeu, le temps est écoulé"]
+    I --> J["Mon score final apparait"]
     J --> K{"Je veux rejouer ?"}
     K -- Oui --> B
     K -- Non --> L["Je quitte la page"]
