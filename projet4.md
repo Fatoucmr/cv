@@ -25,7 +25,7 @@ Enfin, j’ai modifié la gestion du son, j’ai remplacé le son déclenché lo
 
 ```mermaid
 flowchart TB
-    A@{ label: "Je vois le Tableau des Niveaux et j'ai le choix entre les niveaux 1 2 3 ou 4 spécial" } --> B{"Quel Niveau choisir ?"}
+    A@{ label: "Je vois le tableau des niveaux et scores et j'ai le choix entre les niveaux 1 2 3 ou 4 spécial" } --> B{"Quel Niveau choisir ?"}
     B -- Niveau 1, 2 ou 3 --> CN["Démarrage du niveau sélectionné"]
     CN --> DN{"Temps écoulé ?"}
     DN -- Oui --> EN{"Score du niveau sélectionné supérieur ou égal au nombre Requis ?"}
