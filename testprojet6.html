@@ -22,7 +22,7 @@
             height: 100vh;
         }
         
-       
+        
         #game-screen {
             position: relative; 
             width: 800px; 
@@ -38,7 +38,7 @@
             transition: opacity 0.5s, border-color 0.5s, box-shadow 0.5s; 
         }
 
-      
+        
         #control-panel {
             position: fixed; 
             top: 50%; 
@@ -54,7 +54,7 @@
             justify-content: center;
             align-items: center;
             
-         
+            
             background-color: rgba(0, 0, 0, 1); 
             
             padding: 40px; 
@@ -110,6 +110,63 @@
             border: 2px solid #FFFFFF; 
         }
 
+        /* NOUVEAU: Panneau d'instructions pour le niveau spécial */
+        #special-level-intro {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: none; /* Caché par défaut */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 500;
+            color: #ffffff;
+            font-size: 1.8em;
+            cursor: pointer;
+            border: 5px solid #8B0000; /* Couleur du Niveau Spécial */
+        }
+        #special-level-intro.active {
+            display: flex;
+        }
+        #special-level-intro h2 {
+            color: #F8DE65; /* Or pour le titre */
+            margin-bottom: 20px;
+        }
+        
+        /* NOUVEAU: Message minimaliste sous le score */
+        #minimal-tip {
+            position: absolute;
+            top: 75px; 
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 100;
+            display: none; /* Caché par défaut */
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* NOUVEAU: Message de pénalité */
+        .penalty-message {
+            position: absolute;
+            color: #F44336; /* Rouge */
+            font-size: 1.5em;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 200;
+        }
+
 
         .game-button {
             padding: 15px 30px;
@@ -143,7 +200,7 @@
         }
 
 
-       
+        
         #select-level-1 { background-color: #556B2F; } 
         #select-level-2 { background-color: #B8860B; } 
         #select-level-3 { background-color: #CC5500; } 
@@ -169,24 +226,9 @@
         .star.level-3 { background-color: #ffffff; }
         .star.level-4 { background-color: #F44336; } 
         
-        #special-level-tip {
-            position: absolute;
-            top: 70px;
-            right: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000000;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            width: 200px;
-            text-align: center;
-            border: 2px solid #F44336;
-            display: none; 
-            z-index: 101;
-        }
+        /* L'ancienne balise special-level-tip a été supprimée */
         
         
-
         .table-container {
             margin: 30px 0;
             width: 80%;
@@ -260,6 +302,13 @@
     
     <div id="game-screen">
         
+        <div id="special-level-intro">
+            <h2>Instructions du Niveau SPÉCIAL 🚨</h2>
+            <p>CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est **IDENTIQUE** à la couleur de la bordure de l'encadré du score ci-dessous.</p>
+            <p style="margin-top: 15px;">⚠️ La couleur de la bordure change régulièrement !</p>
+            <p style="margin-top: 40px; font-weight: bold; color: #4fafff;">**Cliquez n'importe où pour commencer !**</p>
+        </div>
+
         <div id="game-container">
             <div id="score-board">Score: <span id="score">0</span></div>
             <div id="level-display">Niveau: <span id="current-level">1</span></div> 
@@ -267,17 +316,17 @@
             <div id="countdownExample">
                 <div class="values"></div>
             </div>
-        </div>
-    </div>
 
-    <div id="special-level-tip">
-        CONSIGNE : Cliquez sur l'étoile UNIQUEMENT si sa couleur est IDENTIQUE à la couleur de la bordure du score ci-dessus. La couleur change !
+            <div id="minimal-tip">
+                Cible : <span id="target-color-text" style="font-weight: bold;">BLANC</span>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-           
+            
             const clickSynth = new Tone.Synth().toDestination(); 
             const startSynth = new Tone.PolySynth(Tone.Synth).toDestination();
             const endOscillator = new Tone.Oscillator().toDestination(); 
@@ -288,7 +337,7 @@
             Tone.loaded().then(() => {
                 console.log("Audio context started.");
             });
-           
+            
             
 
             const gameScreen = document.getElementById('game-screen');
@@ -301,10 +350,13 @@
             const scoreTableContainer = document.getElementById('score-table-container');
             const currentLevelDisplay = document.getElementById('current-level');
             const levelSelectionButtons = document.getElementById('level-selection-buttons');
-            const specialLevelTip = document.getElementById('special-level-tip');
+            // NOUVEAU: Éléments pour l'intro et le conseil minimaliste
+            const specialLevelIntro = document.getElementById('special-level-intro');
+            const minimalTip = document.getElementById('minimal-tip');
+            const targetColorText = document.getElementById('target-color-text');
 
             
-
+            
             const LEVELS = [
                 { id: 1, time: 60, goal: 20, name: "Niveau 1: Facile", isSpecial: false, color: "#556B2F", shadow: "rgba(85, 107, 47, 0.7)" },
                 { id: 2, time: 40, goal: 40, name: "Niveau 2: Normal", isSpecial: false, color: "#B8860B", shadow: "rgba(184, 134, 11, 0.7)" },
@@ -314,19 +366,27 @@
             
 
             const SPECIAL_LEVEL_COLORS = [
-                '#FF4FA8',
-                '#4FAFFF',
-                '#FFFFFF',
-                '#F44336',
-                '#5D0D6E',
-                '#F8DE65',
-                '#0FAC71',
-                '#FC4E00'
+                '#FF4FA8', // Rose
+                '#4FAFFF', // Bleu
+                '#FFFFFF', // Blanc
+                '#F44336', // Rouge
+                '#5D0D6E', // Violet
+                '#F8DE65', // Jaune
+                '#0FAC71', // Vert
+                '#FC4E00'  // Orange
             ];
+            // NOUVEAU: Dictionnaire simple pour la conversion Hex -> Nom de couleur pour le conseil minimaliste
+            const COLOR_NAMES = {
+                '#FF4FA8': 'ROSE', '#4FAFFF': 'BLEU', '#FFFFFF': 'BLANC', '#F44336': 'ROUGE',
+                '#5D0D6E': 'VIOLET', '#F8DE65': 'JAUNE', '#0FAC71': 'VERT', '#FC4E00': 'ORANGE',
+                // Couleur par défaut si non trouvée
+                '#4F4F4F': 'GRIS' 
+            };
+            
             let currentBorderColor = '#FFFFFF';
             let colorChangeInterval;
 
-           
+            
             let currentLevel = 1;
             let score = 0;
             let gameActive = false;
@@ -340,7 +400,7 @@
             const STAR_LIFETIME_MS = 5000; 
             const STAR_SPAWN_INTERVAL_MS = [1500, 1000, 700, 1500]; 
 
-     
+            
             function updateGameScreenStyle(levelConfig) {
                 if (levelConfig) {
                     gameScreen.style.borderColor = levelConfig.color;
@@ -398,14 +458,14 @@
                     tableHTML += `<tr>
                         <td>${level.name}</td>
                         <td class="level-score ${statusClass}">${levelScore}</td>
-                        <td>${level.goal} étoiles</td>
+                        <td>${level.goal}${level.goal > 0 ? ' étoiles' : ''}</td>
                     </tr>`;
                 });
 
                 tableHTML += '</tbody>';
                 
                 if (showTotal) {
-                       tableHTML += `<tfoot><tr><th>TOTAL</th><th colspan="2">${totalScore}</th></tr></tfoot>`;
+                        tableHTML += `<tfoot><tr><th>TOTAL</th><th colspan="2">${totalScore}</th></tr></tfoot>`;
                 }
                 
                 tableHTML += '</table>';
@@ -417,13 +477,17 @@
                 const randomIndex = Math.floor(Math.random() * SPECIAL_LEVEL_COLORS.length);
                 currentBorderColor = SPECIAL_LEVEL_COLORS[randomIndex];
                 scoreBoard.style.borderColor = currentBorderColor;
+                
+                // NOUVEAU: Mettre à jour le message minimaliste
+                targetColorText.textContent = COLOR_NAMES[currentBorderColor] || '???';
+                targetColorText.style.color = currentBorderColor;
             }
 
             function startSpecialLevelLoop() {
                 if (currentLevel !== 4 || !gameActive) return;
                 changeBorderColor();
                 colorChangeInterval = setInterval(changeBorderColor, 3000);
-                specialLevelTip.style.display = 'block';
+                minimalTip.style.display = 'block'; // Afficher le conseil minimaliste
             }
 
             function stopSpecialLevelLoop() {
@@ -431,7 +495,7 @@
                     clearInterval(colorChangeInterval);
                 }
                 scoreBoard.style.borderColor = '#FFFFFF'; 
-                specialLevelTip.style.display = 'none';
+                minimalTip.style.display = 'none'; // Cacher le conseil minimaliste
             }
             
             function rgbToHex(rgb) {
@@ -458,19 +522,41 @@
                 return starColorHex === borderHex;
             }
 
-
-
-
             function triggerEndSound() {
                 const now = Tone.now();
                 
-              
+                
                 endOscillator.frequency.value = "C4";
                 endOscillator.frequency.rampTo("C2", 2);
                 endOscillator.start(now).stop(now + 3);
             }
+            
+            // NOUVEAU: Fonction pour afficher le message de pénalité
+            function showPenaltyMessage(x, y) {
+                const penalty = document.createElement('div');
+                penalty.classList.add('penalty-message');
+                penalty.textContent = '-1 ❌';
+                
+                // Positionner le message
+                penalty.style.left = `${x}px`;
+                penalty.style.top = `${y}px`;
 
-            function updateScore(validClick) {
+                gameContainer.appendChild(penalty);
+
+                // Animation du message
+                anime({
+                    targets: penalty,
+                    translateY: -30, // Monter
+                    opacity: [1, 0], // Apparaître puis disparaître
+                    duration: 700,
+                    easing: 'easeOutQuad',
+                    complete: () => {
+                        penalty.remove(); // Supprimer après l'animation
+                    }
+                });
+            }
+
+            function updateScore(validClick, starElement) { // Ajout de starElement
                 if (validClick) {
                     score++;
                     scoreElement.textContent = score;
@@ -478,8 +564,14 @@
                     clickSynth.triggerAttack("C4", now);
                     clickSynth.triggerRelease(now + 0.125); 
                 } else if (currentLevel === 4) {
+                    // C'est le message petit et minimaliste
                     score = Math.max(0, score - 1);
                     scoreElement.textContent = score;
+                    
+                    if (starElement) {
+                        showPenaltyMessage(starElement.offsetLeft, starElement.offsetTop);
+                    }
+
                     if (errorPlayer.buffer.loaded) {
                         errorPlayer.start();
                     }
@@ -506,20 +598,20 @@
                 displayLevelScores(true);
 
                 const currentLevelConfig = LEVELS.find(l => l.id === currentLevel);
-                const goalMet = score >= currentLevelConfig.goal;
+                const goalMet = currentLevelConfig.goal > 0 && score >= currentLevelConfig.goal;
                 
                 levelSelectionButtons.style.display = 'flex'; 
                 
                 if (currentLevel === 4) {
-                    messageElement.innerHTML = `✨ Niveau SPÉCIAL terminé ! Votre score est de ${score}. Choisissez votre prochaine aventure !`;
+                    messageElement.innerHTML = `✨ Niveau SPÉCIAL terminé ! Votre score est de **${score}**. Choisissez votre prochaine aventure !`;
                 } else if (goalMet) {
-                    messageElement.innerHTML = `🌟 Bravo ! Niveau ${currentLevelConfig.name} validé avec un score de ${score}. Choisissez votre prochaine aventure !`;
+                    messageElement.innerHTML = `🌟 Bravo ! Niveau ${currentLevelConfig.name} validé avec un score de **${score}**. Choisissez votre prochaine aventure !`;
                 } else {
-                    messageElement.innerHTML = `⚡ Presque ! Votre score est de ${score} (Objectif : ${currentLevelConfig.goal}). Rejouez ou sélectionnez un autre niveau !`;
+                    messageElement.innerHTML = `⚡ Presque ! Votre score est de **${score}** (Objectif : ${currentLevelConfig.goal}). Rejouez ou sélectionnez un autre niveau !`;
                 }
             }
 
-        
+            
             function updateTimer() {
                 const levelConfig = LEVELS.find(l => l.id === currentLevel);
                 if (!levelConfig || !gameActive) {
@@ -609,7 +701,7 @@
                         }
                     });
 
-                    updateScore(isValid);
+                    updateScore(isValid, star); // Transmettre l'élément star
                 });
             }
 
@@ -643,32 +735,64 @@
                 }
 
                 currentLevel = levelId;
-                gameActive = true;
                 
-                score = 0;
-                timeLeft = levelConfig.time;
-                scoreElement.textContent = score;
-                currentLevelDisplay.textContent = currentLevel;
-
-                triggerStartSound();
-                
-               
-                updateGameScreenStyle(levelConfig);
-
-                
-                controlPanel.classList.add('hidden');
-                gameScreen.style.opacity = 1; 
-                scoreBoard.style.opacity = 1; 
-                scoreTableContainer.classList.remove('active');
-                scoreTableContainer.innerHTML = '';
-
-
+                // NOUVEAU: Afficher l'écran d'intro si c'est le niveau spécial
                 if (levelConfig.isSpecial) {
-                    startSpecialLevelLoop();
-                }
+                    
+                    // Préparer l'écran de jeu derrière le panneau d'intro
+                    updateGameScreenStyle(levelConfig);
+                    gameScreen.style.opacity = 1;
+                    scoreBoard.style.opacity = 1;
+                    currentLevelDisplay.textContent = currentLevel;
 
-                gameLoop();
-                updateTimer();
+                    controlPanel.classList.add('hidden');
+                    levelSelectionButtons.style.display = 'none';
+                    
+                    // Afficher le panneau d'intro
+                    specialLevelIntro.classList.add('active');
+                    
+                    // Ajouter un écouteur d'événement pour commencer le jeu
+                    const startSpecialGame = () => {
+                        specialLevelIntro.classList.remove('active');
+                        specialLevelIntro.removeEventListener('click', startSpecialGame);
+                        
+                        // Démarrage effectif du jeu
+                        gameActive = true;
+                        score = 0;
+                        timeLeft = levelConfig.time;
+                        scoreElement.textContent = score;
+
+                        triggerStartSound();
+
+                        startSpecialLevelLoop();
+                        gameLoop();
+                        updateTimer();
+                    };
+                    specialLevelIntro.addEventListener('click', startSpecialGame);
+
+                } else { // Niveaux normaux (1, 2, 3)
+                    
+                    gameActive = true;
+                    score = 0;
+                    timeLeft = levelConfig.time;
+                    scoreElement.textContent = score;
+                    currentLevelDisplay.textContent = currentLevel;
+
+                    triggerStartSound();
+                    
+                    updateGameScreenStyle(levelConfig);
+
+                    
+                    controlPanel.classList.add('hidden');
+                    gameScreen.style.opacity = 1; 
+                    scoreBoard.style.opacity = 1; 
+                    scoreTableContainer.classList.remove('active');
+                    scoreTableContainer.innerHTML = '';
+                    levelSelectionButtons.style.display = 'none';
+
+                    gameLoop();
+                    updateTimer();
+                }
             }
 
             function resetGame() {
@@ -685,6 +809,9 @@
                 messageElement.textContent = "Attrape les étoiles : sélectionne un niveau pour (re)commencer !";
                 
                 levelSelectionButtons.style.display = 'flex'; 
+                
+                // Assurer que l'intro du spécial niveau est cachée au reset
+                specialLevelIntro.classList.remove('active');
                 
                 gameScreen.style.opacity = 0; 
                 
@@ -710,7 +837,6 @@
                 button.addEventListener('click', (e) => {
                     const levelId = parseInt(e.target.dataset.level);
                     startLevel(levelId);
-                    levelSelectionButtons.style.display = 'none'; 
                 });
             });
             
