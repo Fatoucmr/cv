@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet – Version 0</title>
+    <style>
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        h2 {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PROJET – VERSION 0 (GÉNÉRÉE PAR L’IA GEMINI)</h1>
+
+    <h2>Description du projet – Attrape les étoiles</h2>
+    <p>
+        Le projet consiste à créer un petit jeu interactif en HTML, CSS et JavaScript, en utilisant la bibliothèque Anime.js.
+        Des étoiles apparaissent à l’écran et se déplacent grâce à des animations. Le joueur doit cliquer sur les étoiles
+        pour les attraper avant qu’elles ne disparaissent. Lors du clic sur une étoile, une animation se déclenche
+        (disparition ou changement de couleur). Chaque étoile attrapée ajoute un point au compteur affiché à l’écran.
+    </p>
+
+    <h2>Démarche de création</h2>
+    <p>
+        Pour cette version 0, j’ai copié-collé la consigne du projet et demandé à <strong>l’IA Gemini</strong> de générer le jeu.
+        J’ai rédigé un prompt décrivant précisément le fonctionnement attendu : des étoiles animées apparaissant à l’écran,
+        que le joueur doit cliquer pour gagner des points.
+    </p>
+    <p>
+        L’IA m’a alors fourni une première version fonctionnelle du code, servant de base au projet. Après avoir relu cette
+        version, j’ai effectué quelques ajustements mineurs, notamment la modification de la couleur des étoiles et de
+        l’encadré du score, en m’aidant du site palettedecouleur afin de choisir des couleurs correspondant davantage
+        à mes goûts.
+    </p>
+
+    <h2>Diagramme de flux testprojet (version 0)</h2>
+
+    ```mermaid
+flowchart TB
+    A["Démarrage du Jeu"] --> B@{ label: "L'écran de jeu s'active" }
+    B --> C@{ label: "Plusieurs étoiles aléatoires apparaissent à l'écran" }
+    C --> D@{ label: "Le joueur clique sur l'Étoile ?" }
+    D -- Oui --> E["Le score augmente de 1"]
+    E --> F@{ label: "L'étoile disparaît" }
+    F --> C
+    D -- Non --> G@{ label: "Le temps de vie de l'Étoile est écoulé ?" }
+    G -- Oui --> H@{ label: "L'étoile disparaît" }
+    H --> C
+
+    B@{ shape: rect}
+    C@{ shape: rounded}
+    D@{ shape: diamond}
+    F@{ shape: rect}
+    G@{ shape: diamond}
+    H@{ shape: rect}
+```
+    
+</body>
+</html>
+
