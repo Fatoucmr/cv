@@ -16,3 +16,6 @@ Chaque nouvelle version a introduit des améliorations précises : ajout de fonc
 
 Tout au long du projet, j’ai utilisé l’IA comme un outil d’aide, tout en personnalisant, corrigeant et améliorant chaque élément pour développer ma compréhension du code. L’attention portée aux couleurs, aux messages et aux sons a permis d’améliorer la lisibilité, l’esthétique et l’immersion, tout en rendant le jeu agréable et fonctionnel.
 
+## Diagramme de flux testprojet6
+
+```mermaid
