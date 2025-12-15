@@ -71,7 +71,7 @@
             border-radius: 10px;
             z-index: 100;
             position: absolute;
-            top: 20px;
+            top: 50px; /* MODIFIÉ: Augmenté la position pour compenser l'espace au-dessus */
         }
 
         #score-board { 
@@ -200,13 +200,12 @@
             background-color: #d32f2f;
         }
        
-        /* MODIFIÉ: Message d'alerte de couleur minimaliste */
+        /* MODIFIÉ: Message d'alerte de couleur minimaliste AVEC PLUS D'ESPACE */
         #color-alert-message {
             position: absolute;
-            top: 75px; /* Positionné juste au-dessus du score */
+            top: 10px; /* MODIFIÉ: Positionné plus haut pour créer un espace avec le score */
             left: 50%;
             transform: translateX(-50%);
-            /* Retrait du fond et de la bordure pour un look minimaliste */
             padding: 5px 10px;
             font-size: 1.3em; 
             font-weight: bold;
