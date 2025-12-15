@@ -1,4 +1,4 @@
-# VERSION 4
+# VERSION 4 - testprojet4
 
 Par rapport à la version 3, cette version apporte **une modification importante de la structure du jeu**, en laissant au joueur la liberté de **choisir directement le niveau** dès le lancement de la partie.
 
