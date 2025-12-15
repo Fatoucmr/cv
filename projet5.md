@@ -1,4 +1,4 @@
-# VERSION 5
+# VERSION 5 - testprojet5
 
 Par rapport à la version 4, cette version apporte une amélioration visuelle de la page de démarrage ainsi qu’un nouvel élément sonore.
 
